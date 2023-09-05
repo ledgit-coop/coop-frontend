@@ -19,6 +19,7 @@ module.exports = {
     'prettier/prettier': ['error'],
     'vue/require-default-prop': 0,
     'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+    'vue/multi-word-component-names': 'off',
   },
   parserOptions: {
     ecmaVersion: 'latest',

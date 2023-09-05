@@ -20,9 +20,9 @@ onMounted(() => {
       <div class="card">
         <h5>Tree</h5>
         <Tree
-          :value="treeValue"
-          selectionMode="checkbox"
           v-model:selectionKeys="selectedTreeValue"
+          :value="treeValue"
+          selection-mode="checkbox"
         ></Tree>
       </div>
     </div>
@@ -30,9 +30,9 @@ onMounted(() => {
       <div class="card">
         <h5>TreeTable</h5>
         <TreeTable
-          :value="treeTableValue"
-          selectionMode="checkbox"
           v-model:selectionKeys="selectedTreeTableValue"
+          :value="treeTableValue"
+          selection-mode="checkbox"
         >
           <template #header> FileSystem </template>
           <Column

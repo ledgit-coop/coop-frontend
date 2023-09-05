@@ -522,8 +522,8 @@ const onContextRightClick = (event) => {
           type="button"
           label="Options"
           icon="pi pi-angle-down"
-          @click="toggleMenu"
           style="width: auto"
+          @click="toggleMenu"
         />
       </div>
 

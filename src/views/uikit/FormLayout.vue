@@ -172,7 +172,7 @@ const dropdownItem = ref(null);
               id="state"
               v-model="dropdownItem"
               :options="dropdownItems"
-              optionLabel="name"
+              option-label="name"
               placeholder="Select One"
             ></Dropdown>
           </div>

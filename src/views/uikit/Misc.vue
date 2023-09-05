@@ -39,7 +39,7 @@ onBeforeUnmount(() => {
           <div class="col">
             <ProgressBar
               :value="50"
-              :showValue="false"
+              :show-value="false"
             ></ProgressBar>
           </div>
         </div>
@@ -77,19 +77,19 @@ onBeforeUnmount(() => {
 
         <h5>Positioned Badge</h5>
         <i
+          v-badge="2"
           class="pi pi-bell mr-4 p-text-secondary"
           style="font-size: 2rem"
-          v-badge="2"
         ></i>
         <i
+          v-badge.danger="'10+'"
           class="pi pi-calendar mr-4 p-text-secondary"
           style="font-size: 2rem"
-          v-badge.danger="'10+'"
         ></i>
         <i
+          v-badge.danger
           class="pi pi-envelope p-text-secondary"
           style="font-size: 2rem"
-          v-badge.danger
         ></i>
 
         <h5>Inline Button Badge</h5>
@@ -103,7 +103,7 @@ onBeforeUnmount(() => {
           icon="pi pi-users"
           class="p-button-warning"
           badge="8"
-          badgeClass="p-badge-danger"
+          badge-class="p-badge-danger"
         ></Button>
 
         <h5>Sizes</h5>
@@ -186,10 +186,10 @@ onBeforeUnmount(() => {
 
         <h5>Icon - Badge</h5>
         <Avatar
+          v-badge.success="4"
           icon="pi pi-user"
           class="mr-2"
           size="xlarge"
-          v-badge.success="4"
         ></Avatar>
       </div>
 

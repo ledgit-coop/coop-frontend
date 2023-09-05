@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout';
 import { computed } from 'vue';
 
 const { layoutConfig } = useLayout();
 
 const logoUrl = computed(() => {
-  return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+  return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
 </script>
 
@@ -17,8 +17,7 @@ const logoUrl = computed(() => {
       height="20"
       class="mr-2"
     />
-    by
-    <span class="font-medium ml-2"> </span>
+    <span class="font-medium ml-2"> Dalan Sa Pag Asenso Credit Cooperative @ 2023</span>
   </div>
 </template>
 <style lang="scss" scoped></style>

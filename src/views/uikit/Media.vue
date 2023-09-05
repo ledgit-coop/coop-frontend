@@ -57,10 +57,10 @@ onMounted(() => {
         <h5>Carousel</h5>
         <Carousel
           :value="products"
-          :numVisible="3"
-          :numScroll="3"
+          :num-visible="3"
+          :num-scroll="3"
           :circular="false"
-          :responsiveOptions="carouselResponsiveOptions"
+          :responsive-options="carouselResponsiveOptions"
         >
           <template #item="product">
             <div
@@ -108,10 +108,10 @@ onMounted(() => {
         <h5>Galleria</h5>
         <Galleria
           :value="images"
-          :responsiveOptions="galleriaResponsiveOptions"
-          :numVisible="7"
+          :responsive-options="galleriaResponsiveOptions"
+          :num-visible="7"
           :circular="true"
-          containerStyle="max-width: 800px; margin: auto"
+          container-style="max-width: 800px; margin: auto"
         >
           <template #item="slotProps">
             <img

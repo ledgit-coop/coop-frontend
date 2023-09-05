@@ -688,7 +688,7 @@ const checked = ref(false);
     <BlockViewer
       header="Banner"
       :code="block5"
-      containerClass="surface-section py-8"
+      container-class="surface-section py-8"
       free
     >
       <div
@@ -851,7 +851,7 @@ const checked = ref(false);
     <BlockViewer
       header="Sign-In"
       :code="block8"
-      containerClass="surface-ground px-4 py-8 md:px-6 lg:px-8 flex align-items-center justify-content-center"
+      container-class="surface-ground px-4 py-8 md:px-6 lg:px-8 flex align-items-center justify-content-center"
       free
     >
       <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
@@ -894,8 +894,8 @@ const checked = ref(false);
             <div class="flex align-items-center">
               <Checkbox
                 id="rememberme1"
-                :binary="true"
                 v-model="checked"
+                :binary="true"
                 class="mr-2"
               ></Checkbox>
               <label for="rememberme1">Remember me</label>
@@ -915,7 +915,7 @@ const checked = ref(false);
     <BlockViewer
       header="Description List"
       :code="block9"
-      containerClass="surface-section px-4 py-8 md:px-6 lg:px-8"
+      container-class="surface-section px-4 py-8 md:px-6 lg:px-8"
       free
     >
       <div class="surface-section">
@@ -997,7 +997,7 @@ const checked = ref(false);
     <BlockViewer
       header="Card"
       :code="block10"
-      containerClass="px-4 py-8 md:px-6 lg:px-8"
+      container-class="px-4 py-8 md:px-6 lg:px-8"
       free
     >
       <div class="surface-card p-4 shadow-2 border-round">

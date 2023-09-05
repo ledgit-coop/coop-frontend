@@ -24,9 +24,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-        // Recommended
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
+    // Recommended
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
  
   },
   "include": ["env.d.ts", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

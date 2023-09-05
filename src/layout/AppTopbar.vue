@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
@@ -7,7 +7,7 @@ import AuthService from '@/service/AuthService';
 
 const { layoutConfig, onMenuToggle } = useLayout();
 
-const outsideClickListener = ref(null);
+const outsideClickListener = ref<any>();
 const topbarMenuActive = ref(false);
 const router = useRouter();
 const menu = ref();
@@ -33,7 +33,7 @@ const items = ref([
   },
 ]);
 
-const toggle = (event) => {
+const toggle = (event: any) => {
   menu.value.toggle(event);
 };
 
@@ -64,7 +64,7 @@ const topbarMenuClasses = computed(() => {
 
 const bindOutsideClickListener = () => {
   if (!outsideClickListener.value) {
-    outsideClickListener.value = (event) => {
+    outsideClickListener.value = (event: any) => {
       if (isOutsideClicked(event)) {
         topbarMenuActive.value = false;
       }
@@ -78,7 +78,7 @@ const unbindOutsideClickListener = () => {
     outsideClickListener.value = null;
   }
 };
-const isOutsideClicked = (event) => {
+const isOutsideClicked = (event: any) => {
   if (!topbarMenuActive.value) return;
 
   const sidebarEl = document.querySelector('.layout-topbar-menu');
@@ -103,7 +103,7 @@ const isOutsideClicked = (event) => {
         :src="logoUrl"
         alt="logo"
       />
-      <span>Coop System</span>
+      <span>DSPACC</span>
     </router-link>
 
     <button
@@ -125,30 +125,30 @@ const isOutsideClicked = (event) => {
       :class="topbarMenuClasses"
     >
       <button
-        @click="onTopBarMenuButton()"
         class="p-link layout-topbar-button"
+        @click="onTopBarMenuButton()"
       >
         <i class="pi pi-calendar"></i>
         <span>Calendar</span>
       </button>
       <button
-        @click="toggle"
         class="p-link layout-topbar-button"
+        @click="toggle"
       >
         <i class="pi pi-user"></i>
         <span>Profile</span>
       </button>
 
       <Menu
-        ref="menu"
         id="overlay_menu"
+        ref="menu"
         :model="items"
         :popup="true"
       />
 
       <button
-        @click="onSettingsClick()"
         class="p-link layout-topbar-button"
+        @click="onSettingsClick()"
       >
         <i class="pi pi-cog"></i>
         <span>Settings</span>

@@ -244,7 +244,7 @@ const load = (index) => {
         <Button
           label="Bookmark"
           icon="pi pi-bookmark"
-          iconPos="right"
+          icon-pos="right"
           class="mr-2 mb-2"
         ></Button>
       </div>
@@ -416,7 +416,7 @@ const load = (index) => {
           class="mr-2 mb-2"
           label="Search"
           icon="pi pi-search"
-          iconPos="right"
+          icon-pos="right"
           :loading="loading[1]"
           @click="load(1)"
         />

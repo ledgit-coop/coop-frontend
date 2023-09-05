@@ -15,11 +15,11 @@ const onUpload = () => {
         <h5>Advanced</h5>
         <FileUpload
           name="demo[]"
-          @uploader="onUpload"
           :multiple="true"
           accept="image/*"
-          :maxFileSize="1000000"
-          customUpload
+          :max-file-size="1000000"
+          custom-upload
+          @uploader="onUpload"
         />
 
         <h5>Basic</h5>
@@ -27,9 +27,9 @@ const onUpload = () => {
           mode="basic"
           name="demo[]"
           accept="image/*"
-          :maxFileSize="1000000"
+          :max-file-size="1000000"
+          custom-upload
           @uploader="onUpload"
-          customUpload
         />
       </div>
     </div>

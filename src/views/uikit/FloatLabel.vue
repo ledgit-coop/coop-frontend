@@ -48,9 +48,9 @@ const searchCountry = (event) => {
       <div class="field col-12 md:col-4">
         <span class="p-float-label">
           <InputText
-            type="text"
             id="inputtext"
             v-model="value1"
+            type="text"
           />
           <label for="inputtext">InputText</label>
         </span>
@@ -61,8 +61,8 @@ const searchCountry = (event) => {
             id="autocomplete"
             v-model="value2"
             :suggestions="filteredCountries"
-            @complete="searchCountry($event)"
             field="name"
+            @complete="searchCountry($event)"
           ></AutoComplete>
           <label for="autocomplete">AutoComplete</label>
         </span>
@@ -70,8 +70,8 @@ const searchCountry = (event) => {
       <div class="field col-12 md:col-4">
         <span class="p-float-label">
           <Calendar
-            inputId="calendar"
             v-model="value3"
+            input-id="calendar"
           ></Calendar>
           <label for="calendar">Calendar</label>
         </span>
@@ -79,8 +79,8 @@ const searchCountry = (event) => {
       <div class="field col-12 md:col-4">
         <span class="p-float-label">
           <Chips
-            inputId="chips"
             v-model="value4"
+            input-id="chips"
           ></Chips>
           <label for="chips">Chips</label>
         </span>
@@ -89,8 +89,8 @@ const searchCountry = (event) => {
         <span class="p-float-label">
           <InputMask
             id="inputmask"
-            mask="99/99/9999"
             v-model="value5"
+            mask="99/99/9999"
           ></InputMask>
           <label for="inputmask">InputMask</label>
         </span>
@@ -111,9 +111,9 @@ const searchCountry = (event) => {
           </span>
           <span class="p-float-label">
             <InputText
-              type="text"
               id="inputgroup"
               v-model="value7"
+              type="text"
             />
             <label for="inputgroup">InputGroup</label>
           </span>
@@ -123,9 +123,9 @@ const searchCountry = (event) => {
         <span class="p-float-label">
           <Dropdown
             id="dropdown"
-            :options="cities"
             v-model="value8"
-            optionLabel="name"
+            :options="cities"
+            option-label="name"
           ></Dropdown>
           <label for="dropdown">Dropdown</label>
         </span>
@@ -134,9 +134,9 @@ const searchCountry = (event) => {
         <span class="p-float-label">
           <MultiSelect
             id="multiselect"
-            :options="cities"
             v-model="value9"
-            optionLabel="name"
+            :options="cities"
+            option-label="name"
             :filter="false"
           ></MultiSelect>
           <label for="multiselect">MultiSelect</label>
@@ -145,10 +145,10 @@ const searchCountry = (event) => {
       <div class="field col-12 md:col-4">
         <span class="p-float-label">
           <Textarea
-            inputId="textarea"
+            v-model="value10"
+            input-id="textarea"
             rows="3"
             cols="30"
-            v-model="value10"
           ></Textarea>
           <label for="textarea">Textarea</label>
         </span>

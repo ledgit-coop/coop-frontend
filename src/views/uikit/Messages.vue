@@ -47,24 +47,24 @@ const showError = () => {
 
         <Toast />
         <Button
-          @click="showSuccess()"
           label="Success"
           class="p-button-success mr-2"
+          @click="showSuccess()"
         />
         <Button
-          @click="showInfo()"
           label="Info"
           class="p-button-info mr-2"
+          @click="showInfo()"
         />
         <Button
-          @click="showWarn()"
           label="Warn"
           class="p-button-warning mr-2"
+          @click="showWarn()"
         />
         <Button
-          @click="showError()"
           label="Error"
           class="p-button-danger mr-2"
+          @click="showError()"
         />
       </div>
     </div>
@@ -75,23 +75,23 @@ const showError = () => {
 
         <Button
           label="Success"
-          @click="addMessage('success')"
           class="p-button-success mr-2"
+          @click="addMessage('success')"
         />
         <Button
           label="Info"
-          @click="addMessage('info')"
           class="p-button-info mr-2"
+          @click="addMessage('info')"
         />
         <Button
           label="Warn"
-          @click="addMessage('warn')"
           class="p-button-warning mr-2"
+          @click="addMessage('warn')"
         />
         <Button
           label="Error"
-          @click="addMessage('error')"
           class="p-button-danger mr-2"
+          @click="addMessage('error')"
         />
 
         <transition-group
@@ -100,8 +100,8 @@ const showError = () => {
         >
           <Message
             v-for="msg of message"
-            :severity="msg.severity"
             :key="msg.content"
+            :severity="msg.severity"
             >{{ msg.content }}</Message
           >
         </transition-group>

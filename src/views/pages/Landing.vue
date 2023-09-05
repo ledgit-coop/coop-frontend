@@ -37,9 +37,9 @@ const logoUrl = computed(() => {
           /><span class="text-900 font-medium text-2xl line-height-3 mr-8">SAKAI</span>
         </a>
         <a
-          class="cursor-pointer block lg:hidden text-700 p-ripple"
           v-ripple
           v-styleclass="{ selector: '@next', enterClass: 'hidden', leaveToClass: 'hidden', hideOnOutsideClick: true }"
+          class="cursor-pointer block lg:hidden text-700 p-ripple"
         >
           <i class="pi pi-bars text-4xl"></i>
         </a>
@@ -50,36 +50,36 @@ const logoUrl = computed(() => {
           <ul class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row cursor-pointer">
             <li>
               <a
-                @click="smoothScroll('#hero')"
-                class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple"
                 v-ripple
+                class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple"
+                @click="smoothScroll('#hero')"
               >
                 <span>Home</span>
               </a>
             </li>
             <li>
               <a
-                @click="smoothScroll('#features')"
-                class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple"
                 v-ripple
+                class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple"
+                @click="smoothScroll('#features')"
               >
                 <span>Features</span>
               </a>
             </li>
             <li>
               <a
-                @click="smoothScroll('#highlights')"
-                class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple"
                 v-ripple
+                class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple"
+                @click="smoothScroll('#highlights')"
               >
                 <span>Highlights</span>
               </a>
             </li>
             <li>
               <a
-                @click="smoothScroll('#pricing')"
-                class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple"
                 v-ripple
+                class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple"
+                @click="smoothScroll('#pricing')"
               >
                 <span>Pricing</span>
               </a>
@@ -613,8 +613,8 @@ const logoUrl = computed(() => {
             style="margin-top: -1.5rem"
           >
             <a
-              @click="smoothScroll('#home')"
               class="flex flex-wrap align-items-center justify-content-center md:justify-content-start md:mb-0 mb-3 cursor-pointer"
+              @click="smoothScroll('#home')"
             >
               <img
                 :src="logoUrl"

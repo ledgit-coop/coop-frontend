@@ -53,8 +53,8 @@ const searchCountry = (event) => {
               <label for="inputtext">InputText</label>
               <InputText
                 id="inputtext"
-                type="text"
                 v-model="value1"
+                type="text"
                 class="p-invalid"
               />
             </div>
@@ -64,9 +64,9 @@ const searchCountry = (event) => {
                 id="autocomplete"
                 v-model="value2"
                 :suggestions="filteredCountries"
-                @complete="searchCountry($event)"
                 field="name"
                 class="p-invalid"
+                @complete="searchCountry($event)"
               />
             </div>
             <div class="field">
@@ -75,7 +75,7 @@ const searchCountry = (event) => {
                 id="calendar"
                 v-model="value3"
                 class="p-invalid"
-                :showIcon="true"
+                :show-icon="true"
               />
             </div>
             <div class="field">
@@ -103,7 +103,7 @@ const searchCountry = (event) => {
                 id="inputmask"
                 v-model="value5"
                 mask="99/99/9999"
-                slotChar="mm/dd/yyyy"
+                slot-char="mm/dd/yyyy"
                 class="p-invalid"
               />
             </div>
@@ -121,7 +121,7 @@ const searchCountry = (event) => {
                 id="dropdown"
                 v-model="value7"
                 :options="cities"
-                optionLabel="name"
+                option-label="name"
                 class="p-invalid"
               />
             </div>
@@ -131,7 +131,7 @@ const searchCountry = (event) => {
                 id="multiselect"
                 v-model="value8"
                 :options="cities"
-                optionLabel="name"
+                option-label="name"
                 class="p-invalid"
               />
             </div>

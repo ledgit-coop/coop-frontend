@@ -67,8 +67,8 @@ const onSortChange = (event) => {
           :layout="layout"
           :paginator="true"
           :rows="9"
-          :sortOrder="sortOrder"
-          :sortField="sortField"
+          :sort-order="sortOrder"
+          :sort-field="sortField"
         >
           <template #header>
             <div class="grid grid-nogutter">
@@ -76,7 +76,7 @@ const onSortChange = (event) => {
                 <Dropdown
                   v-model="sortKey"
                   :options="sortOptions"
-                  optionLabel="label"
+                  option-label="label"
                   placeholder="Sort By Price"
                   @change="onSortChange($event)"
                 />
@@ -98,7 +98,7 @@ const onSortChange = (event) => {
                   <div class="font-bold text-2xl">{{ slotProps.data.name }}</div>
                   <div class="mb-3">{{ slotProps.data.description }}</div>
                   <Rating
-                    :modelValue="slotProps.data.rating"
+                    :model-value="slotProps.data.rating"
                     :readonly="true"
                     :cancel="false"
                     class="mb-2"
@@ -149,7 +149,7 @@ const onSortChange = (event) => {
                   <div class="text-2xl font-bold">{{ slotProps.data.name }}</div>
                   <div class="mb-3">{{ slotProps.data.description }}</div>
                   <Rating
-                    :modelValue="slotProps.data.rating"
+                    :model-value="slotProps.data.rating"
                     :readonly="true"
                     :cancel="false"
                   ></Rating>
@@ -173,8 +173,8 @@ const onSortChange = (event) => {
         <h5>PickList</h5>
         <PickList
           v-model="picklistValue"
-          listStyle="height:250px"
-          dataKey="code"
+          list-style="height:250px"
+          data-key="code"
         >
           <template #sourceheader> From </template>
           <template #targetheader> To </template>
@@ -190,8 +190,8 @@ const onSortChange = (event) => {
         <h5>OrderList</h5>
         <OrderList
           v-model="orderlistValue"
-          listStyle="height:250px"
-          dataKey="code"
+          list-style="height:250px"
+          data-key="code"
           :rows="10"
         >
           <template #header> Cities </template>

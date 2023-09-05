@@ -196,7 +196,7 @@ watch(
           :value="products"
           :rows="5"
           :paginator="true"
-          responsiveLayout="scroll"
+          responsive-layout="scroll"
         >
           <Column style="width: 15%">
             <template #header> Image </template>

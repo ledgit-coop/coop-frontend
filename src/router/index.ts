@@ -1,7 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AppLayout from '@/layout/AppLayout.vue';
 import AuthService from '@/service/AuthService';
-import { PUBLIC_ROUTES, ROUTE_NAME_MEMBERS, ROUTE_NAME_MEMBERS_CREATE } from '@/constants/routes';
+import {
+  PUBLIC_ROUTES,
+  ROUTE_NAME_LOANS,
+  ROUTE_NAME_LOANS_CREATE,
+  ROUTE_NAME_MEMBERS,
+  ROUTE_NAME_MEMBERS_CREATE,
+  ROUTE_NAME_MEMBERS_VIEW,
+} from '@/constants/routes';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,136 +59,29 @@ const router = createRouter({
               name: ROUTE_NAME_MEMBERS_CREATE,
               component: () => import('@/views/pages/members/MembersCreate.vue'),
             },
+            {
+              path: 'view/:id',
+              name: ROUTE_NAME_MEMBERS_VIEW,
+              component: () => import('@/views/pages/members/MembersView.vue'),
+            },
           ],
         },
 
         {
-          path: '/uikit/formlayout',
-          name: 'formlayout',
-          component: () => import('@/views/uikit/FormLayout.vue'),
-        },
-        {
-          path: '/uikit/input',
-          name: 'input',
-          component: () => import('@/views/uikit/Input.vue'),
-        },
-        {
-          path: '/uikit/floatlabel',
-          name: 'floatlabel',
-          component: () => import('@/views/uikit/FloatLabel.vue'),
-        },
-        {
-          path: '/uikit/invalidstate',
-          name: 'invalidstate',
-          component: () => import('@/views/uikit/InvalidState.vue'),
-        },
-        {
-          path: '/uikit/button',
-          name: 'button',
-          component: () => import('@/views/uikit/Button.vue'),
-        },
-        {
-          path: '/uikit/table',
-          name: 'table',
-          component: () => import('@/views/uikit/Table.vue'),
-        },
-        {
-          path: '/uikit/list',
-          name: 'list',
-          component: () => import('@/views/uikit/List.vue'),
-        },
-        {
-          path: '/uikit/tree',
-          name: 'tree',
-          component: () => import('@/views/uikit/Tree.vue'),
-        },
-        {
-          path: '/uikit/panel',
-          name: 'panel',
-          component: () => import('@/views/uikit/Panels.vue'),
-        },
-
-        {
-          path: '/uikit/overlay',
-          name: 'overlay',
-          component: () => import('@/views/uikit/Overlay.vue'),
-        },
-        {
-          path: '/uikit/media',
-          name: 'media',
-          component: () => import('@/views/uikit/Media.vue'),
-        },
-        {
-          path: '/uikit/menu',
-          component: () => import('@/views/uikit/Menu.vue'),
+          path: '/loans',
+          redirect: 'loans/list',
           children: [
             {
-              path: '/uikit/menu',
-              component: () => import('@/views/uikit/menu/PersonalDemo.vue'),
+              path: 'list',
+              name: ROUTE_NAME_LOANS,
+              component: () => import('@/views/pages/loans/LoansPage.vue'),
             },
             {
-              path: '/uikit/menu/seat',
-              component: () => import('@/views/uikit/menu/SeatDemo.vue'),
-            },
-            {
-              path: '/uikit/menu/payment',
-              component: () => import('@/views/uikit/menu/PaymentDemo.vue'),
-            },
-            {
-              path: '/uikit/menu/confirmation',
-              component: () => import('@/views/uikit/menu/ConfirmationDemo.vue'),
+              path: 'create',
+              name: ROUTE_NAME_LOANS_CREATE,
+              component: () => import('@/views/pages/loans/LoansCreate.vue'),
             },
           ],
-        },
-        {
-          path: '/uikit/message',
-          name: 'message',
-          component: () => import('@/views/uikit/Messages.vue'),
-        },
-        {
-          path: '/uikit/file',
-          name: 'file',
-          component: () => import('@/views/uikit/File.vue'),
-        },
-        {
-          path: '/uikit/charts',
-          name: 'charts',
-          component: () => import('@/views/uikit/Chart.vue'),
-        },
-        {
-          path: '/uikit/misc',
-          name: 'misc',
-          component: () => import('@/views/uikit/Misc.vue'),
-        },
-        {
-          path: '/blocks',
-          name: 'blocks',
-          component: () => import('@/views/utilities/Blocks.vue'),
-        },
-        {
-          path: '/utilities/icons',
-          name: 'icons',
-          component: () => import('@/views/utilities/Icons.vue'),
-        },
-        {
-          path: '/pages/timeline',
-          name: 'timeline',
-          component: () => import('@/views/pages/Timeline.vue'),
-        },
-        {
-          path: '/pages/empty',
-          name: 'empty',
-          component: () => import('@/views/pages/Empty.vue'),
-        },
-        {
-          path: '/pages/crud',
-          name: 'crud',
-          component: () => import('@/views/pages/Crud.vue'),
-        },
-        {
-          path: '/documentation',
-          name: 'documentation',
-          component: () => import('@/views/utilities/Documentation.vue'),
         },
       ],
     },

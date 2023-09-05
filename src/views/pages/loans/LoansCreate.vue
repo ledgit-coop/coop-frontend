@@ -1,24 +1,25 @@
 <script setup lang="ts">
-import { ROUTE_NAME_MEMBERS } from '@/constants/routes';
-import PageContentHeader from '../../components/PageContentHeader.vue';
+import { ref } from 'vue';
+import { ROUTE_NAME_LOANS } from '@/constants/routes';
+import PageContentHeader from '@/views/components/PageContentHeader.vue';
 import Button from 'primevue/button';
 import router from '@/router';
-import MembersForm from './components/MembersForm.vue';
+import LoansForm from './components/LoansForm.vue';
 </script>
 
 <template>
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <PageContentHeader title="Add New Member">
+        <PageContentHeader title="Add New Loan">
           <Button
             icon="pi pi-arrow-left"
             label="Back"
-            @click="router.push({ name: ROUTE_NAME_MEMBERS })"
+            @click="router.push({ name: ROUTE_NAME_LOANS })"
           ></Button>
         </PageContentHeader>
 
-        <MembersForm />
+        <LoansForm />
 
         <div class="flex">
           <Button

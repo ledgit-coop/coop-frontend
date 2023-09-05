@@ -37,7 +37,7 @@ const toggle = () => {
       <div class="card">
         <h5>Toolbar</h5>
         <Toolbar>
-          <template v-slot:start>
+          <template #start>
             <Button
               label="New"
               icon="pi pi-plus"
@@ -64,7 +64,7 @@ const toggle = () => {
               class="p-button-danger"
             />
           </template>
-          <template v-slot:end>
+          <template #end>
             <SplitButton
               label="Options"
               :model="toolbarItems"
@@ -76,7 +76,7 @@ const toggle = () => {
     <div class="col-12 md:col-6">
       <div class="card">
         <h5>AccordionPanel</h5>
-        <Accordion :activeIndex="0">
+        <Accordion :active-index="0">
           <AccordionTab header="Header I">
             <p class="line-height-3 m-0">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
@@ -172,7 +172,7 @@ const toggle = () => {
       </div>
 
       <Card>
-        <template v-slot:title>
+        <template #title>
           <div class="flex align-items-center justify-content-between mb-0">
             <h5>Card</h5>
             <Button
@@ -189,7 +189,7 @@ const toggle = () => {
           />
         </template>
 
-        <template v-slot:content>
+        <template #content>
           <p class="line-height-3 m-0">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
             dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
@@ -287,7 +287,7 @@ const toggle = () => {
         >
           <SplitterPanel
             :size="30"
-            :minSize="10"
+            :min-size="10"
             style="overflow: scroll"
           >
             <div className="h-full flex align-items-center justify-content-center">Panel 1</div>

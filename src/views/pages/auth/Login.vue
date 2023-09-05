@@ -35,11 +35,11 @@
             >
             <InputText
               id="email1"
+              v-model="email"
               type="text"
               placeholder="Email address"
               class="w-full md:w-30rem mb-5"
               style="padding: 1rem"
-              v-model="email"
             />
 
             <label
@@ -51,17 +51,17 @@
               id="password1"
               v-model="password"
               placeholder="Password"
-              :toggleMask="true"
+              :toggle-mask="true"
               class="w-full mb-3"
-              inputClass="w-full"
-              :inputStyle="{ padding: '1rem' }"
+              input-class="w-full"
+              :input-style="{ padding: '1rem' }"
             ></Password>
 
             <div class="flex align-items-center justify-content-between mb-5 gap-5">
               <div class="flex align-items-center">
                 <Checkbox
-                  v-model="rememberMe"
                   id="rememberme1"
+                  v-model="rememberMe"
                   binary
                   class="mr-2"
                 ></Checkbox>

@@ -1,6 +1,6 @@
 <template>
   <div class="mb-3 flex gap-3 align-items-center">
-    <h5 class="m-0">{{ title }}</h5>
+    <h4 class="m-0">{{ title }}</h4>
     <div class="ml-auto">
       <slot></slot>
     </div>

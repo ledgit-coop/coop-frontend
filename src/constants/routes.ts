@@ -64,8 +64,15 @@ export const ROUTE_NAME_KNOWLEDGE_PORTAL_CASE_STUDY = 'case-study';
 export const ROUTE_NAME_KNOWLEDGE_PORTAL_REMB_PORTAL = 'remb-portal';
 export const ROUTE_NAME_MAPS = 'maps';
 
+/**
+ * NEW
+ */
 export const ROUTE_NAME_MEMBERS = 'members';
 export const ROUTE_NAME_MEMBERS_CREATE = 'members-create';
+export const ROUTE_NAME_MEMBERS_VIEW = 'members-view';
+
+export const ROUTE_NAME_LOANS = 'loans';
+export const ROUTE_NAME_LOANS_CREATE = 'loans-create';
 
 export const PUBLIC_ROUTES: Array<string> = [
   ROUTE_NAME_LOGIN,

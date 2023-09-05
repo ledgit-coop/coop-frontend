@@ -107,9 +107,9 @@ onMounted(() => {
 
     <div class="grid icons-list text-center">
       <div
-        class="col-6 sm:col-4 lg:col-3 xl:col-2 pb-5"
         v-for="icon of filteredIcons"
         :key="icon.properties.name"
+        class="col-6 sm:col-4 lg:col-3 xl:col-2 pb-5"
       >
         <i :class="'text-2xl mb-2 pi pi-' + icon.properties.name"></i>
         <div>pi-{{ icon.properties.name }}</div>
