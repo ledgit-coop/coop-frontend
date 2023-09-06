@@ -43,6 +43,9 @@ const router = createRouter({
           path: '/',
           name: 'dashboard',
           component: () => import('@/views/Dashboard.vue'),
+          meta: {
+            title: 'Dashboard'
+          }
         },
 
         {
@@ -53,16 +56,25 @@ const router = createRouter({
               path: 'list',
               name: ROUTE_NAME_MEMBERS,
               component: () => import('@/views/pages/members/MembersPage.vue'),
+              meta: {
+                title: 'Members'
+              }
             },
             {
               path: 'create',
               name: ROUTE_NAME_MEMBERS_CREATE,
               component: () => import('@/views/pages/members/MembersCreate.vue'),
+              meta: {
+                title: 'Create Member'
+              }
             },
             {
               path: 'view/:id',
               name: ROUTE_NAME_MEMBERS_VIEW,
               component: () => import('@/views/pages/members/MembersView.vue'),
+              meta: {
+                title: 'View Member'
+              }
             },
           ],
         },
@@ -75,6 +87,9 @@ const router = createRouter({
               path: 'list',
               name: ROUTE_NAME_LOANS,
               component: () => import('@/views/pages/loans/LoansPage.vue'),
+              meta: {
+                title: 'Loans'
+              }
             },
             {
               path: 'create',
@@ -93,6 +108,10 @@ const router = createRouter({
     },
   ],
 });
+
+router.beforeEach((to) => {
+  document.title = 'DSPACC - ' + (to.meta?.title ?? 'Credit Portal')
+})
 
 router.beforeResolve(async (to) => {
   if (!AuthService.canAccess(to)) {

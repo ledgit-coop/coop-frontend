@@ -146,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Avatar from 'primevue/avatar';
 import Information from '@/views/components/Information.vue';
 import type { InformationItem } from '@/types/ui';
@@ -230,4 +230,8 @@ const mother_information = computed<InformationItem[]>(() => [
   { label: 'Occupation', value: 'Kevin' },
   { label: 'Contact Number', value: 'Kevin' },
 ]);
+
+onMounted(()=>{
+  document.title = 'DSPACC - Member (Kevin Loquencio)';
+})
 </script>
