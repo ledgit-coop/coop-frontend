@@ -12,17 +12,17 @@ const model = ref<any>([
     label: 'Operations',
     items: [
       { label: 'Members', icon: 'pi pi-fw pi-id-card', to: '/members/list' },
-      { label: 'Users', icon: 'pi pi-fw pi-check-square', to: '/loans/list' },
-      { label: 'Loans', icon: 'pi pi-fw pi-bookmark', to: '/loans/list' },
-      { label: 'Shared Capitals', icon: 'pi pi-fw pi-exclamation-circle', to: '/uikit/invalidstate' },
+      { label: 'Loans', icon: 'pi pi-fw pi-history', to: '/loans/list' },
+      { label: 'Share Capitals', icon: 'pi pi-fw pi-globe', to: '/uikit/invalidstate' },
     ],
   },
 
   {
     label: 'Administration',
     items: [
-      { label: 'Loan Types', icon: 'pi pi-fw pi-prime', to: '/utilities/icons' },
-      { label: 'Account Types', icon: 'pi pi-fw pi-prime', to: '/utilities/icons' },
+      { label: 'Users', icon: 'pi pi-fw pi-users', to: '/users/list' },
+      { label: 'Loan Types', icon: 'pi pi-fw pi-book', to: '/utilities/icons' },
+      { label: 'Account Types', icon: 'pi pi-fw pi-book', to: '/utilities/icons' },
 
       {
         label: 'PrimeFlex',

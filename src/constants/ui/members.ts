@@ -1,22 +1,15 @@
+import type { DropdownOption } from '@/types/ui';
+
 export enum MemberType {
-  'permanent',
-  'present',
+  PERMANENT = 'permanent',
+  PRESENT = 'present',
+}
+export enum MemberStatus {
+  ACTIVE = 'active',
+  TERMINATED = 'terminated',
 }
 
-export interface MemberForm {
-  beneficiaries: MemberFormBeneficiary[];
-}
-
-export interface MemberFormBeneficiary {
-  name?: string;
-  birthdate?: string;
-  relationship?: string;
-}
-
-export interface MemberLoanWidgetItem {
-  type: string;
-  balance: number;
-  terms: number;
-  paid: number;
-  currency: string;
-}
+export const MEMBER_STATUSES: DropdownOption[] = [
+  { label: 'Active', value: MemberStatus.ACTIVE },
+  { label: 'Terminated', value: MemberStatus.TERMINATED },
+];

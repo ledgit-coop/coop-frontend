@@ -21,7 +21,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { InformationItem } from '@/constants/ui/index';
+import type { InformationItem } from '@/types/ui/index';
 
 interface Props {
   info: InformationItem[];

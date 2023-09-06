@@ -128,8 +128,8 @@
     </div>
   </div>
 
-  <MemberAddress :type="MemberType.present" />
-  <MemberAddress :type="MemberType.permanent" />
+  <MemberAddress :type="MemberType.PRESENT" />
+  <MemberAddress :type="MemberType.PERMANENT" />
 
   <div class="p-fluid formgrid grid">
     <div class="field col-12 md:col-4">
@@ -386,7 +386,7 @@ import RadioButton from 'primevue/radiobutton';
 import MemberAddress from '@/views/pages/members/components/MemberAddress.vue';
 import { reactive } from 'vue';
 import { MemberType } from '@/constants/ui/members';
-import type { MemberForm } from '@/constants/ui/members';
+import type { MemberForm } from '@/types/ui/members';
 import useAlert from '@/composables/useAlert';
 
 const { showError } = useAlert();

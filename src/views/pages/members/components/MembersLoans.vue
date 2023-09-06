@@ -50,7 +50,7 @@
 import DataTable from 'primevue/datatable';
 import { ref } from 'vue';
 import MembersLoanWidget from './MembersLoanWidget.vue';
-import type { MemberLoanWidgetItem } from '@/constants/ui/members';
+import type { MemberLoanWidgetItem } from '@/types/ui/members';
 
 const products = ref<any[]>();
 const loans = ref<MemberLoanWidgetItem[]>([

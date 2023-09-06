@@ -1,79 +1,3 @@
-<script setup lang="ts">
-import { computed } from 'vue';
-import Avatar from 'primevue/avatar';
-import Information from '@/views/components/Information.vue';
-import type { InformationItem } from '@/constants/ui';
-import TabView from 'primevue/tabview';
-import TabPanel from 'primevue/tabpanel';
-
-import MembersSharedCapital from './components/MemberSharedCapital.vue';
-import MembersLoans from './components/MembersLoans.vue';
-
-const basic_information = computed<InformationItem[]>(() => [
-  { label: 'Surname', value: 'Loqencio' },
-  { label: 'First Name', value: 'Kevin' },
-  { label: 'Middle Name', value: 'Muldez' },
-  { label: 'Suffix (Jr. Sr.)', value: 'N/A' },
-  { label: 'Date of Birth', value: 'Sept. 2, 1993' },
-  { label: 'Place of Birth', value: 'Macrohon So. Leyte' },
-  { label: 'Gender', value: 'Male' },
-]);
-
-const employment_information = computed<InformationItem[]>(() => [
-  { label: 'Date Hired', value: 'Sept. 2, 1993' },
-  { label: 'Department', value: 'IT' },
-  { label: 'Position', value: 'Software Engineer' },
-  { label: 'Employee No.', value: 'ID6585478' },
-  { label: 'TIN No.', value: '00000' },
-  { label: 'Email Address', value: 'kevin.loquencio@gmail.com' },
-]);
-const address_info = computed<InformationItem[]>(() => [
-  {
-    label: 'Present Address',
-    value: 'Block 19, Lot 2 La Aldea Lapu Lapu City 6015',
-  },
-  {
-    label: 'Status of Residence',
-    value: 'Living with Parents',
-  },
-  {
-    label: 'Permanent Address',
-    value:
-      'Block 19, Lot 2 La Aldea Lapu Lapu City 6015 Block 19, Lot 2 La Aldea Lapu Lapu City 6015 Block 19, Lot 2 La Aldea Lapu Lapu City 6015 Block 19, Lot 2 La Aldea Lapu Lapu City 6015 Block 19, Lot 2 La Aldea Lapu Lapu City 6015',
-  },
-]);
-
-const spouse_information = computed<InformationItem[]>(() => [
-  {
-    label: 'Name of Spouse',
-    value: 'Kevin Loquencio',
-  },
-  { label: 'Date of Birth', value: 'Kevin' },
-  { label: 'Occupation', value: 'Kevin' },
-  { label: 'Contact Number', value: 'Kevin' },
-]);
-
-const father_information = computed<InformationItem[]>(() => [
-  {
-    label: 'Name of Father',
-    value: 'Kevin Loquencio',
-  },
-  { label: 'Date of Birth', value: 'Kevin' },
-  { label: 'Occupation', value: 'Kevin' },
-  { label: 'Contact Number', value: 'Kevin' },
-]);
-
-const mother_information = computed<InformationItem[]>(() => [
-  {
-    label: 'Name of Mother',
-    value: 'Kevin Loquencio',
-  },
-  { label: 'Date of Birth', value: 'Kevin' },
-  { label: 'Occupation', value: 'Kevin' },
-  { label: 'Contact Number', value: 'Kevin' },
-]);
-</script>
-
 <template>
   <div class="grid">
     <div class="col-12">
@@ -86,17 +10,23 @@ const mother_information = computed<InformationItem[]>(() => [
             shape="circle"
           ></Avatar>
           <div class="flex flex-column ml-2">
-            <h4 class="m-0">Label - Circle</h4>
-            <small>Member since: 2012</small>
+            <h4 class="m-0">Kevin Loquencio</h4>
+            <small>Member since: 2023</small>
           </div>
           <div class="ml-auto grid gap-2">
             <Button
               icon="pi pi-arrow-left"
               label="Back"
+              @click="router.push({ name: ROUTE_NAME_MEMBERS })"
             ></Button>
             <Button
               icon="pi pi-print"
               label="Print"
+            ></Button>
+            <Button
+              icon="pi pi-print"
+              label="Apply Loan"
+              @click="modalsVisibility.apply_form = true"
             ></Button>
           </div>
         </div>
@@ -180,8 +110,11 @@ const mother_information = computed<InformationItem[]>(() => [
                 </div>
               </div>
             </TabPanel>
-            <TabPanel header="Shared Capital">
-              <MembersSharedCapital />
+            <TabPanel header="Share Capital">
+              <MembersShareCapital />
+            </TabPanel>
+            <TabPanel header="Savings">
+              <MembersSavings />
             </TabPanel>
             <TabPanel header="Loans">
               <MembersLoans />
@@ -196,8 +129,100 @@ const mother_information = computed<InformationItem[]>(() => [
               </p>
             </TabPanel>
           </TabView>
+          <ApplyLoan
+            member_id="12231"
+            v-model:visible="modalsVisibility.apply_form"
+            :disable_member="true"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import Avatar from 'primevue/avatar';
+import Information from '@/views/components/Information.vue';
+import type { InformationItem } from '@/types/ui';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+import router from '@/router';
+import MembersShareCapital from './components/MembersShareCapital.vue';
+import MembersLoans from './components/MembersLoans.vue';
+import ApplyLoan from '@/views/components/ApplyLoan.vue';
+import { ROUTE_NAME_MEMBERS } from '@/constants';
+import MembersSavings from './components/MembersSavings.vue';
+
+interface ModalsVisibility {
+  apply_form: boolean;
+}
+
+const modalsVisibility = ref<ModalsVisibility>({
+  apply_form: false,
+});
+
+const basic_information = computed<InformationItem[]>(() => [
+  { label: 'Surname', value: 'Loqencio' },
+  { label: 'First Name', value: 'Kevin' },
+  { label: 'Middle Name', value: 'Muldez' },
+  { label: 'Suffix (Jr. Sr.)', value: 'N/A' },
+  { label: 'Date of Birth', value: 'Sept. 2, 1993' },
+  { label: 'Place of Birth', value: 'Macrohon So. Leyte' },
+  { label: 'Gender', value: 'Male' },
+]);
+
+const employment_information = computed<InformationItem[]>(() => [
+  { label: 'Date Hired', value: 'Sept. 2, 1993' },
+  { label: 'Department', value: 'IT' },
+  { label: 'Position', value: 'Software Engineer' },
+  { label: 'Employee No.', value: 'ID6585478' },
+  { label: 'TIN No.', value: '00000' },
+  { label: 'Email Address', value: 'kevin.loquencio@gmail.com' },
+]);
+const address_info = computed<InformationItem[]>(() => [
+  {
+    label: 'Present Address',
+    value: 'Block 19, Lot 2 La Aldea Lapu Lapu City 6015',
+  },
+  {
+    label: 'Status of Residence',
+    value: 'Living with Parents',
+  },
+  {
+    label: 'Permanent Address',
+    value:
+      'Block 19, Lot 2 La Aldea Lapu Lapu City 6015 Block 19, Lot 2 La Aldea Lapu Lapu City 6015 Block 19, Lot 2 La Aldea Lapu Lapu City 6015 Block 19, Lot 2 La Aldea Lapu Lapu City 6015 Block 19, Lot 2 La Aldea Lapu Lapu City 6015',
+  },
+]);
+
+const spouse_information = computed<InformationItem[]>(() => [
+  {
+    label: 'Name of Spouse',
+    value: 'Kevin Loquencio',
+  },
+  { label: 'Date of Birth', value: 'Kevin' },
+  { label: 'Occupation', value: 'Kevin' },
+  { label: 'Contact Number', value: 'Kevin' },
+]);
+
+const father_information = computed<InformationItem[]>(() => [
+  {
+    label: 'Name of Father',
+    value: 'Kevin Loquencio',
+  },
+  { label: 'Date of Birth', value: 'Kevin' },
+  { label: 'Occupation', value: 'Kevin' },
+  { label: 'Contact Number', value: 'Kevin' },
+]);
+
+const mother_information = computed<InformationItem[]>(() => [
+  {
+    label: 'Name of Mother',
+    value: 'Kevin Loquencio',
+  },
+  { label: 'Date of Birth', value: 'Kevin' },
+  { label: 'Occupation', value: 'Kevin' },
+  { label: 'Contact Number', value: 'Kevin' },
+]);
+</script>

@@ -60,7 +60,7 @@
 
   <div
     class="p-fluid formgrid grid"
-    v-if="type == MemberType.present"
+    v-if="type == MemberType.PRESENT"
   >
     <div class="field col-12">
       <div class="flex flex-wrap gap-3">
@@ -116,10 +116,10 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  type: MemberType.present,
+  type: MemberType.PRESENT,
 });
 
 const form = reactive<any>({});
 
-const addressName = computed(() => (props.type === MemberType.present ? 'Present Address' : 'Permanent Address'));
+const addressName = computed(() => (props.type === MemberType.PRESENT ? 'Present Address' : 'Permanent Address'));
 </script>

@@ -2,11 +2,11 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <PageContentHeader title="Loans">
+        <PageContentHeader title="Member Loans">
           <Button
             icon="pi pi-plus"
-            label="Add Loans"
-            @click="router.push({ name: ROUTE_NAME_LOANS_CREATE })"
+            label="Apply Loan"
+            @click="modalsVisibility.apply_form = true"
           ></Button>
         </PageContentHeader>
 
@@ -43,227 +43,71 @@
               </span>
             </div>
           </template>
-          <template #empty> No customers found. </template>
-          <template #loading> Loading customers data. Please wait. </template>
+          <template #empty> No loan records found. </template>
+          <template #loading> Loading loan records. Please wait. </template>
           <Column
             field="name"
-            header="Name"
+            header="Member"
             style="min-width: 12rem"
           >
-            <template #body="{ data }">
-              {{ data.name }}
-            </template>
-            <template #filter="{ filterModel }">
-              <InputText
-                v-model="filterModel.value"
-                type="text"
-                class="p-column-filter"
-                placeholder="Search by name"
-              />
-            </template>
           </Column>
+
           <Column
-            header="Country"
-            filter-field="country.name"
+            field="loan_type"
+            header="Loan"
             style="min-width: 12rem"
           >
-            <template #body="{ data }">
-              <img
-                src="/demo/images/flag/flag_placeholder.png"
-                :alt="data.country.name"
-                :class="'flag flag-' + data.country.code"
-                width="30"
-              />
-              <span
-                style="margin-left: 0.5em; vertical-align: middle"
-                class="image-text"
-                >{{ data.country.name }}</span
-              >
-            </template>
-            <template #filter="{ filterModel }">
-              <InputText
-                v-model="filterModel.value"
-                type="text"
-                class="p-column-filter"
-                placeholder="Search by country"
-              />
-            </template>
-            <template #filterclear="{ filterCallback }">
-              <Button
-                type="button"
-                icon="pi pi-times"
-                class="p-button-secondary"
-                @click="filterCallback()"
-              ></Button>
-            </template>
-            <template #filterapply="{ filterCallback }">
-              <Button
-                type="button"
-                icon="pi pi-check"
-                class="p-button-success"
-                @click="filterCallback()"
-              ></Button>
-            </template>
           </Column>
+
           <Column
-            header="Agent"
-            filter-field="representative"
-            :show-filter-match-modes="false"
-            :filter-menu-style="{ width: '14rem' }"
-            style="min-width: 14rem"
+            field="Amount"
+            header="Loan Amount"
+            style="min-width: 12rem"
           >
-            <template #body="{ data }">
-              <img
-                :alt="data.representative.name"
-                :src="'demo/images/avatar/' + data.representative.image"
-                width="32"
-                style="vertical-align: middle"
-              />
-              <span
-                style="margin-left: 0.5em; vertical-align: middle"
-                class="image-text"
-                >{{ data.representative.name }}</span
-              >
-            </template>
-            <template #filter="{ filterModel }">
-              <div class="mb-3 text-bold">Agent Picker</div>
-              <MultiSelect
-                v-model="filterModel.value"
-                :options="representatives"
-                option-label="name"
-                placeholder="Any"
-                class="p-column-filter"
-              >
-                <template #option="slotProps">
-                  <div class="p-multiselect-representative-option">
-                    <img
-                      :alt="slotProps.option.name"
-                      :src="'demo/images/avatar/' + slotProps.option.image"
-                      width="32"
-                      style="vertical-align: middle"
-                    />
-                    <span
-                      style="margin-left: 0.5em; vertical-align: middle"
-                      class="image-text"
-                      >{{ slotProps.option.name }}</span
-                    >
-                  </div>
-                </template>
-              </MultiSelect>
-            </template>
           </Column>
+
           <Column
-            header="Date"
-            filter-field="date"
-            data-type="date"
-            style="min-width: 10rem"
+            field="Amount"
+            header="Approved Amount"
+            style="min-width: 12rem"
           >
-            <template #body="{ data }">
-              {{ formatDate(data.date) }}
-            </template>
-            <template #filter="{ filterModel }">
-              <Calendar
-                v-model="filterModel.value"
-                date-format="mm/dd/yy"
-                placeholder="mm/dd/yyyy"
-              />
-            </template>
           </Column>
+
           <Column
-            header="Balance"
-            filter-field="balance"
-            data-type="numeric"
-            style="min-width: 10rem"
+            field="amount"
+            header="Terms"
+            style="min-width: 12rem"
           >
-            <template #body="{ data }">
-              {{ formatCurrency(data.balance) }}
-            </template>
-            <template #filter="{ filterModel }">
-              <InputNumber
-                v-model="filterModel.value"
-                mode="currency"
-                currency="USD"
-                locale="en-US"
-              />
-            </template>
+          </Column>
+
+          <Column
+            field="Amount"
+            header="Interest (%)"
+            style="min-width: 12rem"
+          >
           </Column>
           <Column
             field="status"
             header="Status"
-            :filter-menu-style="{ width: '14rem' }"
             style="min-width: 12rem"
           >
-            <template #body="{ data }">
-              <span :class="'customer-badge status-' + data.status">{{ data.status }}</span>
-            </template>
-            <template #filter="{ filterModel }">
-              <Dropdown
-                v-model="filterModel.value"
-                :options="statuses"
-                placeholder="Any"
-                class="p-column-filter"
-                :show-clear="true"
-              >
-                <template #value="slotProps">
-                  <span
-                    v-if="slotProps.value"
-                    :class="'customer-badge status-' + slotProps.value"
-                    >{{ slotProps.value }}</span
-                  >
-                  <span v-else>{{ slotProps.placeholder }}</span>
-                </template>
-                <template #option="slotProps">
-                  <span :class="'customer-badge status-' + slotProps.option">{{ slotProps.option }}</span>
-                </template>
-              </Dropdown>
-            </template>
           </Column>
+
           <Column
-            field="activity"
-            header="Activity"
-            :show-filter-match-modes="false"
+            field="status"
+            header="Remarks"
             style="min-width: 12rem"
           >
-            <template #body="{ data }">
-              <ProgressBar
-                :value="data.activity"
-                :show-value="false"
-                style="height: 0.5rem"
-              ></ProgressBar>
-            </template>
-            <template #filter="{ filterModel }">
-              <Slider
-                v-model="filterModel.value"
-                :range="true"
-                class="m-3"
-              ></Slider>
-              <div class="flex align-items-center justify-content-between px-2">
-                <span>{{ filterModel.value ? filterModel.value[0] : 0 }}</span>
-                <span>{{ filterModel.value ? filterModel.value[1] : 100 }}</span>
-              </div>
-            </template>
           </Column>
           <Column
-            field="verified"
-            header="Verified"
-            data-type="boolean"
-            body-class="text-center"
-            style="min-width: 8rem"
+            field="action"
+            header="Action"
+            style="min-width: 12rem"
           >
-            <template #body="{ data }">
-              <i
-                class="pi"
-                :class="{
-                  'text-green-500 pi-check-circle': data.verified,
-                  'text-pink-500 pi-times-circle': !data.verified,
-                }"
-              ></i>
-            </template>
-            <template #filter="{ filterModel }">
-              <TriStateCheckbox v-model="filterModel.value" />
-            </template>
           </Column>
         </DataTable>
+
+        <ApplyLoan v-model:visible="modalsVisibility.apply_form" />
       </div>
     </div>
   </div>
@@ -278,6 +122,15 @@ import Button from 'primevue/button';
 import router from '@/router';
 import { ROUTE_NAME_LOANS_CREATE } from '@/constants/routes';
 import PageContentHeader from '../../components/PageContentHeader.vue';
+import ApplyLoan from '@/views/components/ApplyLoan.vue';
+
+interface ModalsVisibility {
+  apply_form: boolean;
+}
+
+const modalsVisibility = ref<ModalsVisibility>({
+  apply_form: false,
+});
 
 const customer1 = ref(null);
 const customer2 = ref(null);
