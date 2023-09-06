@@ -1,11 +1,7 @@
 <template>
   <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
     <div class="flex flex-column align-items-center justify-content-center">
-      <img
-        :src="logoUrl"
-        alt="Sakai logo"
-        class="mb-5 w-6rem flex-shrink-0"
-      />
+  
 
       <div class="w-full lg:w-6 md:w-8 mx-auto px-4">
         <Message
@@ -26,7 +22,16 @@
           class="w-full surface-card py-8 px-5 sm:px-8"
           style="border-radius: 53px"
         >
-          <h2>Coop Management</h2>
+        
+          <div class="mb-5 grid">
+  <img
+        :src="logoUrl"
+        alt="DSPACC Logo"
+        class="w-6rem flex-shrink-0"
+      />
+      <h4 class="ml-2">Dalan Sa-Pag Asenso<br><small>Credit Cooperative Portal</small></h4>
+
+</div>
           <div>
             <label
               for="email1"
@@ -107,7 +112,7 @@ const errorMsg = ref('');
 const isSumitted = ref(false);
 
 const logoUrl = computed(() => {
-  return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+  return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
 
 const handleLoginClick = async () => {
