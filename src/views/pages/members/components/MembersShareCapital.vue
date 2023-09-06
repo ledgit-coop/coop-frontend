@@ -13,7 +13,7 @@
       </div>
     </div>
     <span class="text-green-500 font-medium">Last shared 10,000.0 </span>
-    <br>
+    <br />
     <span class="text-500">was on Sept 2, 2023</span>
   </div>
 

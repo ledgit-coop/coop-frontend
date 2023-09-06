@@ -75,18 +75,22 @@ export interface MembersShareCapitalPatronageHistory {
   release_date: string;
 }
 
-
 export interface MemberAccountTransactionHistory {
   id: string;
   transaction_number: string;
-  account:string;
+  account: string;
   withdrawals: string;
   deposits: string;
   date: string;
   running_balance: string;
 }
-
-
-
-
-
+export interface MemberLoanHistory {
+  id: string;
+  loan_number: string;
+  status: string;
+  type: string;
+  loan_date: string;
+  loan_amount: string;
+  interest_rate: string;
+  outstanding_balance: string;
+}

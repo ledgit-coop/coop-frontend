@@ -13,3 +13,11 @@ export const MEMBER_STATUSES: DropdownOption[] = [
   { label: 'Active', value: MemberStatus.ACTIVE },
   { label: 'Terminated', value: MemberStatus.TERMINATED },
 ];
+
+export enum MemberLoanStatus {
+  EVAULUATION = 'evaluation',
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+  PAID = 'paid',
+}

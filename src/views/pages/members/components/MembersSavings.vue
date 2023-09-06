@@ -26,8 +26,6 @@
     </Dropdown>
   </PageContentHeader>
 
- 
-
   <DataTable
     :value="transactions"
     tableStyle="min-width: 50rem"
@@ -67,7 +65,6 @@
         <Column footer="1,100.00" />
       </Row>
     </ColumnGroup>
-
   </DataTable>
 </template>
 <script setup lang="ts">
@@ -96,7 +93,7 @@ const accounts = ref<MemberSavingsAccountWidgetItem[]>([
   },
 ]);
 
-onMounted(async()=>{
-  transactions.value = await MembersService.getMembersSavingsTransactionHistory("1");
-})
+onMounted(async () => {
+  transactions.value = await MembersService.getMembersSavingsTransactionHistory('1');
+});
 </script>

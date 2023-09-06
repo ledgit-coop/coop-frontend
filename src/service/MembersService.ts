@@ -25,6 +25,13 @@ class MembersService {
       .then((res) => res.json())
       .then((d) => d.data);
   }
+
+  getMemberLoanHistory(member_id: string) {
+    console.log(member_id);
+    return fetch('/demo/data/member-loan-history.json')
+      .then((res) => res.json())
+      .then((d) => d.data);
+  }
 }
 
 export default new MembersService();

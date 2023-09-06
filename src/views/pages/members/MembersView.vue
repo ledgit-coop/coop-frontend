@@ -28,6 +28,11 @@
               label="Apply Loan"
               @click="modalsVisibility.apply_form = true"
             ></Button>
+            <Button
+              icon="pi pi-print"
+              label="Make Transaction"
+              @click="modalsVisibility.apply_form = true"
+            ></Button>
           </div>
         </div>
 
