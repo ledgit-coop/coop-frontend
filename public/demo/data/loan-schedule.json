@@ -1,0 +1,42 @@
+{
+    "data": [
+      {
+        "due_date": "01-Jan-2023",
+        "amount_due": "1935.12",
+        "late_fees": "1935.12",
+        "amount_paid": "3497.66"
+      },
+      {
+        "due_date": "01-Jan-2023",
+        "amount_due": "1935.12",
+        "late_fees": "1935.12",
+        "amount_paid": "3497.66"
+    }, {
+      "due_date": "01-Jan-2023",
+      "amount_due": "1935.12",
+      "late_fees": "1935.12",
+      "amount_paid": "3497.66"
+    }, {
+      "due_date": "01-Jan-2023",
+      "amount_due": "1935.12",
+      "late_fees": "1935.12",
+      "amount_paid": "3497.66"
+    }, {
+      "due_date": "01-Jan-2023",
+      "amount_due": "1935.12",
+      "late_fees": "1935.12",
+      "amount_paid": "3497.66"
+    }, {
+      "due_date": "01-Jan-2023",
+      "amount_due": "1935.12",
+      "late_fees": "1935.12",
+      "amount_paid": "3497.66"
+    },
+    {
+      "due_date": "01-Jan-2023",
+      "amount_due": "1935.12",
+      "late_fees": "1935.12",
+      "amount_paid": "3497.66"
+    }
+  ]
+}

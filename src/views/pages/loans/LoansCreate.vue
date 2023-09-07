@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { ROUTE_NAME_LOANS } from '@/constants/routes';
-import PageContentHeader from '@/views/components/PageContentHeader.vue';
+import PageContentHeader from '@components/PageContentHeader.vue';
 import Button from 'primevue/button';
 import router from '@/router';
 import LoansForm from './components/LoansForm.vue';

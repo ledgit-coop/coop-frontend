@@ -51,7 +51,7 @@
         <div class="flex align-items-center">
           <RadioButton
             v-model="form.gender"
-            inputId="gender-maile"
+            input-id="gender-maile"
             name="gender"
             value="Male"
           />
@@ -64,7 +64,7 @@
         <div class="flex align-items-center">
           <RadioButton
             v-model="form.gender"
-            inputId="gender-female"
+            input-id="gender-female"
             name="gender"
             value="Female"
           />
@@ -326,29 +326,30 @@
     Beneficiaries
     <Button
       icon="pi pi-plus"
-      @click="handleAddBeneficiary"
       class="p-button-rounded p-button-success p-button-text"
+      @click="handleAddBeneficiary"
     />
   </h5>
 
   <div
     v-for="index in form.beneficiaries.length"
+    :key="index"
     class="p-fluid formgrid grid"
   >
     <div class="field col-12 md:col-4">
       <label for="lastname2">Name (Last Name, First Name, Middle Name)</label>
       <InputText
         id="lastname2"
-        type="text"
         v-model="form.beneficiaries[index - 1].name"
+        type="text"
       />
     </div>
     <div class="field col-12 md:col-4">
       <label for="firstname2">Birthdate</label>
       <Calendar
+        v-model="form.beneficiaries[index - 1].birthdate"
         pattern="dd-MM-yyyy"
         mask="true"
-        v-model="form.beneficiaries[index - 1].birthdate"
       />
     </div>
     <div class="flex align-items-center col-12 md:col-4">
@@ -356,15 +357,15 @@
         <label for="lastname2">Relationship</label>
         <InputText
           id="lastname2"
-          type="text"
           v-model="form.beneficiaries[index - 1].relationship"
+          type="text"
         />
       </div>
 
       <Button
         icon="pi pi-trash"
-        @click="handleRemoveBeneficiary(index - 1)"
         class="p-button-rounded p-button-danger p-button-text ml-2"
+        @click="handleRemoveBeneficiary(index - 1)"
       />
     </div>
   </div>

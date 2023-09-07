@@ -1,0 +1,14 @@
+[
+  {
+    "comakered_twice": false,
+    "name": "John Doe"
+  },
+  {
+    "comakered_twice": true,
+    "name": "Philips Doe"
+  },
+  {
+    "comakered_twice": false,
+    "name": "Philips Maquen"
+  }
+]

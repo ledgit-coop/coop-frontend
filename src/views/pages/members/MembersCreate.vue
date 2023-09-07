@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ROUTE_NAME_MEMBERS } from '@/constants/routes';
-import PageContentHeader from '../../components/PageContentHeader.vue';
 import Button from 'primevue/button';
 import router from '@/router';
 import MembersForm from './components/MembersForm.vue';
+import PageContentHeader from '@components/PageContentHeader.vue';
 </script>
 
 <template>

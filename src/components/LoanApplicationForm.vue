@@ -6,11 +6,11 @@
           <label for="name">Member</label>
           <Dropdown
             v-model="data.form.member_id"
-            :disabled="disable_member"
+            :disabled="disableMember"
             :options="members"
             filter
             option-value="value"
-            optionLabel="label"
+            option-label="label"
             placeholder="Select a Member"
             class="w-full"
             @change="handleChangeMember"
@@ -82,9 +82,9 @@
           <label for="dsspacc_id">DSSP Account ID</label>
           <InputText
             id="dsspacc_id"
+            v-model="data.form.member_id"
             type="text"
             :readonly="true"
-            v-model="data.form.member_id"
           />
         </div>
 
@@ -136,7 +136,7 @@
         <div class="flex align-items-center">
           <RadioButton
             v-model="data.form.application_type"
-            inputId="application-type"
+            input-id="application-type"
             name="loan_type"
             value="new"
           />
@@ -149,7 +149,7 @@
         <div class="flex align-items-center">
           <RadioButton
             v-model="data.form.application_type"
-            inputId="application-type"
+            input-id="application-type"
             name="loan_type"
             value="renew"
           />
@@ -166,16 +166,16 @@
       <h6>Type Of Loan Applied</h6>
       <div class="flex flex-wrap gap-3">
         <div
-          v-for="(loan_type, index) in loan_types"
-          class="flex align-items-center"
+          v-for="(loan_type, index) in loanTypes"
           :key="index"
+          class="flex align-items-center"
         >
           <RadioButton
             v-model="data.form.loan_type"
-            :inputId="'loan-type' + index"
+            :input-id="'loan-type' + index"
             name="loan_type"
-            :value="loan_types[index].id"
-            @change="handleLoanTypeChange(loan_types[index])"
+            :value="loanTypes[index].id"
+            @change="handleLoanTypeChange(loanTypes[index])"
           />
           <label
             :for="'loan-type' + index"
@@ -208,8 +208,8 @@
       <label for="loan_terms">Loan Terms</label>
       <InputText
         id="loan_terms"
-        type="text"
         v-model="data.form.loan_terms"
+        type="text"
       />
     </div>
 
@@ -218,9 +218,9 @@
 
       <InputNumber
         v-model="data.form.loan_interest_rate"
-        inputId="loan_interest_rate"
-        :minFractionDigits="2"
-        :maxFractionDigits="5"
+        input-id="loan_interest_rate"
+        :min-fraction-digits="2"
+        :max-fraction-digits="5"
       />
 
       <small id="username-help">Loan interest can be changed.</small>
@@ -241,6 +241,23 @@
         type="text"
       />
     </div>
+
+    <div class="field col-12 md:col-6">
+      <label for="payment_method">Co-maker (1)</label>
+      <ComakerSearch
+        id="comaker-first"
+        v-model="data.form.comaker_first"
+        name="comaker_first"
+      />
+    </div>
+
+    <div class="field col-12 md:col-6">
+      <label for="payment_method">Co-maker (2)</label>
+      <ComakerSearch
+        id="comaker-second"
+        name="comaker_second"
+      />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -249,21 +266,23 @@ import { onMounted, reactive, watch } from 'vue';
 import type { LoanType } from '@/types/ui/loans';
 import InputNumber from 'primevue/inputnumber';
 import type { DropdownOption } from '@/types/ui';
+import ComakerSearch from './ComakerSearch.vue';
 
 interface Props {
   modelValue?: MemberLoanApplication;
-  loan_types: LoanType[];
+  loanTypes: LoanType[];
   members: DropdownOption[];
-  disable_member?: boolean;
+  disableMember?: boolean;
 }
 
 const data = reactive<{ form: MemberLoanApplication }>({
   form: {
     loan_type: '',
+    comaker_second: 'test',
   },
 });
-const emit = defineEmits(['update:modelValue']);
 
+const emit = defineEmits(['update:modelValue']);
 const props = defineProps<Props>();
 
 onMounted(() => {

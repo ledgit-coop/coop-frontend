@@ -2,8 +2,8 @@
   <div class="grid">
     <div
       v-for="(value, index) in accounts"
-      class="col-3"
       :key="index"
+      class="col-12 sm:col-6 md:col-6 lg:col-4"
     >
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">

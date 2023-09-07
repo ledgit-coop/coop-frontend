@@ -8,9 +8,23 @@
     <LoanApplicationForm
       v-model="model"
       :members="members"
-      :loan_types="loan_types"
-      :disable_member="disable_member"
+      :loan-types="loan_types"
+      :disable-member="disableMember"
     />
+
+    <template #footer>
+      <Button
+        label="Cancel"
+        icon="pi pi-times"
+        text
+        @click="showModal = false"
+      />
+      <Button
+        label="Submit"
+        icon="pi pi-save"
+        autofocus
+      />
+    </template>
   </Dialog>
 </template>
 <script setup lang="ts">
@@ -20,11 +34,12 @@ import Dialog from 'primevue/dialog';
 import { onMounted, reactive, ref, watch } from 'vue';
 import LoanApplicationForm from './LoanApplicationForm.vue';
 import type { MemberLoanApplication } from '@/types/ui/members';
+import Button from 'primevue/button';
 
 interface Props {
   visible: boolean;
-  member_id?: string;
-  disable_member?: boolean;
+  memberId?: string;
+  disableMember?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -49,14 +64,14 @@ watch(
 );
 
 watch(
-  () => props.member_id,
+  () => props.memberId,
   () => {
     setMemberId();
   }
 );
 
 const setMemberId = () => {
-  model.member_id = props.member_id;
+  model.member_id = props.memberId;
 };
 
 const members = ref<DropdownOption[]>([{ value: '12231', label: 'Kevin Loquencio' }]);

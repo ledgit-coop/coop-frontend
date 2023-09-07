@@ -8,6 +8,8 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": ["./src/*"],
+      "@service/*": ["./src/service/*"],
+      "@components/*": ["./src/components/*"]
     },
 
     /* Bundler mode */
@@ -27,9 +29,13 @@
     // Recommended
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+
+    "noImplicitThis": true,
  
   },
-  "include": ["env.d.ts", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  //"include": ["env.d.ts", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+
   "references": [{ "path": "./tsconfig.node.json" }],
-  "extends": "@vue/tsconfig/tsconfig.json",
+  "extends": "@vue/tsconfig/tsconfig.json", 
 }

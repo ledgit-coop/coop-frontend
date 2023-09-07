@@ -46,6 +46,8 @@ export interface MemberLoanApplication {
   payment_method?: string;
   loan_type?: string;
   loan_interest_rate?: number;
+  comaker_first?: string;
+  comaker_second?: string;
 }
 
 export interface MembersTable {
@@ -75,16 +77,7 @@ export interface MembersShareCapitalPatronageHistory {
   release_date: string;
 }
 
-export interface MemberAccountTransactionHistory {
-  id: string;
-  transaction_number: string;
-  account: string;
-  withdrawals: string;
-  deposits: string;
-  date: string;
-  running_balance: string;
-}
-export interface MemberLoanHistory {
+export interface MemberLoanTable {
   id: string;
   loan_number: string;
   status: string;
@@ -93,4 +86,14 @@ export interface MemberLoanHistory {
   loan_amount: string;
   interest_rate: string;
   outstanding_balance: string;
+  due_every: string;
+  member?: string;
+  member_id?: string;
+}
+
+export interface MemberLoanSchedule {
+  due_date: string;
+  amount_due: string;
+  late_fees: string;
+  amount_paid: string;
 }

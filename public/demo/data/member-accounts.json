@@ -1,0 +1,43 @@
+{
+    "data": [
+      {
+        "id": 1,
+        "account_number": "1198963638",
+        "type": "Share Capital Account",
+        "opened_date": "01-Jan-2023",
+        "current_balance": "1935.12",
+        "passbook_count": "1",
+        "status": "active"
+      },
+      {
+        "id": 1,
+        "account_number": "1198963638",
+        "type": "Savings Account",
+        "opened_date": "01-Jan-2023",
+        "current_balance": "1935.12",
+        "passbook_count": "1",
+        "status": "active"
+      },
+       
+
+      {
+        "id": 1,
+        "account_number": "1198963638",
+        "type": "Personal Loan Account",
+        "opened_date": "01-Jan-2023",
+        "current_balance": "1935.12",
+        "passbook_count": "1",
+        "status": "active"
+      },
+      {
+        "id": 1,
+        "account_number": "1198963638",
+        "type": "Quick Cash Loan Account",
+        "opened_date": "01-Jan-2023",
+        "current_balance": "1935.12",
+        "passbook_count": "1",
+        "status": "dormant"
+      }
+       
+  ]
+}

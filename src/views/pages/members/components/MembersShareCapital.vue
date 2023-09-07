@@ -9,7 +9,7 @@
         class="flex align-items-center justify-content-center bg-blue-100 border-round"
         style="width: 2.5rem; height: 2.5rem"
       >
-        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
+        <i class="pi pi-fw pi-globe text-blue-500 text-xl"></i>
       </div>
     </div>
     <span class="text-green-500 font-medium">Last shared 10,000.0 </span>
@@ -25,7 +25,7 @@
     <Dropdown
       filter
       option-value="value"
-      optionLabel="label"
+      option-label="label"
       placeholder="Select a Year"
     >
     </Dropdown>
@@ -33,7 +33,7 @@
 
   <DataTable
     :value="transactions"
-    tableStyle="min-width: 50rem"
+    table-style="min-width: 50rem"
   >
     <Column
       field="reference_number"
@@ -62,7 +62,7 @@
         <Column
           footer="Total Share Cap.:"
           :colspan="3"
-          footerStyle="text-align:right"
+          footer-style="text-align:right"
         />
         <Column footer="1,100.00" />
       </Row>
@@ -77,7 +77,7 @@
     <Dropdown
       filter
       option-value="value"
-      optionLabel="label"
+      option-label="label"
       placeholder="Select a Year"
     >
     </Dropdown>
@@ -85,7 +85,7 @@
 
   <DataTable
     :value="patronage_history"
-    tableStyle="min-width: 50rem"
+    table-style="min-width: 50rem"
   >
     <Column
       field="reference_number"
@@ -123,7 +123,7 @@
         <Column
           footer="Total Dividend Released:"
           :colspan="5"
-          footerStyle="text-align:right"
+          footer-style="text-align:right"
         />
         <Column footer="1,100.00" />
       </Row>
@@ -135,7 +135,7 @@ import MembersService from '@/service/MembersService';
 import DataTable from 'primevue/datatable';
 import { onMounted, ref } from 'vue';
 import type { MembersShareCapitalTransactions, MembersShareCapitalPatronageHistory } from '@/types/ui/members';
-import PageContentHeader from '@/views/components/PageContentHeader.vue';
+import PageContentHeader from '@components/PageContentHeader.vue';
 
 const transactions = ref<MembersShareCapitalTransactions[]>();
 const patronage_history = ref<MembersShareCapitalPatronageHistory[]>();

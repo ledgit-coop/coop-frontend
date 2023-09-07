@@ -20,4 +20,5 @@ export enum MemberLoanStatus {
   APPROVED = 'approved',
   REJECTED = 'rejected',
   PAID = 'paid',
+  OVERDUE = 'overdue',
 }

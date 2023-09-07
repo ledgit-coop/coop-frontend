@@ -36,12 +36,12 @@
 
               <div class="grid gap-1 m-0 align-items-start ml-auto">
                 <Dropdown
+                  v-model="filters.status"
                   :options="statuses"
                   filter
                   option-value="value"
-                  optionLabel="label"
+                  option-label="label"
                   placeholder="Select Status"
-                  v-model="filters.status"
                   style="min-width: 10rem"
                 >
                 </Dropdown>
@@ -49,9 +49,9 @@
                 <span class="p-input-icon-left mb-2">
                   <i class="pi pi-search" />
                   <InputText
+                    v-model="filters.keyword"
                     placeholder="Keyword Search"
                     style="width: 100%"
-                    v-model="filters.keyword"
                   />
                 </span>
               </div>
@@ -120,7 +120,7 @@
           <Column
             field="id"
             header="Action"
-            alignFrozen="right"
+            align-frozen="right"
             style="min-width: 12rem"
             frozen
           >
@@ -147,13 +147,13 @@ import { ref, onBeforeMount } from 'vue';
 import Button from 'primevue/button';
 import router from '@/router';
 import { ROUTE_NAME_MEMBERS_CREATE, ROUTE_NAME_MEMBERS_VIEW } from '@/constants/routes';
-import PageContentHeader from '../../components/PageContentHeader.vue';
 import MembersService from '@/service/MembersService';
 import type { MembersTable } from '@/types/ui/members';
 import Tag from 'primevue/tag';
 import { MemberStatus, MEMBER_STATUSES } from '@/constants/ui/members';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
+import PageContentHeader from '@/components/PageContentHeader.vue';
 
 interface PageLoadings {
   table: boolean;

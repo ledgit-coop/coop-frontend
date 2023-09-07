@@ -2,7 +2,7 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <div class="grid align-items-center">
+        <div class="grid m-0 align-items-center">
           <Avatar
             label="P"
             class="mr-2"
@@ -13,7 +13,7 @@
             <h4 class="m-0">Kevin Loquencio</h4>
             <small>Member since: 2023</small>
           </div>
-          <div class="ml-auto grid gap-2">
+          <div class="ml-auto mt-5 md:mt-0 lg:mt-0 grid gap-2">
             <Button
               icon="pi pi-arrow-left"
               label="Back"
@@ -28,16 +28,23 @@
               label="Apply Loan"
               @click="modalsVisibility.apply_form = true"
             ></Button>
+
             <Button
               icon="pi pi-print"
-              label="Make Transaction"
-              @click="modalsVisibility.apply_form = true"
+              label="Add Transaction"
+              @click="modalsVisibility.make_transaction = true"
+            ></Button>
+            <Button
+              icon="pi pi-print"
+              label="Terminate"
+              severity="danger"
+              @click="handleTerminateClick"
             ></Button>
           </div>
         </div>
 
         <div class="mt-3">
-          <TabView>
+          <TabView scrollable>
             <TabPanel header="Member Information">
               <div class="p-3">
                 <div class="grid mt-2">
@@ -125,19 +132,17 @@
               <MembersLoans />
             </TabPanel>
             <TabPanel header="Accounts">
-              <p>
-                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
-                deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
-                provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est
-                eligendi optio cumque nihil impedit quo minus.
-              </p>
+              <MembersAccounts />
             </TabPanel>
           </TabView>
           <ApplyLoan
-            member_id="12231"
             v-model:visible="modalsVisibility.apply_form"
+            member_id="12231"
             :disable_member="true"
+          />
+          <MakeAccountTransaction
+            v-model:visible="modalsVisibility.make_transaction"
+            account_id="12231"
           />
         </div>
       </div>
@@ -148,23 +153,31 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import Avatar from 'primevue/avatar';
-import Information from '@/views/components/Information.vue';
+import Information from '@components/Information.vue';
 import type { InformationItem } from '@/types/ui';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import router from '@/router';
 import MembersShareCapital from './components/MembersShareCapital.vue';
 import MembersLoans from './components/MembersLoans.vue';
-import ApplyLoan from '@/views/components/ApplyLoan.vue';
+import ApplyLoan from '@components/ApplyLoan.vue';
 import { ROUTE_NAME_MEMBERS } from '@/constants';
 import MembersSavings from './components/MembersSavings.vue';
+import MembersAccounts from './components/MembersAccounts.vue';
+import MakeAccountTransaction from '@components/MakeAccountTransaction.vue';
+import { useConfirm } from 'primevue/useconfirm';
+import Button from 'primevue/button';
+
+const confirm = useConfirm();
 
 interface ModalsVisibility {
   apply_form: boolean;
+  make_transaction: boolean;
 }
 
 const modalsVisibility = ref<ModalsVisibility>({
   apply_form: false,
+  make_transaction: false,
 });
 
 const basic_information = computed<InformationItem[]>(() => [
@@ -231,7 +244,18 @@ const mother_information = computed<InformationItem[]>(() => [
   { label: 'Contact Number', value: 'Kevin' },
 ]);
 
-onMounted(()=>{
+onMounted(() => {
   document.title = 'DSPACC - Member (Kevin Loquencio)';
-})
+});
+
+const handleTerminateClick = () => {
+  confirm.require({
+    message: 'Are you sure you want to proceed?',
+    header: 'Account Termination',
+    icon: 'pi pi-exclamation-triangle',
+    acceptClass: 'p-button-danger',
+    accept: () => {},
+    reject: () => {},
+  });
+};
 </script>

@@ -33,8 +33,4 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { reactive } from 'vue';
-
-const form = reactive<any>({});
-</script>
+<script setup lang="ts"></script>

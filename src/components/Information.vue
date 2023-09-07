@@ -8,11 +8,11 @@
         >
           <td
             style="text-wrap: nowrap"
-            class="font-medium pb-1 pt-1 vertical-align-top"
+            class="font-medium pb-2 pt-1 vertical-align-top"
           >
             {{ value.label }}:
           </td>
-          <td class="pl-5 pb-1 pt-1 vertical-align-top">
+          <td class="pl-5 pb-2 pt-1 vertical-align-top">
             {{ value.value }}
           </td>
         </tr>

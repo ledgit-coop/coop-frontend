@@ -59,15 +59,15 @@
   </div>
 
   <div
-    class="p-fluid formgrid grid"
     v-if="type == MemberType.PRESENT"
+    class="p-fluid formgrid grid"
   >
     <div class="field col-12">
       <div class="flex flex-wrap gap-3">
         <div class="flex align-items-center">
           <RadioButton
             v-model="form.address_state"
-            inputId="address-state-owned"
+            input-id="address-state-owned"
             name="address_state"
             value="owned"
           />
@@ -80,7 +80,7 @@
         <div class="flex align-items-center">
           <RadioButton
             v-model="form.address_state"
-            inputId="address-state-rented"
+            input-id="address-state-rented"
             name="address_state"
             value="rented"
           />
@@ -93,7 +93,7 @@
         <div class="flex align-items-center">
           <RadioButton
             v-model="form.address_state"
-            inputId="address-state-living"
+            input-id="address-state-living"
             name="address_state"
             value="parents_or_relatives"
           />
