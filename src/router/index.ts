@@ -5,6 +5,7 @@ import {
   PUBLIC_ROUTES,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOANS_CREATE,
+  ROUTE_NAME_LOAN_PRODUCTS,
   ROUTE_NAME_MEMBERS,
   ROUTE_NAME_MEMBERS_CREATE,
   ROUTE_NAME_MEMBERS_VIEW,
@@ -95,6 +96,26 @@ const router = createRouter({
               path: 'create',
               name: ROUTE_NAME_LOANS_CREATE,
               component: () => import('@/views/pages/loans/LoansCreate.vue'),
+            },
+          ],
+        },
+
+        {
+          path: '/admin',
+          children: [
+            {
+              path: 'loan-products',
+              redirect: 'loan-products/list',
+              children: [
+                {
+                  path: 'list',
+                  name: ROUTE_NAME_LOAN_PRODUCTS,
+                  component: () => import('@/views/pages/administration/loan-products/LoanProductsPage.vue'),
+                  meta: {
+                    title: 'Loan Products',
+                  },
+                },
+              ],
             },
           ],
         },

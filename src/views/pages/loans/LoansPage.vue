@@ -10,7 +10,10 @@
           ></Button>
         </PageContentHeader>
 
-        <MemberLoansTable @on-loan-click="handleViewLoanClick">
+        <MemberLoansTable
+          :model-value="loans"
+          @on-loan-click="handleViewLoanClick"
+        >
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
               <Button
@@ -43,10 +46,37 @@
           </template>
 
           <template #action="slotProps">
-            <div class="flex flex-wrap gap-2">
+            <div class="flex gap-2">
               <Button
                 label="View"
                 icon="pi pi-eye"
+                class="p-button-raised mr-2 mb-2"
+                size="small"
+                @click="handleViewLoanClick(slotProps.data)"
+              />
+
+              <Button
+                v-if="[MemberLoanStatus.PENDING,MemberLoanStatus.EVAULUATION, MemberLoanStatus.PRE_APPROVED].includes(slotProps.data.status as MemberLoanStatus)"
+                label="Reject"
+                icon="pi pi-times"
+                class="p-button-raised mr-2 mb-2"
+                size="small"
+                severity="danger"
+                @click="handleViewLoanClick(slotProps.data)"
+              />
+
+              <Button
+                v-if="slotProps.data.status === MemberLoanStatus.PENDING"
+                label="Evaluate"
+                icon="pi pi-check"
+                class="p-button-raised mr-2 mb-2"
+                size="small"
+                @click="handleViewLoanClick(slotProps.data)"
+              />
+              <Button
+                v-if="slotProps.data.status === MemberLoanStatus.PRE_APPROVED"
+                label="Approve"
+                icon="pi pi-check"
                 class="p-button-raised mr-2 mb-2"
                 size="small"
                 @click="handleViewLoanClick(slotProps.data)"
@@ -66,13 +96,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Button from 'primevue/button';
 import ApplyLoan from '@components/ApplyLoan.vue';
 import type { MemberLoanTable } from '@/types/ui/members';
 import MembersLoanView from '@/components/MembersLoanView.vue';
 import MemberLoansTable from '@components/MemberLoansTable.vue';
 import PageContentHeader from '@components/PageContentHeader.vue';
+import LoanService from '@/service/LoanService';
+import { MemberLoanStatus } from '@/constants/ui/members';
 
 interface ModalsVisibility {
   apply_form: boolean;
@@ -83,9 +115,17 @@ const modalsVisibility = ref<ModalsVisibility>({
   apply_form: false,
   view_loan: false,
 });
-
+const loans = ref<MemberLoanTable[]>([]);
 const selected_loan = ref<MemberLoanTable | undefined>();
 
+onMounted(() => {
+  list();
+});
+
+const list = async () => {
+  const { data } = await LoanService.list({});
+  loans.value = data;
+};
 const handleViewLoanClick = (value: MemberLoanTable) => {
   selected_loan.value = value;
   modalsVisibility.value.view_loan = true;

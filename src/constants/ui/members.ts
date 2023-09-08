@@ -16,6 +16,7 @@ export const MEMBER_STATUSES: DropdownOption[] = [
 
 export enum MemberLoanStatus {
   EVAULUATION = 'evaluation',
+  PRE_APPROVED = 'pre-approved',
   PENDING = 'pending',
   APPROVED = 'approved',
   REJECTED = 'rejected',

@@ -258,7 +258,29 @@
         name="comaker_second"
       />
     </div>
+    <div class="field col-12 md:col-6">
+      <label for="name">Account</label>
+      <Dropdown
+        v-model="data.form.member_id"
+        :disabled="disableMember"
+        :options="members"
+        filter
+        option-value="value"
+        option-label="label"
+        placeholder="Select Account"
+        class="w-full"
+        @change="handleChangeMember"
+      >
+      </Dropdown>
+      <small
+        class="flex align-items-center pt-1"
+        id="username-help"
+        ><i class="pi pi-info-circle pr-2"></i> Create account if not exists.</small
+      >
+    </div>
   </div>
+
+  <div class="p-1"></div>
 </template>
 <script setup lang="ts">
 import type { MemberLoanApplication } from '@/types/ui/members';

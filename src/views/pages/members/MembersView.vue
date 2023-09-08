@@ -30,7 +30,13 @@
             ></Button>
 
             <Button
-              icon="pi pi-print"
+              icon="pi pi-plus"
+              label="Add Account"
+              @click="modalsVisibility.add_account = true"
+            ></Button>
+
+            <Button
+              icon="pi pi-plus"
               label="Add Transaction"
               @click="modalsVisibility.make_transaction = true"
             ></Button>
@@ -144,6 +150,10 @@
             v-model:visible="modalsVisibility.make_transaction"
             account_id="12231"
           />
+          <MembersAddAccount
+            v-model:visible="modalsVisibility.add_account"
+            member_id="12231"
+          />
         </div>
       </div>
     </div>
@@ -167,17 +177,20 @@ import MembersAccounts from './components/MembersAccounts.vue';
 import MakeAccountTransaction from '@components/MakeAccountTransaction.vue';
 import { useConfirm } from 'primevue/useconfirm';
 import Button from 'primevue/button';
+import MembersAddAccount from './MembersAddAccount.vue';
 
 const confirm = useConfirm();
 
 interface ModalsVisibility {
   apply_form: boolean;
   make_transaction: boolean;
+  add_account: boolean;
 }
 
 const modalsVisibility = ref<ModalsVisibility>({
   apply_form: false,
   make_transaction: false,
+  add_account: false,
 });
 
 const basic_information = computed<InformationItem[]>(() => [

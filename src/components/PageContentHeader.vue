@@ -46,7 +46,7 @@
 <script setup lang="ts">
 interface Props {
   title?: string;
-  size: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  size?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
 
 withDefaults(defineProps<Props>(), {

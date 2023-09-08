@@ -126,6 +126,7 @@ import Button from 'primevue/button';
 import { AccountStatus } from '@/constants/ui/accounts';
 import AccountTransactionsTable from '@components/AccountTransactionsTable.vue';
 import Calendar from 'primevue/calendar';
+import Dialog from 'primevue/dialog';
 
 const showModal = ref(false);
 const accounts = ref<MemberLoanTable[]>();

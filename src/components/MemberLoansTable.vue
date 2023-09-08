@@ -26,11 +26,12 @@
       sortable
     >
       <template #body="slotProps">
-        <a
-          href="#"
+        <Button
+          class="white-space-nowrap"
+          :label="slotProps.data.member"
+          link
           @click="router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: slotProps.data.member_id } })"
-          >{{ slotProps.data.member }}</a
-        >
+        />
       </template>
     </Column>
 
@@ -48,56 +49,21 @@
       header="Status"
     >
       <template #body="slotProps">
-        <Tag
-          v-if="slotProps.data.status == MemberLoanStatus.APPROVED"
-          severity="success"
-          rounded
-          value="Approved"
-        ></Tag>
-        <Tag
-          v-else-if="slotProps.data.status == MemberLoanStatus.EVAULUATION"
-          severity="info"
-          value="Under evaluation"
-          rounded
-        ></Tag>
-        <Tag
-          v-else-if="slotProps.data.status == MemberLoanStatus.PAID"
-          :style="{ background: 'linear-gradient(-225deg,#AC32E4 0%,#7918F2 48%,#4801FF 100%)' }"
-          severity="info"
-          value="Fully Paid"
-          rounded
-        ></Tag>
-        <Tag
-          v-else-if="slotProps.data.status == MemberLoanStatus.PENDING"
-          severity="warning"
-          value="Pending"
-          rounded
-        ></Tag>
-        <Tag
-          v-else-if="slotProps.data.status == MemberLoanStatus.REJECTED"
-          severity="danger"
-          rounded
-          value="Rejected"
-        ></Tag>
-        <Tag
-          v-else-if="slotProps.data.status == MemberLoanStatus.OVERDUE"
-          severity="danger"
-          rounded
-          icon="pi pi-exclamation-triangle"
-          value="Overdue"
-        ></Tag>
+        <LoanStatus :status="slotProps.data.status" />
       </template>
     </Column>
     <Column
       v-if="!hideColumns?.includes('type')"
       field="type"
       header="Type"
+      class="white-space-nowrap"
       sortable
     ></Column>
     <Column
       v-if="!hideColumns?.includes('loan_date')"
       field="loan_date"
       header="Loan Date"
+      class="white-space-nowrap"
     ></Column>
     <Column
       v-if="!hideColumns?.includes('due_every')"
@@ -118,12 +84,13 @@
     <Column
       v-if="!hideColumns?.includes('interest_rate')"
       field="interest_rate"
-      header="Interest Rate (%)"
+      header="IR (%)"
+      class="white-space-nowrap"
     ></Column>
     <Column
       v-if="!hideColumns?.includes('outstanding_balance')"
       field="outstanding_balance"
-      header="Outstanding Balance"
+      header="Balance"
     ></Column>
     <Column
       v-if="!hideColumns?.includes('action')"
@@ -148,6 +115,8 @@ import type { MemberLoanTable } from '@/types/ui/members';
 import { onMounted, ref, watch } from 'vue';
 import router from '@/router';
 import { ROUTE_NAME_MEMBERS_VIEW } from '@/constants';
+import Button from 'primevue/button';
+import LoanStatus from './LoanStatus.vue';
 
 interface Props {
   hideColumns?: string[];

@@ -1,7 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue';
 import ProductService from '@/service/ProductService';
 import { useLayout } from '@/layout/composables/layout';
+import Button from 'primevue/button';
+import Menu from 'primevue/menu';
 
 const { isDarkTheme } = useLayout();
 

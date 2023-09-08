@@ -20,9 +20,11 @@ const model = ref<any>([
   {
     label: 'Administration',
     items: [
-      { label: 'Users', icon: 'pi pi-fw pi-users', to: '/users/list' },
-      { label: 'Loan Types', icon: 'pi pi-fw pi-book', to: '/utilities/icons' },
+      { label: 'Users', icon: 'pi pi-fw pi-users', to: '/admin/loan-products' },
+      { label: 'Loan Products', icon: 'pi pi-fw pi-book', to: '/admin/loan-products' },
       { label: 'Account Types', icon: 'pi pi-fw pi-book', to: '/utilities/icons' },
+      { label: 'Repayment Methods', icon: 'pi pi-fw pi-book', to: '/admin/loan-products' },
+      { label: 'Disbursment Channel', icon: 'pi pi-fw pi-book', to: '/admin/loan-products' },
 
       {
         label: 'PrimeFlex',

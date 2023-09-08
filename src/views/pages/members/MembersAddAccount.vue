@@ -2,13 +2,23 @@
   <Dialog
     v-model:visible="showModal"
     modal
-    header="Add Transaction"
+    header="Add Account"
     :style="{ width: '40vw' }"
   >
-    <AccountTransactionForm
-      :members="members"
-      :accounts="accounts"
-    />
+    <div class="grid p-fluid formgrid">
+      <div class="field col-12">
+        <label for="name">Type of Account</label>
+        <Dropdown
+          :options="accounts"
+          filter
+          option-value="value"
+          option-label="label"
+          placeholder="Select Type of Account"
+          class="w-full"
+        >
+        </Dropdown>
+      </div>
+    </div>
 
     <template #footer>
       <Button
@@ -26,17 +36,15 @@
   </Dialog>
 </template>
 <script setup lang="ts">
-import type { DropdownOption } from '@/types/ui';
 import Dialog from 'primevue/dialog';
 import { onMounted, reactive, ref, watch } from 'vue';
 import type { MemberLoanApplication } from '@/types/ui/members';
-import AccountTransactionForm from './AccountTransactionForm.vue';
-import type { Account } from '@/types/ui/accounts';
 import Button from 'primevue/button';
+import type { DropdownOption } from '@/types/ui';
 
 interface Props {
   visible: boolean;
-  accountId?: string;
+  memberId?: string;
 }
 
 const props = defineProps<Props>();
@@ -61,23 +69,21 @@ watch(
 );
 
 watch(
-  () => props.accountId,
+  () => props.memberId,
   () => {
     setMemberId();
   }
 );
 
 const setMemberId = () => {
-  model.member_id = props.accountId;
+  model.member_id = props.memberId;
 };
 
-const members = ref<DropdownOption[]>([{ value: '12231', label: 'Kevin Loquencio' }]);
-
-const accounts = ref<Account[]>([
-  { id: '1', name: 'Regular Loan Account' },
-  { id: '2', name: 'Educational Loan Account' },
-  { id: '3', name: 'Share Capital Account' },
-  { id: '4', name: 'Savings Account' },
-  { id: '5', name: 'Kiddie Savings Account' },
+const accounts = ref<DropdownOption[]>([
+  { value: '1', label: 'Regular Loan Account' },
+  { value: '2', label: 'Educational Loan Account' },
+  { value: '3', label: 'Share Capital Account' },
+  { value: '4', label: 'Savings Account' },
+  { value: '5', label: 'Kiddie Savings Account' },
 ]);
 </script>

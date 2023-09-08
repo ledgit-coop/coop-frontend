@@ -389,6 +389,7 @@ import { reactive } from 'vue';
 import { MemberType } from '@/constants/ui/members';
 import type { MemberForm } from '@/types/ui/members';
 import useAlert from '@/composables/useAlert';
+import Button from 'primevue/button';
 
 const { showError } = useAlert();
 

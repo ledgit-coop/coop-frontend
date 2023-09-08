@@ -5,6 +5,8 @@
     maximizable
     header="Emergency Loan - 1000023"
   >
+    <LoanStatus status="approved" />
+
     <PageContentHeader
       title="Loan Information"
       size="h6"
@@ -84,6 +86,7 @@ import type { InformationItem } from '@/types/ui';
 import Information from '@components/Information.vue';
 import MembersService from '@/service/MembersService';
 import type { MemberLoanSchedule } from '@/types/ui/members';
+import LoanStatus from './LoanStatus.vue';
 
 interface Props {
   visible: boolean;
