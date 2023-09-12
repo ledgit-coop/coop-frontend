@@ -1,4 +1,4 @@
-import type { User } from '@/types/user';
+import type { User } from '@/types/ui/user';
 
 export const AUTH_TOKEN_KEY_NAME = 'AuthToken';
 const AUTH_USER_KEY_NAME = 'AuthUser';

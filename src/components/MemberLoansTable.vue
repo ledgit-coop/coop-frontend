@@ -30,7 +30,7 @@
           class="white-space-nowrap"
           :label="slotProps.data.member"
           link
-          @click="router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: slotProps.data.member_id } })"
+          @click="router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: slotProps.data.member_number } })"
         />
       </template>
     </Column>
@@ -130,6 +130,7 @@ const emit = defineEmits(['update:modelValue']);
 onMounted(() => {
   loans.value = props.modelValue ?? [];
 });
+
 watch(
   () => loans.value,
   (value: MemberLoanTable[]) => {

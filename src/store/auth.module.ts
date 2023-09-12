@@ -1,5 +1,5 @@
 import TokenService from '@/service/TokenService';
-import type { User } from '@/types/user';
+import type { User } from '@/types/ui/user';
 
 export interface AuthState {
   user: User | null | undefined;

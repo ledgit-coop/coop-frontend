@@ -10,7 +10,7 @@
           ></Button>
         </PageContentHeader>
 
-        <LoanProductCreate :visible="modalsVisibility.create_product" />
+        <LoanProductCreate v-model:visible="modalsVisibility.create_product" />
       </div>
     </div>
   </div>
@@ -23,7 +23,6 @@ import router from '@/router';
 import { ROUTE_NAME_MEMBERS_VIEW } from '@/constants/routes';
 import MembersService from '@/service/MembersService';
 import type { MembersTable } from '@/types/ui/members';
-import { MEMBER_STATUSES } from '@/constants/ui/members';
 import PageContentHeader from '@/components/PageContentHeader.vue';
 import LoanProductCreate from './LoanProductCreate.vue';
 

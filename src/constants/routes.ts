@@ -74,7 +74,10 @@ export const ROUTE_NAME_MEMBERS_VIEW = 'members-view';
 export const ROUTE_NAME_LOANS = 'loans';
 export const ROUTE_NAME_LOANS_CREATE = 'loans-create';
 
+export const ROUTE_NAME_REPAYMENTS = 'repayments';
+
 export const ROUTE_NAME_LOAN_PRODUCTS = 'loan-products';
+export const ROUTE_NAME_USERS = 'users';
 
 export const PUBLIC_ROUTES: Array<string> = [
   ROUTE_NAME_LOGIN,

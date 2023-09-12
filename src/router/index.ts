@@ -9,6 +9,8 @@ import {
   ROUTE_NAME_MEMBERS,
   ROUTE_NAME_MEMBERS_CREATE,
   ROUTE_NAME_MEMBERS_VIEW,
+  ROUTE_NAME_REPAYMENTS,
+  ROUTE_NAME_USERS,
 } from '@/constants/routes';
 
 const router = createRouter({
@@ -101,8 +103,31 @@ const router = createRouter({
         },
 
         {
+          path: '/repayments',
+          name: ROUTE_NAME_REPAYMENTS,
+          component: () => import('@/views/pages/repayments/RepaymentsPage.vue'),
+          meta: {
+            title: 'Repayments',
+          },
+        },
+
+        {
           path: '/admin',
           children: [
+            {
+              path: 'users',
+              redirect: 'users/list',
+              children: [
+                {
+                  path: 'list',
+                  name: ROUTE_NAME_USERS,
+                  component: () => import('@/views/pages/administration/users/UsersPage.vue'),
+                  meta: {
+                    title: 'Users',
+                  },
+                },
+              ],
+            },
             {
               path: 'loan-products',
               redirect: 'loan-products/list',

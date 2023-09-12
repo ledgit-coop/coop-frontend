@@ -210,7 +210,7 @@ pre[class*='language-'] {
       }
 
       &.attr-value {
-        color: #4caf50 !important;
+        color: #5aa76d !important;
       }
 
       &.punctuation {

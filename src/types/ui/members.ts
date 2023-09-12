@@ -1,6 +1,62 @@
+import type { LoanTermForm } from './loans';
+
 export interface MemberForm {
+  surname?: string;
+  first_name?: string;
+  middle_name?: string | null;
+  name_extension?: string | null;
+  date_of_birth?: string | null;
+  place_of_birth?: string | null;
+  date_hired?: string | null;
+  department?: string | null;
+  position?: string | null;
+  employee_no?: string | null;
+  tin_no?: string | null;
+  email_address?: string | null;
+  member_at?: string;
+  oriented?: boolean;
   gender?: string;
+  telephone_number?: string;
+  mobile_number?: string;
   beneficiaries: MemberFormBeneficiary[];
+  present_address?: MemberAddress;
+  permanent_address?: MemberAddress;
+  father: MemberRelatedPerson;
+  mother: MemberRelatedPerson;
+  spouse: MemberRelatedPerson;
+}
+
+export interface Member extends MemberForm {
+  id?: string;
+  member_number?: string;
+  full_name?: string;
+  member_year?: string;
+  age?: number;
+  oriented?: boolean;
+  full_present_address?: string;
+  full_permanent_address?: string;
+}
+
+export interface MemberAddress {
+  house_block_lot?: string;
+  street?: string;
+  subdivision_village?: string;
+  barangay?: string;
+  city_municipality?: string;
+  province?: string;
+  zip_code?: string;
+  residency_status?: string;
+}
+
+export interface MemberRelatedPerson {
+  surname?: string;
+  first_name?: string;
+  middle_name?: string;
+  name_extension?: string;
+  date_of_birth?: string;
+  occupation?: string;
+  contact_number?: string;
+  type?: string;
 }
 
 export interface MemberFormBeneficiary {
@@ -25,38 +81,17 @@ export interface MemberSavingsAccountWidgetItem {
   last_deposit_amount: number;
 }
 
-export interface MemberLoanApplication {
-  member_id?: string;
-  contact_number?: string;
-  age?: number;
-  civil_status?: string;
-  present_address?: string;
-  home_address?: string;
-  email?: string;
-  valid_id?: string;
-  tin_number?: string;
-  number_of_children?: number;
-  application_type?: string;
-  employer_name?: string;
-  occupation?: string;
-  work_address?: string;
-  loan_purpose?: string;
-  loan_terms?: string;
-  payment_mode?: string;
-  payment_method?: string;
-  loan_type?: string;
-  loan_interest_rate?: number;
-  comaker_first?: string;
-  comaker_second?: string;
-}
-
 export interface MembersTable {
-  id: string;
-  name: string;
+  member_number: string;
+  full_name: string;
   email: string;
   status: string;
   gender: string;
-  joined: string;
+  surname: string;
+  first_name: string;
+  middle_name: string;
+  email_address: string;
+  member_at: string;
 }
 
 export interface MembersShareCapitalTransactions {
@@ -88,7 +123,7 @@ export interface MemberLoanTable {
   outstanding_balance: string;
   due_every: string;
   member?: string;
-  member_id?: string;
+  member_number?: string;
 }
 
 export interface MemberLoanSchedule {
@@ -96,4 +131,11 @@ export interface MemberLoanSchedule {
   amount_due: string;
   late_fees: string;
   amount_paid: string;
+}
+
+export interface MemberAccountTransactionForm {
+  member_account_id?: string;
+  transaction_type?: string;
+  amount?: number;
+  particular?: string;
 }

@@ -20,6 +20,12 @@
         icon="pi pi-download"
         label="Download Application"
       ></Button>
+
+      <Button
+        icon="pi pi-upload"
+        severity="secondary"
+        label="Upload Files"
+      ></Button>
     </PageContentHeader>
 
     <div class="p-2"></div>
@@ -66,7 +72,13 @@
         </Row>
       </ColumnGroup>
     </DataTable>
-
+    <div class="p-2"></div>
+    <PageContentHeader
+      title="Comments"
+      size="h6"
+    >
+    </PageContentHeader>
+    <Chatter />
     <template #footer>
       <Button
         label="Close"
@@ -87,6 +99,7 @@ import Information from '@components/Information.vue';
 import MembersService from '@/service/MembersService';
 import type { MemberLoanSchedule } from '@/types/ui/members';
 import LoanStatus from './LoanStatus.vue';
+import Chatter from './Chatter.vue';
 
 interface Props {
   visible: boolean;

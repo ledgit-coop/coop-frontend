@@ -1,3 +1,4 @@
+import type { AxiosError } from 'axios';
 import { useToast } from 'primevue/usetoast';
 
 export default function useAlert() {
@@ -30,7 +31,18 @@ export default function useAlert() {
     });
   };
 
+  const showApiError = (error?: AxiosError) => {
+    const data: any = error?.response?.data;
+    toast.add({
+      summary: 'Contact administrator',
+      detail: data.message ?? `Something went wrong.`,
+      severity: 'error',
+      life: 3000,
+    });
+  };
+
   return {
+    showApiError,
     showSuccess,
     showError,
     showWarning,

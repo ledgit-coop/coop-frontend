@@ -93,8 +93,8 @@ import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
 import store from '@/store/index.js';
-
 import setUpInterceptors from './guards/token.interceptor';
+import Validation from '@/directives/validation';
 
 import '@/assets/styles.scss';
 
@@ -107,11 +107,13 @@ app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);
+app.use(store);
 
 app.directive('tooltip', Tooltip);
 app.directive('badge', BadgeDirective);
 app.directive('ripple', Ripple);
 app.directive('styleclass', StyleClass);
+app.directive('validation', Validation);
 
 app.component('Accordion', Accordion);
 app.component('AccordionTab', AccordionTab);

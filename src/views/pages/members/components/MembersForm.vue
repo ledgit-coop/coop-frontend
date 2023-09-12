@@ -1,382 +1,465 @@
 <template>
-  <div class="p-fluid formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Surname</label>
-      <InputText
-        id="firstname2"
-        type="text"
-      />
+  <div>
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <Label
+          for="firstname2"
+          :required="true"
+          >Surname</Label
+        >
+        <InputText
+          id="surname"
+          v-model="data.form.surname"
+          type="text"
+          validate="surname"
+          v-validation="validation"
+        />
+        <FieldErrorMessage
+          :validation="validation"
+          field="surname"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <Label
+          for="first-name"
+          required
+          >First Name</Label
+        >
+        <InputText
+          id="first-name"
+          v-model="data.form.first_name"
+          type="text"
+          validate="first_name"
+          v-validation="validation"
+        />
+        <FieldErrorMessage
+          :validation="validation"
+          field="first_name"
+        />
+      </div>
+      <div class="field col-12 md:col-2">
+        <Label
+          required
+          for="middle-name"
+          >Middle Name</Label
+        >
+        <InputText
+          id="middle-name"
+          v-model="data.form.middle_name"
+          validate="middle_name"
+          v-validation="validation"
+          type="text"
+        />
+        <FieldErrorMessage
+          :validation="validation"
+          field="middle_name"
+        />
+      </div>
+      <div class="field col-12 md:col-2">
+        <label for="lastname2">Name Extension (Jr., Sr.)</label>
+        <InputText
+          id="name-ext"
+          v-model="data.form.name_extension"
+          type="text"
+        />
+      </div>
     </div>
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">First Name</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-2">
-      <label for="lastname2">Middle Name</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-2">
-      <label for="lastname2">Name Extension (Jr., Sr.)</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-  </div>
 
-  <div class="p-fluid formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Date of Birth</label>
-      <Calendar
-        pattern="dd-MM-yyyy"
-        mask="true"
-      />
-    </div>
-    <div class="field col-12 md:col-6">
-      <label for="lastname2">Place of Birth</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-2">
-      <label for="gender">Gender</label>
-      <div class="flex flex-wrap gap-3">
-        <div class="flex align-items-center">
-          <RadioButton
-            v-model="form.gender"
-            input-id="gender-maile"
-            name="gender"
-            value="Male"
-          />
-          <label
-            for="gender-male"
-            class="ml-2"
-            >Male</label
-          >
-        </div>
-        <div class="flex align-items-center">
-          <RadioButton
-            v-model="form.gender"
-            input-id="gender-female"
-            name="gender"
-            value="Female"
-          />
-          <label
-            for="gender-female"
-            class="ml-2"
-            >Female</label
-          >
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <Label
+          for="date-of-birth"
+          required
+          >Date of Birth</Label
+        >
+        <Calendar
+          pattern="dd-MM-yyyy"
+          mask="true"
+          id="date-of-birth"
+          v-model="data.form.date_of_birth"
+          validate="date_of_birth"
+          v-validation="validation"
+        />
+        <FieldErrorMessage
+          :validation="validation"
+          field="date_of_birth"
+        />
+      </div>
+      <div class="field col-12 md:col-6">
+        <Label
+          for="place-of-birth"
+          required
+          >Place of Birth</Label
+        >
+        <InputText
+          id="place-of-birth"
+          v-model="data.form.place_of_birth"
+          type="text"
+        />
+        <FieldErrorMessage
+          :validation="validation"
+          field="place_of_birth"
+        />
+      </div>
+      <div class="field col-12 md:col-2">
+        <label for="gender">Gender</label>
+        <div class="flex flex-wrap gap-3">
+          <div class="flex align-items-center">
+            <RadioButton
+              v-model="data.form.gender"
+              input-id="gender-male"
+              name="gender"
+              value="male"
+            />
+            <label
+              for="gender-male"
+              class="ml-2"
+              >Male</label
+            >
+          </div>
+          <div class="flex align-items-center">
+            <RadioButton
+              v-model="data.form.gender"
+              input-id="gender-female"
+              name="gender"
+              value="female"
+            />
+            <label
+              for="gender-female"
+              class="ml-2"
+              >Female</label
+            >
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="p-fluid formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Date Hired</label>
-      <Calendar
-        pattern="dd-MM-yyyy"
-        mask="true"
-      />
-    </div>
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">Department</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">Position</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-  </div>
-
-  <div class="p-fluid formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Employee No.</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">TIN No.</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">Email Address</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-  </div>
-
-  <MemberAddress :type="MemberType.PRESENT" />
-  <MemberAddress :type="MemberType.PERMANENT" />
-
-  <div class="p-fluid formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Telephone Number</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">Mobile Number</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-  </div>
-
-  <h5>Name of Spouse</h5>
-
-  <div class="p-fluid formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Surname</label>
-      <InputText
-        id="firstname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">First Name</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-2">
-      <label for="lastname2">Middle Name</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-2">
-      <label for="lastname2">Name Extension (Jr., Sr.)</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-  </div>
-
-  <div class="p-fluid formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Date of Birth</label>
-      <Calendar
-        pattern="dd-MM-yyyy"
-        mask="true"
-      />
-    </div>
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">Occupation</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">Contact Number</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-  </div>
-
-  <h5>Father's Name</h5>
-
-  <div class="p-fluid formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Surname</label>
-      <InputText
-        id="firstname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">First Name</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-2">
-      <label for="lastname2">Middle Name</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-2">
-      <label for="lastname2">Name Extension (Jr., Sr.)</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-  </div>
-
-  <div class="p-fluid formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Date of Birth</label>
-      <Calendar
-        pattern="dd-MM-yyyy"
-        mask="true"
-      />
-    </div>
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">Occupation</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">Contact Number</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-  </div>
-
-  <h5>Mother's Name</h5>
-
-  <div class="p-fluid formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Surname</label>
-      <InputText
-        id="firstname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">First Name</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-2">
-      <label for="lastname2">Middle Name</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-2">
-      <label for="lastname2">Name Extension (Jr., Sr.)</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-  </div>
-
-  <div class="p-fluid formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Date of Birth</label>
-      <Calendar
-        pattern="dd-MM-yyyy"
-        mask="true"
-      />
-    </div>
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">Occupation</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">Contact Number</label>
-      <InputText
-        id="lastname2"
-        type="text"
-      />
-    </div>
-  </div>
-
-  <h5 class="flex align-items-center">
-    Beneficiaries
-    <Button
-      icon="pi pi-plus"
-      class="p-button-rounded p-button-success p-button-text"
-      @click="handleAddBeneficiary"
-    />
-  </h5>
-
-  <div
-    v-for="index in form.beneficiaries.length"
-    :key="index"
-    class="p-fluid formgrid grid"
-  >
-    <div class="field col-12 md:col-4">
-      <label for="lastname2">Name (Last Name, First Name, Middle Name)</label>
-      <InputText
-        id="lastname2"
-        v-model="form.beneficiaries[index - 1].name"
-        type="text"
-      />
-    </div>
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Birthdate</label>
-      <Calendar
-        v-model="form.beneficiaries[index - 1].birthdate"
-        pattern="dd-MM-yyyy"
-        mask="true"
-      />
-    </div>
-    <div class="flex align-items-center col-12 md:col-4">
-      <div class="field">
-        <label for="lastname2">Relationship</label>
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <label for="firstname2">Date Hired</label>
+        <Calendar
+          pattern="dd-MM-yyyy"
+          id="date-hired"
+          v-model="data.form.date_hired"
+          mask="true"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="department">Department</label>
         <InputText
-          id="lastname2"
-          v-model="form.beneficiaries[index - 1].relationship"
+          id="department"
+          type="text"
+          v-model="data.form.department"
+        />
+      </div>
+
+      <div class="field col-12 md:col-4">
+        <label for="position">Position</label>
+        <InputText
+          id="position"
+          type="text"
+          v-model="data.form.position"
+        />
+      </div>
+    </div>
+
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <label for="employee-no">Employee No.</label>
+        <InputText
+          id="employee-no"
+          v-model="data.form.employee_no"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="tin-no">TIN No.</label>
+        <InputText
+          id="tin-no"
+          v-model="data.form.tin_no"
           type="text"
         />
       </div>
 
-      <Button
-        icon="pi pi-trash"
-        class="p-button-rounded p-button-danger p-button-text ml-2"
-        @click="handleRemoveBeneficiary(index - 1)"
-      />
+      <div class="field col-12 md:col-4">
+        <label for="email-address">Email Address</label>
+        <InputText
+          id="email-address"
+          v-model="data.form.email_address"
+          type="text"
+        />
+      </div>
     </div>
-  </div>
 
-  <div class="p-fluid mt-5 formgrid grid">
-    <div class="field col-12 md:col-4">
-      <label for="firstname2">Application Date</label>
-      <Calendar
-        pattern="dd-MM-yyyy"
-        mask="true"
+    <MemberAddress
+      v-model="data.form.present_address"
+      :type="MemberType.PRESENT"
+    />
+    <MemberAddress
+      v-model="data.form.permanent_address"
+      :type="MemberType.PERMANENT"
+    />
+
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <label for="telephone-number">Telephone Number</label>
+        <InputText
+          id="telephone-number"
+          type="text"
+          v-model="data.form.telephone_number"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="mobile-number">Mobile Number</label>
+        <InputText
+          id="mobile-number"
+          type="text"
+          v-model="data.form.mobile_number"
+        />
+      </div>
+    </div>
+
+    <h5>Name of Spouse</h5>
+
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <label for="spouses-surname">Surname</label>
+        <InputText
+          id="spouses-surname"
+          v-model="data.form.spouse.surname"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="spouses-first-name">First Name</label>
+        <InputText
+          id="spouses-first-name"
+          v-model="data.form.spouse.first_name"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-2">
+        <label for="spouses-middle-name">Middle Name</label>
+        <InputText
+          id="spouses-middle-name"
+          v-model="data.form.spouse.middle_name"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-2">
+        <label for="spouses-name-extension">Name Extension (Jr., Sr.)</label>
+        <InputText
+          id="spouses-name-extension"
+          v-model="data.form.spouse.name_extension"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <label for="spouses-date-of-birth">Date of Birth</label>
+        <Calendar
+          id="spouses-date-of-birth"
+          v-model="data.form.spouse.date_of_birth"
+          pattern="dd-MM-yyyy"
+          mask="true"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="spouses-occupation">Occupation</label>
+        <InputText
+          id="spouses-occupation"
+          v-model="data.form.spouse.occupation"
+          type="text"
+        />
+      </div>
+
+      <div class="field col-12 md:col-4">
+        <label for="spouses-contact-number">Contact Number</label>
+        <InputText
+          id="spouses-contact-number"
+          v-model="data.form.spouse.contact_number"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <h5>Father's Name</h5>
+
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <label for="fathers-surname">Surname</label>
+        <InputText
+          id="fathers-surname"
+          v-model="data.form.father.surname"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="fathers-first-name">First Name</label>
+        <InputText
+          id="fathers-first-name"
+          v-model="data.form.father.first_name"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-2">
+        <label for="fathers-middle-name">Middle Name</label>
+        <InputText
+          id="fathers-middle-name"
+          v-model="data.form.father.middle_name"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-2">
+        <label for="fathers-name-extension">Name Extension (Jr., Sr.)</label>
+        <InputText
+          id="fathers-name-extension"
+          v-model="data.form.father.name_extension"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <label for="fathers-date-of-birth">Date of Birth</label>
+        <Calendar
+          id="fathers-date-of-birth"
+          v-model="data.form.father.date_of_birth"
+          pattern="dd-MM-yyyy"
+          mask="true"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="fathers-occupation">Occupation</label>
+        <InputText
+          id="fathers-occupation"
+          v-model="data.form.father.occupation"
+          type="text"
+        />
+      </div>
+
+      <div class="field col-12 md:col-4">
+        <label for="fathers-contact-number">Contact Number</label>
+        <InputText
+          id="fathers-contact-number"
+          v-model="data.form.father.contact_number"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <h5>Mother's Name</h5>
+
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <label for="mothers-surname">Surname</label>
+        <InputText
+          id="mothers-surname"
+          v-model="data.form.mother.surname"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="mothers-first-name">First Name</label>
+        <InputText
+          id="mothers-first-name"
+          v-model="data.form.mother.first_name"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-2">
+        <label for="mothers-middle-name">Middle Name</label>
+        <InputText
+          id="mothers-middle-name"
+          v-model="data.form.mother.middle_name"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-2">
+        <label for="mothers-name-extension">Name Extension (Jr., Sr.)</label>
+        <InputText
+          id="mothers-name-extension"
+          v-model="data.form.mother.name_extension"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <label for="mothers-date-of-birth">Date of Birth</label>
+        <Calendar
+          id="mothers-date-of-birth"
+          v-model="data.form.mother.date_of_birth"
+          pattern="dd-MM-yyyy"
+          mask="true"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="mothers-occupation">Occupation</label>
+        <InputText
+          id="mothers-occupation"
+          v-model="data.form.mother.occupation"
+          type="text"
+        />
+      </div>
+
+      <div class="field col-12 md:col-4">
+        <label for="mothers-contact-number">Contact Number</label>
+        <InputText
+          id="mothers-contact-number"
+          v-model="data.form.mother.contact_number"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <h5 class="flex align-items-center">
+      Beneficiaries
+      <Button
+        icon="pi pi-plus"
+        class="p-button-rounded p-button-success p-button-text"
+        @click="handleAddBeneficiary"
       />
+    </h5>
+
+    <MemberBeneficiaryForm
+      v-for="index in data.form.beneficiaries.length"
+      :key="index"
+      v-model="data.form.beneficiaries[index - 1]"
+      @on-click-remove="handleRemoveBeneficiary(index - 1)"
+    />
+
+    <div class="p-fluid mt-5 formgrid grid">
+      <div class="field col-12 md:col-4">
+        <Label for="member-at">Application Date</Label>
+        <Calendar
+          id="member-at"
+          pattern="dd-MM-yyyy"
+          mask="true"
+          v-model="data.form.member_at"
+        />
+      </div>
+
+      <div class="field col-12 md:col-4">
+        <div class="flex align-items-center p-1">
+          <Checkbox
+            inputId="oriented"
+            name="oriented"
+            binary
+            v-model="data.form.oriented"
+          />
+          <label
+            for="ingredient1"
+            class="ml-2"
+          >
+            Done Orientation?
+          </label>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -385,33 +468,84 @@
 import Calendar from 'primevue/calendar';
 import RadioButton from 'primevue/radiobutton';
 import MemberAddress from '@/views/pages/members/components/MemberAddress.vue';
-import { reactive } from 'vue';
+import { computed, onMounted, reactive, watch } from 'vue';
 import { MemberType } from '@/constants/ui/members';
 import type { MemberForm } from '@/types/ui/members';
 import useAlert from '@/composables/useAlert';
 import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
+import Label from '@/components/Label.vue';
+import FieldErrorMessage from '@/components/FieldErrorMessage.vue';
+import { required } from '@vuelidate/validators';
+import useValidation from '@/composables/useValidation';
+import MemberBeneficiaryForm from '@/views/pages/members/components/MemberBeneficiaryForm.vue';
+import Checkbox from 'primevue/checkbox';
 
+interface Props {
+  modelValue?: MemberForm;
+}
+
+const props = defineProps<Props>();
+const emit = defineEmits(['update:modelValue', 'update:validated']);
 const { showError } = useAlert();
 
-const form = reactive<MemberForm>({
-  beneficiaries: [
-    {
-      name: '',
-      birthdate: undefined,
-      relationship: '',
-    },
-  ],
+const rules = computed(() => ({
+  surname: { required },
+}));
+
+const data = reactive<{ form: MemberForm }>({
+  form: {
+    father: {},
+    mother: {},
+    spouse: {},
+    beneficiaries: [
+      {
+        name: '',
+        birthdate: undefined,
+        relationship: '',
+      },
+    ],
+  },
 });
 
+const form = computed(() => data.form);
+
+const { validation } = useValidation({
+  rules,
+  model: form,
+  globalConfig: {
+    $scope: 'test',
+  },
+});
+
+onMounted(() => {
+  if (props.modelValue) data.form = props.modelValue;
+});
+
+watch(
+  () => data.form,
+  (value: MemberForm) => {
+    emit('update:modelValue', value);
+  },
+  { deep: true }
+);
+
+watch(
+  () => props.modelValue,
+  (value?: MemberForm) => {
+    if (value) data.form = value;
+  }
+);
+
 const handleAddBeneficiary = () => {
-  form.beneficiaries.push({});
+  data.form.beneficiaries.push({});
 };
 
 const handleRemoveBeneficiary = (index: number) => {
-  if (form.beneficiaries.length <= 1) {
+  if (data.form.beneficiaries.length <= 1) {
     showError('Member must have at least one beneficiary.');
     return;
   }
-  form.beneficiaries.splice(index, 1);
+  data.form.beneficiaries.splice(index, 1);
 };
 </script>

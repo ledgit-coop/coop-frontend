@@ -2,6 +2,13 @@
 import { ref } from 'vue';
 
 import AppMenuItem from '@/layout/AppMenuItem.vue';
+import {
+  ROUTE_NAME_LOANS,
+  ROUTE_NAME_LOAN_PRODUCTS,
+  ROUTE_NAME_MEMBERS,
+  ROUTE_NAME_REPAYMENTS,
+  ROUTE_NAME_USERS,
+} from '@/constants';
 
 const model = ref<any>([
   {
@@ -11,8 +18,11 @@ const model = ref<any>([
   {
     label: 'Operations',
     items: [
-      { label: 'Members', icon: 'pi pi-fw pi-id-card', to: '/members/list' },
-      { label: 'Loans', icon: 'pi pi-fw pi-history', to: '/loans/list' },
+      { label: 'Members', icon: 'pi pi-fw pi-id-card', to: { name: ROUTE_NAME_MEMBERS } },
+      { label: 'Loans', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS } },
+      { label: 'Repayments', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_REPAYMENTS } },
+      { label: 'Collections', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS } },
+      { label: 'Due & Missed Loans', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS } },
       { label: 'Share Capitals', icon: 'pi pi-fw pi-globe', to: '/uikit/invalidstate' },
     ],
   },
@@ -20,18 +30,12 @@ const model = ref<any>([
   {
     label: 'Administration',
     items: [
-      { label: 'Users', icon: 'pi pi-fw pi-users', to: '/admin/loan-products' },
-      { label: 'Loan Products', icon: 'pi pi-fw pi-book', to: '/admin/loan-products' },
+      { label: 'Users', icon: 'pi pi-fw pi-users', to: { name: ROUTE_NAME_USERS } },
+      { label: 'Fees', icon: 'pi pi-fw pi-book', to: '/admin/loan-products' },
+      { label: 'Loan Products', icon: 'pi pi-fw pi-book', to: { name: ROUTE_NAME_LOAN_PRODUCTS } },
       { label: 'Account Types', icon: 'pi pi-fw pi-book', to: '/utilities/icons' },
-      { label: 'Repayment Methods', icon: 'pi pi-fw pi-book', to: '/admin/loan-products' },
       { label: 'Disbursment Channel', icon: 'pi pi-fw pi-book', to: '/admin/loan-products' },
-
-      {
-        label: 'PrimeFlex',
-        icon: 'pi pi-fw pi-desktop',
-        url: 'https://www.primefaces.org/primeflex/',
-        target: '_blank',
-      },
+      { label: 'Penalties', icon: 'pi pi-fw pi-book', to: '/admin/loan-products' },
     ],
   },
 ]);

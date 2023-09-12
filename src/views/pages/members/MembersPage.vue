@@ -11,17 +11,22 @@
         </PageContentHeader>
 
         <DataTable
+          ref="table"
           scrollable
           :loading="loadings.table"
           :paginator="true"
           :row-hover="true"
-          :rows="10"
           :value="members"
           class="p-datatable-gridlines"
           data-key="id"
           filter-display="menu"
           responsive-layout="scroll"
           @row-click="handleNavigateView"
+          :rows="rows"
+          :lazy="true"
+          :total-records="totalRecords"
+          @sort="onSort"
+          @page="onPageChange"
         >
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
@@ -43,6 +48,7 @@
                   option-label="label"
                   placeholder="Select Status"
                   style="min-width: 10rem"
+                  @change="loadTable(params)"
                 >
                 </Dropdown>
 
@@ -52,15 +58,15 @@
                     v-model="filters.keyword"
                     placeholder="Keyword Search"
                     style="width: 100%"
+                    @keydown.enter="loadTable(params)"
                   />
                 </span>
               </div>
             </div>
           </template>
           <template #empty> No members found. </template>
-          <template #loading> Loading members data. Please wait. </template>
           <Column
-            field="id"
+            field="member_id"
             header="ID Number"
             style="min-width: 12rem"
             sortable
@@ -68,15 +74,16 @@
           </Column>
 
           <Column
-            field="name"
+            field="full_name"
             header="Name"
+            sort-field="first_name"
             style="min-width: 12rem"
             sortable
           >
           </Column>
 
           <Column
-            field="email"
+            field="email_address"
             header="Email Address"
             style="min-width: 12rem"
             sortable
@@ -92,10 +99,13 @@
           </Column>
 
           <Column
-            field="joined"
+            field="member_at"
             header="Joined"
             style="min-width: 12rem"
           >
+            <template #body="slotProps">
+              {{ dateFormat(slotProps.data.member_at, DATE_FORMAT) }}
+            </template>
           </Column>
 
           <Column
@@ -143,7 +153,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import Button from 'primevue/button';
 import router from '@/router';
 import { ROUTE_NAME_MEMBERS_CREATE, ROUTE_NAME_MEMBERS_VIEW } from '@/constants/routes';
@@ -154,27 +164,60 @@ import { MemberStatus, MEMBER_STATUSES } from '@/constants/ui/members';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import PageContentHeader from '@/components/PageContentHeader.vue';
+import useAlert from '@/composables/useAlert';
+import useTableParameters from '@/composables/useTableParameters';
+import { DATE_FORMAT } from '@/constants';
+import { dateFormat } from '@/helpers';
 
 interface PageLoadings {
   table: boolean;
 }
-const members = ref<MembersTable[]>();
+
 const filters = ref({
   status: '',
   keyword: '',
 });
+
+const table = ref();
+const { rows, onSort, paginate, totalRecords, onPageChange, params } = useTableParameters(filters);
+const members = ref<MembersTable[]>();
+
 const loadings = ref<PageLoadings>({
   table: false,
 });
 
+const { showApiError } = useAlert();
+
 const statuses = ref(MEMBER_STATUSES);
 
-onBeforeMount(async () => {
-  members.value = await MembersService.getMembers();
+onMounted(async () => {
+  loadTable();
 });
 
+watch(params, (params) => {
+  loadTable(params);
+});
+
+const loadTable = (params?: Record<string, any>) => {
+  if (!loadings.value.table) {
+    loadings.value.table = true;
+
+    MembersService.getMembers(params)
+      .then((res) => {
+        members.value = res.data.data;
+        paginate(res.data);
+      })
+      .catch(() => {
+        showApiError();
+      })
+      .finally(() => {
+        loadings.value.table = false;
+      });
+  }
+};
+
 const handleNavigateView = (event: any) => {
-  router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: event.data.id } });
+  router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: event.data.member_number } });
 };
 
 const clearFilters = () => {

@@ -11,7 +11,9 @@
         <Dropdown
           :options="accounts"
           filter
+          v-model="accountId"
           option-value="value"
+          :loading="loadings.fetch_accounts"
           option-label="label"
           placeholder="Select Type of Account"
           class="w-full"
@@ -30,6 +32,8 @@
       <Button
         label="Save"
         icon="pi pi-save"
+        @click="handleSaveAccount"
+        :loading="loadings.add"
         autofocus
       />
     </template>
@@ -38,22 +42,33 @@
 <script setup lang="ts">
 import Dialog from 'primevue/dialog';
 import { onMounted, reactive, ref, watch } from 'vue';
-import type { MemberLoanApplication } from '@/types/ui/members';
 import Button from 'primevue/button';
 import type { DropdownOption } from '@/types/ui';
+import UtilityService from '@/service/UtilityService';
+import useAlert from '@/composables/useAlert';
+import MembersService from '@/service/MembersService';
+import { AxiosError } from 'axios';
+import type { LoanForm } from '@/types/ui/loans';
 
 interface Props {
   visible: boolean;
-  memberId?: string;
+  memberId?: string | number;
 }
 
+const loadings = ref({
+  add: false,
+  fetch_accounts: false,
+});
 const props = defineProps<Props>();
 const emit = defineEmits(['update:visible']);
-const model = reactive<MemberLoanApplication>({});
+const model = reactive<LoanForm>({});
 const showModal = ref(false);
+const accountId = ref();
+const { showError, showApiError, showSuccess } = useAlert();
 
 onMounted(() => {
   setMemberId();
+  loadAccounts();
   showModal.value = props.visible ?? false;
 });
 
@@ -75,15 +90,29 @@ watch(
   }
 );
 
-const setMemberId = () => {
-  model.member_id = props.memberId;
+const accounts = ref<DropdownOption[]>();
+
+const handleSaveAccount = async () => {
+  if (!props.memberId) showError('Member id not found.');
+  if (loadings.value.add) return;
+  loadings.value.add = true;
+  try {
+    await MembersService.postAddAccount(props.memberId?.toString() ?? '', accountId.value);
+    showModal.value = false;
+    showSuccess('Account successfully added.');
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.add = false;
+};
+const loadAccounts = async () => {
+  loadings.value.fetch_accounts = true;
+  const { data } = await UtilityService.getAccountDropdown();
+  accounts.value = data;
+  loadings.value.fetch_accounts = false;
 };
 
-const accounts = ref<DropdownOption[]>([
-  { value: '1', label: 'Regular Loan Account' },
-  { value: '2', label: 'Educational Loan Account' },
-  { value: '3', label: 'Share Capital Account' },
-  { value: '4', label: 'Savings Account' },
-  { value: '5', label: 'Kiddie Savings Account' },
-]);
+const setMemberId = () => {
+  model.member_id = props.memberId?.toString();
+};
 </script>

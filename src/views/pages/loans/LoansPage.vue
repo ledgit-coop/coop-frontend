@@ -67,9 +67,9 @@
 
               <Button
                 v-if="slotProps.data.status === MemberLoanStatus.PENDING"
-                label="Evaluate"
+                label="Pre-Approved"
                 icon="pi pi-check"
-                class="p-button-raised mr-2 mb-2"
+                class="p-button-raised mr-2 mb-2 white-space-nowrap"
                 size="small"
                 @click="handleViewLoanClick(slotProps.data)"
               />

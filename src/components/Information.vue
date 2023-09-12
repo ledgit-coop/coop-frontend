@@ -13,7 +13,12 @@
             {{ value.label }}:
           </td>
           <td class="pl-5 pb-2 pt-1 vertical-align-top">
-            {{ value.value }}
+            <Skeleton
+              v-if="loading"
+              class="w-full"
+            ></Skeleton>
+            <span v-else-if="!isEmptyText(value.value)">{{ value.value }}</span>
+            <span v-else>---</span>
           </td>
         </tr>
       </tbody>
@@ -22,9 +27,11 @@
 </template>
 <script setup lang="ts">
 import type { InformationItem } from '@/types/ui/index';
+import { isEmptyText } from '@/helpers';
 
 interface Props {
   info: InformationItem[];
+  loading?: boolean;
 }
 
 defineProps<Props>();

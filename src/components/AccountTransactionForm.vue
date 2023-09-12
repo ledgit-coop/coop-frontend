@@ -1,16 +1,28 @@
 <template>
   <div class="grid p-fluid formgrid">
     <div class="field col-12">
-      <label for="name">Account</label>
+      <Label
+        for="accounts"
+        required
+        >Account</Label
+      >
       <Dropdown
+        id="accounts"
         :options="accounts"
         filter
-        option-value="id"
-        option-label="name"
+        option-value="value"
+        option-label="label"
         placeholder="Select Account"
+        v-model="data.form.member_account_id"
+        v-validation="validation"
+        validate="member_account_id"
         class="w-full"
       >
       </Dropdown>
+      <FieldErrorMessage
+        :validation="validation"
+        field="member_account_id"
+      />
     </div>
 
     <div class="field col-12 mt-2">
@@ -18,10 +30,10 @@
       <div class="flex flex-wrap gap-3">
         <div class="flex align-items-center">
           <RadioButton
-            v-model="data.form.application_type"
+            v-model="data.form.transaction_type"
             input-id="application-type"
-            name="loan_type"
-            value="new"
+            name="transaction_type"
+            value="withdrawal"
           />
           <label
             inputId="application-type"
@@ -31,10 +43,10 @@
         </div>
         <div class="flex align-items-center">
           <RadioButton
-            v-model="data.form.application_type"
+            v-model="data.form.transaction_type"
             input-id="application-type"
-            name="loan_type"
-            value="renew"
+            name="transaction_type"
+            value="deposit"
           />
           <label
             inputId="application-type"
@@ -43,52 +55,118 @@
           >
         </div>
       </div>
-    </div>
 
-    <div class="field col-12 md:col-6">
-      <label for="loan_purpose">Amount</label>
-
-      <InputNumber
-        input-id="locale-user"
-        :min-fraction-digits="2"
+      <FieldErrorMessage
+        :validation="validation"
+        field="transaction_type"
       />
     </div>
 
     <div class="field col-12 md:col-6">
-      <label for="loan_purpose">Particular</label>
+      <Label
+        required
+        for="amount"
+        >Amount</Label
+      >
+
+      <InputNumber
+        id="amount"
+        input-id="locale-user"
+        :min-fraction-digits="2"
+        v-validation="validation"
+        validate="amount"
+        v-model="data.form.amount"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="amount"
+      />
+    </div>
+
+    <div class="field col-12 md:col-6">
+      <Label
+        required
+        for="particular"
+        >Particular</Label
+      >
       <InputText
-        id="loan_purpose"
+        id="particular"
         type="text"
+        validate="particular"
+        v-validation="validation"
+        v-model="data.form.particular"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="particular"
       />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import type { MemberLoanApplication } from '@/types/ui/members';
-import { onMounted, reactive, watch } from 'vue';
+import type { MemberAccountTransactionForm } from '@/types/ui/members';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import InputNumber from 'primevue/inputnumber';
 import type { DropdownOption } from '@/types/ui';
-import type { Account } from '@/types/ui/accounts';
+import UtilityService from '@/service/UtilityService';
+import useAlert from '@/composables/useAlert';
+import type { AxiosError } from 'axios';
+import { required } from '@vuelidate/validators';
+import useValidation from '@/composables/useValidation';
+import FieldErrorMessage from './FieldErrorMessage.vue';
+import Label from './Label.vue';
 
 interface Props {
-  modelValue?: MemberLoanApplication;
-  accounts: Account[];
-  members: DropdownOption[];
-  disableMember?: boolean;
+  memberId?: string | number;
+  modelValue?: MemberAccountTransactionForm;
 }
+const loadings = ref({
+  fetch_accounts: false,
+});
 
-const data = reactive<{ form: MemberLoanApplication }>({
+const rules = computed(() => ({
+  member_account_id: { required },
+  transaction_type: { required },
+  amount: { required },
+  particular: { required },
+}));
+
+const form = computed(() => data.form);
+
+const accounts = ref<DropdownOption[]>([]);
+const data = reactive<{ form: MemberAccountTransactionForm }>({
   form: {
-    loan_type: '',
+    member_account_id: undefined,
+    transaction_type: undefined,
+    amount: undefined,
+    particular: undefined,
   },
 });
-const emit = defineEmits(['update:modelValue']);
 
+const { validation } = useValidation({
+  rules,
+  model: form,
+});
+
+const emit = defineEmits(['update:modelValue']);
+const { showApiError } = useAlert();
 const props = defineProps<Props>();
 
 onMounted(() => {
   data.form = props.modelValue ?? {};
+  fetchAccounts();
 });
+
+const fetchAccounts = async () => {
+  loadings.value.fetch_accounts = true;
+  try {
+    const { data: acc } = await UtilityService.getmemberAcountDropdown(props.memberId?.toString() ?? '');
+    accounts.value = acc;
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.fetch_accounts = false;
+};
 
 watch(
   () => data.form,
