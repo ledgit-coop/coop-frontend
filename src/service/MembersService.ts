@@ -1,5 +1,11 @@
 import apiClient from '@/http-common';
-import type { ListMemberResponse, PostAddMemberAccountTransactionPayload, PostMemberPayload } from '@/types/api/member';
+import type {
+  GetAccountTransactionsParams,
+  ListMemberResponse,
+  PostAddMemberAccountTransactionPayload,
+  PostMemberPayload,
+} from '@/types/api/member';
+import type { AccountTransaction } from '@/types/ui/accounts';
 import type { Member } from '@/types/ui/members';
 import type { AxiosPromise } from 'axios';
 
@@ -27,6 +33,13 @@ class MembersService {
 
   postAddAccountTransaction(member_account_id: string, params: PostAddMemberAccountTransactionPayload): AxiosPromise {
     return apiClient.post(`${PATH}/accounts/transaction/${member_account_id}`, params);
+  }
+
+  getMemberAccountTrasactions(
+    member_id: string,
+    params?: GetAccountTransactionsParams
+  ): AxiosPromise<AccountTransaction[]> {
+    return apiClient.get(`${PATH}/accounts/transaction/${member_id}`, { params });
   }
 
   getMembersShareCapitalTransactions(member_number: string) {

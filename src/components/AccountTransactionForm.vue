@@ -101,6 +101,28 @@
         field="particular"
       />
     </div>
+
+    <div class="field col-12 md:col-6">
+      <Label
+        required
+        for="transaction-date"
+        >Date</Label
+      >
+
+      <Calendar
+        pattern="dd-MM-yyyy"
+        id="date-hired"
+        v-model="data.form.transaction_date"
+        mask="true"
+        validate="transaction_date"
+        v-validation="validation"
+      />
+
+      <FieldErrorMessage
+        :validation="validation"
+        field="transaction_date"
+      />
+    </div>
   </div>
 </template>
 <script setup lang="ts">

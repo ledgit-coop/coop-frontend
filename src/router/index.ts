@@ -3,6 +3,7 @@ import AppLayout from '@/layout/AppLayout.vue';
 import AuthService from '@/service/AuthService';
 import {
   PUBLIC_ROUTES,
+  ROUTE_NAME_COLLECTIONS,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOANS_CREATE,
   ROUTE_NAME_LOAN_PRODUCTS,
@@ -108,6 +109,15 @@ const router = createRouter({
           component: () => import('@/views/pages/repayments/RepaymentsPage.vue'),
           meta: {
             title: 'Repayments',
+          },
+        },
+
+        {
+          path: '/collections',
+          name: ROUTE_NAME_COLLECTIONS,
+          component: () => import('@/views/pages/collections/CollectionsPage.vue'),
+          meta: {
+            title: 'Collections',
           },
         },
 

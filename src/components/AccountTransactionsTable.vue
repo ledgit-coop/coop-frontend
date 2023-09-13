@@ -1,5 +1,6 @@
 <template>
   <DataTable
+    :loading="loading"
     :value="transactions"
     table-style="min-width: 50rem"
   >
@@ -10,7 +11,7 @@
     ></Column>
     <Column
       v-if="!hideColumns?.includes('type')"
-      field="type"
+      field="account_name"
       header="Account"
     ></Column>
 
@@ -22,7 +23,7 @@
 
     <Column
       v-if="!hideColumns?.includes('date')"
-      field="date"
+      field="transaction_date"
       header="Date"
     ></Column>
 
@@ -30,38 +31,56 @@
       v-if="!hideColumns?.includes('withdrawals')"
       field="withdrawals"
       header="Withdrawals"
-    ></Column>
+    >
+    <template #body="slotProps">
+        {{ slotProps.data.transaction_type === AccountTransactionType.WITHDRAWAL ? formatCurrency(slotProps.data.amount) : '' }}
+      </template>
+  </Column>
     <Column
       v-if="!hideColumns?.includes('deposits')"
       field="deposits"
       header="Deposits"
-    ></Column>
+    >
+  
+    <template #body="slotProps">
+        {{ slotProps.data.transaction_type === AccountTransactionType.DEPOSIT ? formatCurrency(slotProps.data.amount) : '' }}
+      </template>
+  </Column>
 
     <Column
       v-if="!hideColumns?.includes('running_balance')"
       field="running_balance"
       header="Balance"
-    ></Column>
+    >
+   
+    <template #body="slotProps">
+        {{ formatCurrency(slotProps.data.remaining_balance) }}
+      </template>
+  </Column>
 
     <ColumnGroup type="footer">
       <Row>
         <Column
-          footer="Ending Balance:"
+          footer="Total:"
           :colspan="6 - (hideColumns?.length ?? 0)"
           footer-style="text-align:right"
-        />
-        <Column footer="1,100.00" />
+        /> 
+        <Column :footer="formatCurrency(transactions?.reduce((n, p) => n + (p?.amount ?? 0), 0) ?? 0)" />
+
       </Row>
     </ColumnGroup>
   </DataTable>
 </template>
 <script setup lang="ts">
+import { AccountTransactionType } from '@/constants/ui/accounts';
+import { formatCurrency } from '@/helpers';
+import type { AccountTransaction } from '@/types/ui/accounts';
 import DataTable from 'primevue/datatable';
-import type { AccountTransactionHistory } from '@/types/ui/accounts';
 
 interface Props {
   hideColumns?: string[];
-  transactions?: AccountTransactionHistory[];
+  transactions?: AccountTransaction[];
+  loading?: boolean;
 }
 
 defineProps<Props>();

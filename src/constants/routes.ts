@@ -79,6 +79,8 @@ export const ROUTE_NAME_REPAYMENTS = 'repayments';
 export const ROUTE_NAME_LOAN_PRODUCTS = 'loan-products';
 export const ROUTE_NAME_USERS = 'users';
 
+export const ROUTE_NAME_COLLECTIONS = 'collections';
+
 export const PUBLIC_ROUTES: Array<string> = [
   ROUTE_NAME_LOGIN,
   ROUTE_NAME_REGISTER,

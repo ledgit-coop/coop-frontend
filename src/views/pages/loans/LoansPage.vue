@@ -48,36 +48,52 @@
           <template #action="slotProps">
             <div class="flex gap-2">
               <Button
-                label="View"
                 icon="pi pi-eye"
-                class="p-button-raised mr-2 mb-2"
+                v-tooltip="'View'"
+                text raised rounded
+                class="mr-2 mb-2"
+                size="small"
+                @click="handleViewLoanClick(slotProps.data)"
+              />
+
+              <Button
+                icon="pi pi-pencil"
+                v-tooltip="'Edit'"
+                severity="warning"
+                text raised rounded
+                class="  mr-2 mb-2"
                 size="small"
                 @click="handleViewLoanClick(slotProps.data)"
               />
 
               <Button
                 v-if="[MemberLoanStatus.PENDING,MemberLoanStatus.EVAULUATION, MemberLoanStatus.PRE_APPROVED].includes(slotProps.data.status as MemberLoanStatus)"
-                label="Reject"
-                icon="pi pi-times"
-                class="p-button-raised mr-2 mb-2"
+                icon="pi pi-thumbs-down-fill"
+                v-tooltip="'Reject'"
+                text raised rounded
+                class="  mr-2 mb-2"
                 size="small"
                 severity="danger"
                 @click="handleViewLoanClick(slotProps.data)"
               />
 
               <Button
-                v-if="slotProps.data.status === MemberLoanStatus.PENDING"
-                label="Pre-Approved"
+                v-if="slotProps.data.status === MemberLoanStatus.PENDING" 
+                v-tooltip="'Pre-Approved'"
                 icon="pi pi-check"
-                class="p-button-raised mr-2 mb-2 white-space-nowrap"
+                text raised rounded
+                class="  mr-2 mb-2  "
                 size="small"
                 @click="handleViewLoanClick(slotProps.data)"
               />
               <Button
                 v-if="slotProps.data.status === MemberLoanStatus.PRE_APPROVED"
-                label="Approve"
-                icon="pi pi-check"
-                class="p-button-raised mr-2 mb-2"
+          
+                icon="pi pi-thumbs-up-fill"
+                v-tooltip="'Approved'"
+
+                text raised rounded
+                class=" mr-2 mb-2"
                 size="small"
                 @click="handleViewLoanClick(slotProps.data)"
               />

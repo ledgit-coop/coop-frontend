@@ -1,4 +1,4 @@
-import type { LoanTermForm } from './loans';
+import type { AccountTransaction } from './accounts';
 
 export interface MemberForm {
   surname?: string;
@@ -35,6 +35,18 @@ export interface Member extends MemberForm {
   oriented?: boolean;
   full_present_address?: string;
   full_permanent_address?: string;
+  share_capital: {
+    id: number;
+    balance: number;
+    latest_transaction: AccountTransaction;
+  };
+  savings_accounts: {
+    id: number;
+    balance: number;
+    name?: string;
+    interest_per_anum?: number;
+    latest_transaction: AccountTransaction;
+  }[];
 }
 
 export interface MemberAddress {
@@ -75,10 +87,10 @@ export interface MemberLoanWidgetItem {
 
 export interface MemberSavingsAccountWidgetItem {
   type: string;
-  balance: number;
-  currency: string;
+  balance: number; 
   last_deposit_date: string;
   last_deposit_amount: number;
+  interest_per_anum?: number;
 }
 
 export interface MembersTable {
@@ -138,4 +150,5 @@ export interface MemberAccountTransactionForm {
   transaction_type?: string;
   amount?: number;
   particular?: string;
+  transaction_date?: string;
 }

@@ -39,6 +39,9 @@ import MembersService from '@/service/MembersService';
 import useAlert from '@/composables/useAlert';
 import type { AxiosError } from 'axios';
 import { useConfirm } from 'primevue/useconfirm';
+import moment from 'moment';
+import { DATE_FORMAT_DB } from '@/constants';
+import { DATE_FORMAT } from '@/constants';
 
 interface Props {
   visible: boolean;
@@ -48,7 +51,9 @@ interface Props {
 const props = defineProps<Props>();
 const emit = defineEmits(['update:visible']);
 const model = reactive<{ form: MemberAccountTransactionForm }>({
-  form: {},
+  form: {
+    transaction_date: moment().format(DATE_FORMAT),
+  },
 });
 const showModal = ref(false);
 const confirm = useConfirm();
@@ -86,12 +91,17 @@ const handleMakeTransaction = async () => {
       accept: async () => {
         loadings.value.saving = true;
 
-        await MembersService.postAddAccountTransaction(model.form?.member_account_id ?? '', {
-          transaction_type: model.form?.transaction_type,
-          amount: model.form?.amount,
-          particular: model.form?.particular,
-        });
-        showSuccess('Transaction successfullly added.');
+        try {
+          await MembersService.postAddAccountTransaction(model.form?.member_account_id ?? '', {
+            transaction_type: model.form?.transaction_type,
+            amount: model.form?.amount,
+            particular: model.form?.particular,
+            transaction_date: moment(model.form.transaction_date).format(DATE_FORMAT_DB),
+          });
+          showSuccess('Transaction successfullly added.');
+        } catch (error) {
+          showApiError(error as AxiosError);
+        }
 
         loadings.value.saving = false;
         showModal.value = false;

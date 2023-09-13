@@ -20,6 +20,7 @@
       <Button
         label="Submit"
         icon="pi pi-save"
+        :loading="loadings.save"
         @click="handleSaveClick"
         autofocus
       />
@@ -35,6 +36,8 @@ import Button from 'primevue/button';
 import type { LoanForm } from '@/types/ui/loans';
 import { mapLoanFormToPayload } from '@/constants/mapping/loans';
 import LoanService from '@/service/LoanService';
+import useAlert from '@/composables/useAlert';
+import type { AxiosError } from 'axios';
 
 interface Props {
   visible: boolean;
@@ -44,6 +47,8 @@ interface Props {
 
 const props = defineProps<Props>();
 const emit = defineEmits(['update:visible']);
+const {showApiError, showSuccess} = useAlert();
+
 const model = reactive<LoanForm>({
   member_id: '1',
   contact_number: '555-555-5555',
@@ -82,7 +87,9 @@ const model = reactive<LoanForm>({
   },
 });
 const showModal = ref(false);
-
+const loadings = ref({
+  save:false
+})
 onMounted(() => {
   setMemberId();
   showModal.value = props.visible ?? false;
@@ -115,6 +122,14 @@ const setMemberId = () => {
 };
 
 const handleSaveClick = () => {
-  LoanService.postLoan(mapLoanFormToPayload(model));
+  try {
+    loadings.value.save = true;
+    LoanService.postLoan(mapLoanFormToPayload(model));
+    showSuccess("Loan application saved successfully.")
+    showModal.value = false;
+  } catch (error) {
+    showApiError(error as AxiosError)
+  }
+  loadings.value.save = false;
 };
 </script>

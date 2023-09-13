@@ -84,6 +84,7 @@ const checkActiveRoute = (item: any) => {
       :class="item.class"
       :target="item.target"
       tabindex="0"
+      :disabled="true"
       @click="itemClick($event, item)"
     >
       <i

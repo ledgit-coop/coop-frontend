@@ -66,7 +66,7 @@
           </template>
           <template #empty> No members found. </template>
           <Column
-            field="member_id"
+            field="member_number"
             header="ID Number"
             style="min-width: 12rem"
             sortable
@@ -136,13 +136,16 @@
           >
             <template #body="slotProps">
               <div class="flex flex-wrap gap-2">
+           
                 <Button
-                  label="View"
-                  icon="pi pi-eye"
-                  class="p-button-raised mr-2 mb-2"
-                  size="small"
-                  @click="handleNavigateView(slotProps)"
-                />
+                icon="pi pi-eye"
+                v-tooltip="'View'"
+                text raised rounded
+                class="mr-2 mb-2"
+                size="small"
+                @click="handleNavigateView(slotProps)"
+              />
+
               </div>
             </template>
           </Column>

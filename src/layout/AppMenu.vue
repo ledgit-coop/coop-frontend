@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 import AppMenuItem from '@/layout/AppMenuItem.vue';
 import {
+ROUTE_NAME_COLLECTIONS,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOAN_PRODUCTS,
   ROUTE_NAME_MEMBERS,
@@ -21,9 +22,9 @@ const model = ref<any>([
       { label: 'Members', icon: 'pi pi-fw pi-id-card', to: { name: ROUTE_NAME_MEMBERS } },
       { label: 'Loans', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS } },
       { label: 'Repayments', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_REPAYMENTS } },
-      { label: 'Collections', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS } },
-      { label: 'Due & Missed Loans', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS } },
-      { label: 'Share Capitals', icon: 'pi pi-fw pi-globe', to: '/uikit/invalidstate' },
+      { label: 'Collections', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_COLLECTIONS } },
+      { label: 'Due & Missed Loans', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS }, class: 'line-through pointer-events-none' },
+      { label: 'Share Capitals', icon: 'pi pi-fw pi-globe', to: '/uikit/invalidstate', class: 'line-through pointer-events-none' },
     ],
   },
 
@@ -31,11 +32,11 @@ const model = ref<any>([
     label: 'Administration',
     items: [
       { label: 'Users', icon: 'pi pi-fw pi-users', to: { name: ROUTE_NAME_USERS } },
-      { label: 'Fees', icon: 'pi pi-fw pi-book', to: '/admin/loan-products' },
       { label: 'Loan Products', icon: 'pi pi-fw pi-book', to: { name: ROUTE_NAME_LOAN_PRODUCTS } },
-      { label: 'Account Types', icon: 'pi pi-fw pi-book', to: '/utilities/icons' },
-      { label: 'Disbursment Channel', icon: 'pi pi-fw pi-book', to: '/admin/loan-products' },
-      { label: 'Penalties', icon: 'pi pi-fw pi-book', to: '/admin/loan-products' },
+      { label: 'Fees', icon: 'pi pi-fw pi-book', to: '/admin/loan-products', class: 'line-through pointer-events-none' },
+      { label: 'Account Types', icon: 'pi pi-fw pi-book', to: '/utilities/icons', class: 'line-through pointer-events-none' },
+      { label: 'Disbursment Channel', icon: 'pi pi-fw pi-book', to: '/admin/loan-products', class: 'line-through pointer-events-none' },
+      { label: 'Penalties', icon: 'pi pi-fw pi-book', to: '/admin/loan-products', class: 'line-through pointer-events-none' },
     ],
   },
 ]);

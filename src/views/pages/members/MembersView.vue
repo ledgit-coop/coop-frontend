@@ -49,7 +49,6 @@
               label="Print"
             ></Button>
 
-
             <Button
               icon="pi pi-pencil"
               label="Edit"
@@ -186,10 +185,10 @@
               </div>
             </TabPanel>
             <TabPanel header="Share Capital">
-              <MembersShareCapital />
+              <MembersShareCapital :member="member" />
             </TabPanel>
             <TabPanel header="Savings">
-              <MembersSavings />
+              <MembersSavings :member="member" />
             </TabPanel>
             <TabPanel header="Loans">
               <MembersLoans />

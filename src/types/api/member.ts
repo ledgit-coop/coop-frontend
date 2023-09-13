@@ -1,3 +1,4 @@
+import type { AccountType } from '@/constants/ui/accounts';
 import type { Pagination } from '@/types/ui';
 import type { MembersTable } from '@/types/ui/members';
 
@@ -64,4 +65,11 @@ export interface PostAddMemberAccountTransactionPayload {
   transaction_type?: string;
   amount?: number;
   particular?: string;
+  transaction_date?: string;
+}
+
+export interface GetAccountTransactionsParams {
+  member_account_id?: string;
+  year?: string;
+  type?: AccountType;
 }

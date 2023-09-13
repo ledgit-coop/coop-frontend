@@ -8,9 +8,9 @@
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">
           <div>
-            <span class="block text-500 font-medium mb-3">{{ value.type }} <small>1% p.a</small></span>
+            <span class="block text-500 font-medium mb-3">{{ value.type }} <small>{{ value.interest_per_anum }}% p.a</small></span>
 
-            <div class="text-900 font-medium text-xl">{{ value.currency }} {{ formatNumber(value.balance) }}</div>
+            <div class="text-900 font-medium text-xl">{{ formatCurrency(value.balance) }}</div>
             <small>Current Balance</small>
           </div>
           <div
@@ -27,6 +27,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { formatCurrency } from '@/helpers';
 import type { MemberSavingsAccountWidgetItem } from '@/types/ui/members';
 
 interface Props {
