@@ -4,13 +4,13 @@
       <InlineMessage
         v-if="member && !member?.oriented"
         severity="error"
-        >Not attended membership orientation.</InlineMessage
+        >Not attended PMES (Pre-membership Education Seminar).</InlineMessage
       >
       <InlineMessage
         v-if="member && member?.oriented"
         severity="success"
         class="mt-2"
-        >Attended orientation.</InlineMessage
+        >Attended PMES (Pre-membership Education Seminar).</InlineMessage
       >
       <div class="card">
         <div class="grid m-0 align-items-center">
@@ -42,45 +42,64 @@
             <Button
               icon="pi pi-arrow-left"
               label="Back"
+              rounded
+              outlined
               @click="router.push({ name: ROUTE_NAME_MEMBERS })"
             ></Button>
             <Button
               icon="pi pi-print"
               label="Print"
+              rounded
+              outlined
             ></Button>
 
             <Button
               icon="pi pi-pencil"
               label="Edit"
+              severity="warning"
+              rounded
+              outlined
+              @click="router.push({ name: ROUTE_NAME_MEMBERS_EDIT, params: { id: member.member_number } })"
             ></Button>
 
             <Button
               icon="pi pi-print"
               label="Apply Loan"
+              rounded
+              outlined
               @click="handleApplyLoanClick"
             ></Button>
 
             <Button
-              icon="pi pi-plus"
-              label="Add Account"
-              @click="modalsVisibility.add_account = true"
-            ></Button>
-
-            <Button
               icon="pi pi-check"
-              label="Attended Orientation"
+              label="Done PMES"
+              rounded
+              :loading="loadings.oriented"
+              outlined
               v-if="!member.oriented"
               @click="handleDoneOrientation"
             ></Button>
 
             <Button
               icon="pi pi-plus"
+              label="Add Account"
+              rounded
+              outlined
+              @click="modalsVisibility.add_account = true"
+            ></Button>
+
+            <Button
+              icon="pi pi-plus"
               label="Add Transaction"
               @click="modalsVisibility.make_transaction = true"
+              rounded
+              outlined
             ></Button>
             <Button
               icon="pi pi-print"
               label="Terminate"
+              rounded
+              outlined
               severity="danger"
               @click="handleTerminateClick"
             ></Button>
@@ -167,15 +186,10 @@
                           </tr>
                         </thead>
                         <tbody class="p-datatable-tbody">
-                          <tr>
-                            <td>Kevin</td>
-                            <td>Sept 2, 1993</td>
-                            <td>Mother</td>
-                          </tr>
-                          <tr>
-                            <td>Kevin</td>
-                            <td>Sept 2, 1993</td>
-                            <td>Mother</td>
+                          <tr v-for="value in member?.beneficiaries ?? []">
+                            <td>{{ value.name }}</td>
+                            <td>{{ value.birthdate }}</td>
+                            <td>{{ value.relationship }}</td>
                           </tr>
                         </tbody>
                       </table>
@@ -191,17 +205,17 @@
               <MembersSavings :member="member" />
             </TabPanel>
             <TabPanel header="Loans">
-              <MembersLoans />
+              <MembersLoans :member="member" />
             </TabPanel>
             <TabPanel header="Accounts">
-              <MembersAccounts />
+              <MembersAccounts :member="member" />
             </TabPanel>
 
             <TabPanel header="Logs">
               <MembersLogs />
             </TabPanel>
           </TabView>
-          <ApplyLoan
+          <LoanSave
             v-model:visible="modalsVisibility.apply_form"
             :member="member"
             :disable-member="true"
@@ -230,8 +244,7 @@ import TabPanel from 'primevue/tabpanel';
 import router from '@/router';
 import MembersShareCapital from './components/MembersShareCapital.vue';
 import MembersLoans from './components/MembersLoans.vue';
-import ApplyLoan from '@components/ApplyLoan.vue';
-import { ROUTE_NAME_MEMBERS } from '@/constants';
+import { ROUTE_NAME_MEMBERS, ROUTE_NAME_MEMBERS_EDIT } from '@/constants';
 import MembersSavings from './components/MembersSavings.vue';
 import MembersAccounts from './components/MembersAccounts.vue';
 import MakeAccountTransaction from '@components/MakeAccountTransaction.vue';
@@ -246,6 +259,7 @@ import useAlert from '@/composables/useAlert';
 import Skeleton from 'primevue/skeleton';
 import type { AxiosError } from 'axios';
 import InlineMessage from 'primevue/inlinemessage';
+import LoanSave from '@/components/LoanSave.vue';
 
 interface ModalsVisibility {
   apply_form: boolean;
@@ -253,12 +267,9 @@ interface ModalsVisibility {
   add_account: boolean;
 }
 
-interface Loadings {
-  member_fetch: boolean;
-}
-
-const loadings = ref<Loadings>({
+const loadings = ref({
   member_fetch: false,
+  oriented: false,
 });
 
 const confirm = useConfirm();
@@ -279,17 +290,17 @@ const basic_information = computed<InformationItem[]>(() => [
   { label: 'Middle Name', value: member.value?.middle_name ?? '' },
   { label: 'Suffix (Jr. Sr.)', value: member.value?.name_extension ?? '' },
   { label: 'Date of Birth', value: member.value?.date_of_birth?.toString() ?? '' },
-  { label: 'Place of Birth', value: 'Macrohon So. Leyte' },
-  { label: 'Gender', value: 'Male' },
+  { label: 'Place of Birth', value: member.value?.place_of_birth ?? '' },
+  { label: 'Gender', value: member.value?.gender ?? '' },
 ]);
 
 const employment_information = computed<InformationItem[]>(() => [
-  { label: 'Date Hired', value: 'Sept. 2, 1993' },
-  { label: 'Department', value: 'IT' },
-  { label: 'Position', value: 'Software Engineer' },
-  { label: 'Employee No.', value: 'ID6585478' },
-  { label: 'TIN No.', value: '00000' },
-  { label: 'Email Address', value: 'kevin.loquencio@gmail.com' },
+  { label: 'Date Hired', value: member.value?.date_hired ?? '' },
+  { label: 'Department', value: member.value?.department ?? '' },
+  { label: 'Position', value: member.value?.position ?? '' },
+  { label: 'Employee No.', value: member.value?.employee_no ?? '' },
+  { label: 'TIN No.', value: member.value?.tin_no ?? '' },
+  { label: 'Email Address', value: member.value?.email_address ?? '' },
 ]);
 const address_info = computed<InformationItem[]>(() => [
   {
@@ -298,7 +309,7 @@ const address_info = computed<InformationItem[]>(() => [
   },
   {
     label: 'Status of Residence',
-    value: 'Living with Parents',
+    value: member.value?.residency_status ?? '',
   },
   {
     label: 'Permanent Address',
@@ -309,31 +320,31 @@ const address_info = computed<InformationItem[]>(() => [
 const spouse_information = computed<InformationItem[]>(() => [
   {
     label: 'Name of Spouse',
-    value: 'Kevin Loquencio',
+    value: `${member.value?.spouse.first_name} ${member.value?.spouse.middle_name} ${member.value?.spouse.surname}`,
   },
-  { label: 'Date of Birth', value: 'Kevin' },
-  { label: 'Occupation', value: 'Kevin' },
-  { label: 'Contact Number', value: 'Kevin' },
+  { label: 'Date of Birth', value: member.value?.spouse.date_of_birth ?? '' },
+  { label: 'Occupation', value: member.value?.spouse.occupation ?? '' },
+  { label: 'Contact Number', value: member.value?.spouse.contact_number ?? '' },
 ]);
 
 const father_information = computed<InformationItem[]>(() => [
   {
     label: 'Name of Father',
-    value: 'Kevin Loquencio',
+    value: `${member.value?.father.first_name} ${member.value?.father.middle_name} ${member.value?.father.surname}`,
   },
-  { label: 'Date of Birth', value: 'Kevin' },
-  { label: 'Occupation', value: 'Kevin' },
-  { label: 'Contact Number', value: 'Kevin' },
+  { label: 'Date of Birth', value: member.value?.father.date_of_birth ?? '' },
+  { label: 'Occupation', value: member.value?.father.occupation ?? '' },
+  { label: 'Contact Number', value: member.value?.father.contact_number ?? '' },
 ]);
 
 const mother_information = computed<InformationItem[]>(() => [
   {
     label: 'Name of Mother',
-    value: 'Kevin Loquencio',
+    value: `${member.value?.mother.first_name} ${member.value?.mother.middle_name} ${member.value?.mother.surname}`,
   },
-  { label: 'Date of Birth', value: 'Kevin' },
-  { label: 'Occupation', value: 'Kevin' },
-  { label: 'Contact Number', value: 'Kevin' },
+  { label: 'Date of Birth', value: member.value?.mother.date_of_birth ?? '' },
+  { label: 'Occupation', value: member.value?.mother.occupation ?? '' },
+  { label: 'Contact Number', value: member.value?.mother.contact_number ?? '' },
 ]);
 
 onMounted(() => {
@@ -369,13 +380,17 @@ const handleDoneOrientation = () => {
     header: 'Attended Orientation',
     acceptClass: 'p-button-primary',
     accept: async () => {
+      loadings.value.oriented = true;
+
       try {
         await MembersService.postAttendedOrientation(member.value?.member_number ?? '');
         showSuccess('Orientation attendance updated.');
+        member.value!.oriented = true;
       } catch (error) {
         showApiError(error as AxiosError);
         handleDoneOrientation();
       }
+      loadings.value.oriented = false;
     },
   });
 };

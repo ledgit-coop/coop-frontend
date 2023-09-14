@@ -111,13 +111,13 @@
       />
     </div>
 
-    <div class="field col-12">
+    <!-- <div class="field col-12">
       <label for="name">Required Share Capital</label>
       <span class="p-input-icon-right">
         <i class="pi pi-percentage" />
         <InputText placeholder="Percentage" />
       </span>
-    </div>
+    </div> -->
 
     <LoanTerm />
 

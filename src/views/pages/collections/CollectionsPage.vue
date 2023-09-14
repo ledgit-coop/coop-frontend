@@ -9,14 +9,23 @@
         >
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
-              <Button
-                type="button"
-                icon="pi pi-filter-slash"
-                label="Clear"
-                class="p-button-outlined mb-2"
-                size="small"
-              />
+              <div class="flex gap-2 m-0">
+                <Button
+                  type="button"
+                  icon="pi pi-filter-slash"
+                  label="Clear"
+                  class="p-button-outlined mb-2"
+                  size="small"
+                />
 
+                <Button
+                  type="button"
+                  icon="pi pi-download"
+                  label="Export"
+                  class="p-button-outlined mb-2"
+                  size="small"
+                />
+              </div>
               <div class="grid gap-1 m-0 align-items-start ml-auto">
                 <Dropdown
                   filter
@@ -37,8 +46,6 @@
               </div>
             </div>
           </template>
-
-        
         </LoansCollectionTable>
 
         <RepaymentCreate v-model:visible="modalsVisibility.repay" />

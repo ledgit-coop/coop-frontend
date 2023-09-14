@@ -9,6 +9,9 @@
   <MembersLoanWidget
     v-if="loans.length > 1"
     :loans="loans"
+    @sort="onSort"
+    :total-records="totalRecords"
+    @page="onPageChange"
   />
 
   <PageContentHeader
@@ -33,48 +36,50 @@
     </Dropdown>
   </PageContentHeader>
 
-  <MemberLoansTable
+  <LoansTable
     :hide-columns="['member']"
     :model-value="history"
+    :rows="rows"
+    :loading="loadings.table"
   >
     <template #action="slotProps">
-      <div class="flex flex-wrap gap-2">
-        <Button
-          label="View"
-          icon="pi pi-eye"
-          class="p-button-raised mr-2 mb-2"
-          size="small"
-          @click="handleViewLoanClick(slotProps.data)"
-        />
-      </div>
+      <LoanActions
+        :loan="slotProps.data"
+        @updated="loadTable(params)"
+      />
     </template>
-  </MemberLoansTable>
-
-  <MembersLoanView
-    v-model:visible="modalsVisibility.view_loan"
-    :loan_id="selected_history?.id"
-  />
+  </LoansTable>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { ref, watch } from 'vue';
 import MembersLoanWidget from './MembersLoanWidget.vue';
-import type { MemberLoanWidgetItem, MemberLoanTable } from '@/types/ui/members';
-import MembersService from '@/service/MembersService';
+import type { MemberLoanWidgetItem, Member } from '@/types/ui/members';
 import PageContentHeader from '@components/PageContentHeader.vue';
-import MemberLoansTable from '@components/MemberLoansTable.vue';
-import MembersLoanView from '@components/MembersLoanView.vue';
-import Button from 'primevue/button';
+import LoanService from '@/service/LoanService';
+import useTableParameters from '@/composables/useTableParameters';
+import type { LoanListPayload } from '@/types/api/loans';
+import useAlert from '@/composables/useAlert';
+import type { AxiosError } from 'axios';
+import type { Loan } from '@/types/ui/loans';
+import LoansTable from '@/components/LoansTable.vue';
+import LoanActions from '@/components/LoanActions.vue';
 
-interface ModalsVisibility {
-  view_loan: boolean;
+interface Props {
+  member?: Member;
 }
 
-const modalsVisibility = ref<ModalsVisibility>({
-  view_loan: false,
+const filters = ref({
+  status: '',
+  keyword: '',
 });
 
-const history = ref<MemberLoanTable[]>();
-const selected_history = ref<MemberLoanTable | undefined>();
+const loadings = ref({
+  table: false,
+});
+const props = defineProps<Props>();
+const { showApiError } = useAlert();
+const { rows, onSort, paginate, totalRecords, onPageChange, params } = useTableParameters(filters);
+const history = ref<Loan[]>();
 const loans = ref<MemberLoanWidgetItem[]>([
   {
     type: 'Salary Loan',
@@ -94,12 +99,32 @@ const loans = ref<MemberLoanWidgetItem[]>([
   },
 ]);
 
-onMounted(async () => {
-  history.value = await MembersService.getMemberLoanHistory('12');
+watch(
+  () => props.member?.id,
+  (value) => {
+    if (value) {
+      loadTable(params.value);
+    }
+  }
+);
+
+watch(params, (params) => {
+  loadTable(params);
 });
 
-const handleViewLoanClick = (value: MemberLoanTable) => {
-  selected_history.value = value;
-  modalsVisibility.value.view_loan = true;
+const loadTable = async (params: LoanListPayload) => {
+  loadings.value.table = true;
+  try {
+    const { data } = await LoanService.list({
+      ...params,
+      member_id: props.member?.id,
+    });
+    history.value = data.data;
+
+    paginate(data);
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.table = false;
 };
 </script>

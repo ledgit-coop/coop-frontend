@@ -70,6 +70,7 @@ export const ROUTE_NAME_MAPS = 'maps';
 export const ROUTE_NAME_MEMBERS = 'members';
 export const ROUTE_NAME_MEMBERS_CREATE = 'members-create';
 export const ROUTE_NAME_MEMBERS_VIEW = 'members-view';
+export const ROUTE_NAME_MEMBERS_EDIT = 'members-edit';
 
 export const ROUTE_NAME_LOANS = 'loans';
 export const ROUTE_NAME_LOANS_CREATE = 'loans-create';

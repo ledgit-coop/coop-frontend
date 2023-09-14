@@ -109,16 +109,16 @@
     </PageContentHeader>
 
     <AccountTransactionsTable
+      :loading="loadings.transaction_table"
       :transactions="selected_account_transactions"
-      :hide-columns="['type']"
     />
   </Dialog>
 </template>
 <script setup lang="ts">
 import DataTable from 'primevue/datatable';
-import { onMounted, ref } from 'vue';
-import type { MemberLoanTable } from '@/types/ui/members';
-import type { AccountTransactionHistory } from '@/types/ui/accounts';
+import { onMounted, ref, watch } from 'vue';
+import type { Member, MemberLoanTable } from '@/types/ui/members';
+import type { AccountTransaction } from '@/types/ui/accounts';
 
 import AccountsService from '@/service/AccountsService';
 import PageContentHeader from '@components/PageContentHeader.vue';
@@ -127,23 +127,57 @@ import { AccountStatus } from '@/constants/ui/accounts';
 import AccountTransactionsTable from '@components/AccountTransactionsTable.vue';
 import Calendar from 'primevue/calendar';
 import Dialog from 'primevue/dialog';
+import MembersService from '@/service/MembersService';
+import useAlert from '@/composables/useAlert';
+import type { AxiosError } from 'axios';
 
 const showModal = ref(false);
 const accounts = ref<MemberLoanTable[]>();
 const selected_account = ref<undefined | MemberLoanTable>();
 
-const selected_account_transactions = ref<AccountTransactionHistory[]>();
+const selected_account_transactions = ref<AccountTransaction[]>();
 
-onMounted(async () => {
-  selected_account_transactions.value = await AccountsService.getMembersAccountTransactionHistory('1', '1');
+interface Props {
+  member?: Member;
+}
+
+const props = defineProps<Props>();
+const loadings = ref({
+  transaction_table: false,
 });
+const { showApiError } = useAlert();
+
+onMounted(async () => {});
 
 onMounted(async () => {
   accounts.value = await AccountsService.getMemberAccounts('12');
 });
 
+// watch(
+//   () => props.member?.id,
+//   (value) => {
+//     if (value) {
+//       handleGetTransactions();
+//     }
+//   }
+// );
+
+const handleGetTransactions = async () => {
+  loadings.value.transaction_table = true;
+  try {
+    const { data } = await MembersService.getMemberAccountTrasactions(props.member?.id ?? '', {
+      member_account_id: '2',
+    });
+
+    selected_account_transactions.value = data;
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.transaction_table = false;
+};
 const handleViewTransactionClick = (value: MemberLoanTable) => {
   selected_account.value = value;
   showModal.value = true;
+  handleGetTransactions();
 };
 </script>

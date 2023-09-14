@@ -24,6 +24,10 @@ export interface MemberForm {
   father: MemberRelatedPerson;
   mother: MemberRelatedPerson;
   spouse: MemberRelatedPerson;
+  image?: {
+    data?: Blob;
+    base64?: string;
+  };
 }
 
 export interface Member extends MemberForm {
@@ -35,6 +39,7 @@ export interface Member extends MemberForm {
   oriented?: boolean;
   full_present_address?: string;
   full_permanent_address?: string;
+  residency_status?: string;
   share_capital: {
     id: number;
     balance: number;
@@ -87,7 +92,7 @@ export interface MemberLoanWidgetItem {
 
 export interface MemberSavingsAccountWidgetItem {
   type: string;
-  balance: number; 
+  balance: number;
   last_deposit_date: string;
   last_deposit_amount: number;
   interest_per_anum?: number;

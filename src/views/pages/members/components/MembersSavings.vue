@@ -26,8 +26,8 @@
       option-value="value"
       option-label="label"
       placeholder="Select a Year"
-      @change="loadTransactions" 
-      :options="yearOptions"  
+      @change="loadTransactions"
+      :options="yearOptions"
     >
     </Dropdown>
   </PageContentHeader>
@@ -35,7 +35,6 @@
   <AccountTransactionsTable
     :loading="loadings.transaction_table"
     :transactions="transactions"
-    :hide-columns="['particular']"
   />
 </template>
 <script setup lang="ts">
@@ -73,14 +72,14 @@ const loadings = ref({
 });
 const memberAccounts = ref<DropdownOption[]>([]);
 
-const accountsWidget = computed<MemberSavingsAccountWidgetItem[]>(()=> [
-  ...props.member?.savings_accounts?.map(savings=>({
+const accountsWidget = computed<MemberSavingsAccountWidgetItem[]>(() => [
+  ...(props.member?.savings_accounts?.map((savings) => ({
     type: savings.name ?? '',
     balance: savings.balance ?? 0,
     last_deposit_date: dateFormat(savings.latest_transaction?.transaction_date ?? null, DATE_FORMAT_DATE),
-    last_deposit_amount: savings.latest_transaction?.amount  ?? 0,
+    last_deposit_amount: savings.latest_transaction?.amount ?? 0,
     interest_per_anum: savings.interest_per_anum,
-  })) ?? [],
+  })) ?? []),
 ]);
 
 const transactions = ref<AccountTransaction[]>();
@@ -98,7 +97,9 @@ watch(
 const loadAccountDropdown = async () => {
   try {
     loadings.value.member_accounts = true;
-    const { data } = await UtilityService.getmemberAcountDropdown(props.member?.id ?? '');
+    const { data } = await UtilityService.getmemberAcountDropdown(props.member?.id ?? '', {
+      type: AccountType.SAVINGS,
+    });
     memberAccounts.value = data;
   } catch (error) {
     showApiError(error as AxiosError);
@@ -109,8 +110,8 @@ const loadAccountDropdown = async () => {
 const loadTransactions = async () => {
   try {
     loadings.value.transaction_table = true;
-    const { data } = await MembersService.getMemberAccountTrasactions(props.member?.id ?? '',  {
-      type:  AccountType.SAVINGS,
+    const { data } = await MembersService.getMemberAccountTrasactions(props.member?.id ?? '', {
+      type: AccountType.SAVINGS,
       member_account_id: filters.value.member_account_id,
       year: filters.value.year,
     });

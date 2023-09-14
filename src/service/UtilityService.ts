@@ -3,6 +3,7 @@ import type { AxiosPromise } from 'axios';
 import axios from 'axios';
 import apiClient from '@/http-common';
 import type { DropdownOption } from '@/types/ui';
+import type { AccountType } from '@/constants/ui/accounts';
 
 const PATH = '/api/utility';
 class UtilityService {
@@ -22,8 +23,8 @@ class UtilityService {
     return apiClient.get(`${PATH}/work-industries/dropdown`);
   }
 
-  getmemberAcountDropdown(member_id: string): AxiosPromise<DropdownOption[]> {
-    return apiClient.get(`${PATH}/accounts/members/dropdown/${member_id}`);
+  getmemberAcountDropdown(member_id: string, params?: { type: AccountType }): AxiosPromise<DropdownOption[]> {
+    return apiClient.get(`${PATH}/accounts/members/dropdown/${member_id}`, { params });
   }
 
   getLoanProducts(): AxiosPromise<DropdownOption[]> {

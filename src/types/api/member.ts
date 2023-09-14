@@ -41,9 +41,16 @@ export interface PostMemberPayload {
     zip_code?: string;
     residency_status?: string;
   };
+
   father?: PostMemberPerson;
   mother?: PostMemberPerson;
   spouse?: PostMemberPerson;
+
+  beneficiaries: {
+    name?: string;
+    birthdate?: string;
+    relationship?: string;
+  }[];
 }
 
 export interface PostMemberPerson {

@@ -1,5 +1,7 @@
 import type { LoanApplicationPayload } from '@/types/api/loans';
-import type { LoanForm, LoanTermForm } from '@/types/ui/loans';
+import type { Loan, LoanForm, LoanTermForm } from '@/types/ui/loans';
+import moment from 'moment';
+import { DATE_FORMAT_DB } from '..';
 
 export function mapLoanFormToPayload(loanForm: LoanForm): LoanApplicationPayload {
   const {
@@ -19,6 +21,7 @@ export function mapLoanFormToPayload(loanForm: LoanForm): LoanApplicationPayload
     loan_purpose,
     applied_amount,
     loan_term,
+    applied_date,
     ...rest // Extract other properties
   } = loanForm;
 
@@ -53,7 +56,74 @@ export function mapLoanFormToPayload(loanForm: LoanForm): LoanApplicationPayload
     work_address: work_address || null,
     loan_purpose: loan_purpose || null,
     applied_amount: applied_amount || null,
+    applied_date: moment(applied_date).format(DATE_FORMAT_DB),
     ...loanTerm,
     ...rest, // Spread other properties
+  };
+}
+
+export function mapLoanToLoanForm(loan: Loan): LoanForm {
+  const {
+    member_id,
+    loan_product_id,
+    member_account_id,
+    status,
+    contact_number,
+    age,
+    civil_status,
+    present_address,
+    email,
+    home_address,
+    valid_id,
+    tin_number,
+    number_of_children,
+    application_type,
+    employer_name,
+    occupation,
+    work_address,
+    work_industry,
+    loan_purpose,
+    salary_range,
+    applied_amount,
+    applied_date,
+    loan_duration,
+    loan_duration_type,
+    repayment_cycle,
+    number_of_repayments,
+    repayment_mode,
+  } = loan;
+
+  const loanTerm: LoanTermForm = {
+    loan_duration,
+    loan_duration_type,
+    repayment_cycle,
+    number_of_repayments,
+    repayment_mode,
+  };
+
+  return {
+    member_id: member_id.toString(),
+    contact_number,
+    age,
+    civil_status,
+    present_address,
+    home_address,
+    valid_id,
+    tin_number,
+    number_of_children,
+    application_type,
+    email,
+    employer_name,
+    occupation,
+    work_address,
+    work_industry,
+    loan_purpose,
+    salary_range,
+    applied_amount: applied_amount ? parseFloat(applied_amount) : null,
+    member_account_id,
+    loan_product_id,
+    status,
+    applied_date,
+    loan_term: loanTerm,
   };
 }

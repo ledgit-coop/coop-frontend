@@ -1,193 +1,212 @@
 <template>
   <div>
-    <div class="p-fluid formgrid grid">
-      <div class="field col-12 md:col-4">
-        <Label
-          for="firstname2"
-          :required="true"
-          >Surname</Label
-        >
-        <InputText
-          id="surname"
-          v-model="data.form.surname"
-          type="text"
-          validate="surname"
-          v-validation="validation"
-        />
-        <FieldErrorMessage
-          :validation="validation"
-          field="surname"
-        />
-      </div>
-      <div class="field col-12 md:col-4">
-        <Label
-          for="first-name"
-          required
-          >First Name</Label
-        >
-        <InputText
-          id="first-name"
-          v-model="data.form.first_name"
-          type="text"
-          validate="first_name"
-          v-validation="validation"
-        />
-        <FieldErrorMessage
-          :validation="validation"
-          field="first_name"
-        />
-      </div>
-      <div class="field col-12 md:col-2">
-        <Label
-          required
-          for="middle-name"
-          >Middle Name</Label
-        >
-        <InputText
-          id="middle-name"
-          v-model="data.form.middle_name"
-          validate="middle_name"
-          v-validation="validation"
-          type="text"
-        />
-        <FieldErrorMessage
-          :validation="validation"
-          field="middle_name"
-        />
-      </div>
-      <div class="field col-12 md:col-2">
-        <label for="lastname2">Name Extension (Jr., Sr.)</label>
-        <InputText
-          id="name-ext"
-          v-model="data.form.name_extension"
-          type="text"
-        />
-      </div>
-    </div>
+    <div class="p-fluid formgrid grid align-items-center">
+      <div class="field col-12 md:col-12 lg:col-2">
+        <div class="flex gap-2 flex-column ml-auto">
+          <Image
+            :src="data.form.image?.base64 ?? '/images/default-user.png'"
+            alt="Image"
+            height="150"
+            preview
+          />
 
-    <div class="p-fluid formgrid grid">
-      <div class="field col-12 md:col-4">
-        <Label
-          for="date-of-birth"
-          required
-          >Date of Birth</Label
-        >
-        <Calendar
-          pattern="dd-MM-yyyy"
-          mask="true"
-          id="date-of-birth"
-          v-model="data.form.date_of_birth"
-          validate="date_of_birth"
-          v-validation="validation"
-        />
-        <FieldErrorMessage
-          :validation="validation"
-          field="date_of_birth"
-        />
-      </div>
-      <div class="field col-12 md:col-6">
-        <Label
-          for="place-of-birth"
-          required
-          >Place of Birth</Label
-        >
-        <InputText
-          id="place-of-birth"
-          v-model="data.form.place_of_birth"
-          type="text"
-        />
-        <FieldErrorMessage
-          :validation="validation"
-          field="place_of_birth"
-        />
-      </div>
-      <div class="field col-12 md:col-2">
-        <label for="gender">Gender</label>
-        <div class="flex flex-wrap gap-3">
-          <div class="flex align-items-center">
-            <RadioButton
-              v-model="data.form.gender"
-              input-id="gender-male"
-              name="gender"
-              value="male"
-            />
-            <label
-              for="gender-male"
-              class="ml-2"
-              >Male</label
-            >
-          </div>
-          <div class="flex align-items-center">
-            <RadioButton
-              v-model="data.form.gender"
-              input-id="gender-female"
-              name="gender"
-              value="female"
-            />
-            <label
-              for="gender-female"
-              class="ml-2"
-              >Female</label
-            >
-          </div>
+          <Button
+            label="Upload photo"
+            @click="modals.capture_image = true"
+          />
         </div>
       </div>
-    </div>
+      <div class="col-12 md:col-12 lg:col-10">
+        <div class="p-fluid formgrid grid">
+          <div class="field col-12 md:col-4">
+            <Label
+              for="firstname2"
+              :required="true"
+              >Surname</Label
+            >
+            <InputText
+              id="surname"
+              v-model="data.form.surname"
+              type="text"
+              validate="surname"
+              v-validation="validation"
+            />
+            <FieldErrorMessage
+              :validation="validation"
+              field="surname"
+            />
+          </div>
+          <div class="field col-12 md:col-4">
+            <Label
+              for="first-name"
+              required
+              >First Name</Label
+            >
+            <InputText
+              id="first-name"
+              v-model="data.form.first_name"
+              type="text"
+              validate="first_name"
+              v-validation="validation"
+            />
+            <FieldErrorMessage
+              :validation="validation"
+              field="first_name"
+            />
+          </div>
+          <div class="field col-12 md:col-2">
+            <Label
+              required
+              for="middle-name"
+              >Middle Name</Label
+            >
+            <InputText
+              id="middle-name"
+              v-model="data.form.middle_name"
+              validate="middle_name"
+              v-validation="validation"
+              type="text"
+            />
+            <FieldErrorMessage
+              :validation="validation"
+              field="middle_name"
+            />
+          </div>
+          <div class="field col-12 md:col-2">
+            <label for="lastname2">Name Extension (Jr., Sr.)</label>
+            <InputText
+              id="name-ext"
+              v-model="data.form.name_extension"
+              type="text"
+            />
+          </div>
+        </div>
 
-    <div class="p-fluid formgrid grid">
-      <div class="field col-12 md:col-4">
-        <label for="firstname2">Date Hired</label>
-        <Calendar
-          pattern="dd-MM-yyyy"
-          id="date-hired"
-          v-model="data.form.date_hired"
-          mask="true"
-        />
-      </div>
-      <div class="field col-12 md:col-4">
-        <label for="department">Department</label>
-        <InputText
-          id="department"
-          type="text"
-          v-model="data.form.department"
-        />
-      </div>
+        <div class="p-fluid formgrid grid">
+          <div class="field col-12 md:col-4">
+            <Label
+              for="date-of-birth"
+              required
+              >Date of Birth</Label
+            >
+            <Calendar
+              pattern="dd-MM-yyyy"
+              mask="true"
+              id="date-of-birth"
+              v-model="data.form.date_of_birth"
+              validate="date_of_birth"
+              v-validation="validation"
+            />
+            <FieldErrorMessage
+              :validation="validation"
+              field="date_of_birth"
+            />
+          </div>
+          <div class="field col-12 md:col-6">
+            <Label
+              for="place-of-birth"
+              required
+              >Place of Birth</Label
+            >
+            <InputText
+              id="place-of-birth"
+              v-model="data.form.place_of_birth"
+              type="text"
+            />
+            <FieldErrorMessage
+              :validation="validation"
+              field="place_of_birth"
+            />
+          </div>
+          <div class="field col-12 md:col-2">
+            <label for="gender">Gender</label>
+            <div class="flex flex-wrap gap-3">
+              <div class="flex align-items-center">
+                <RadioButton
+                  v-model="data.form.gender"
+                  input-id="gender-male"
+                  name="gender"
+                  value="male"
+                />
+                <label
+                  for="gender-male"
+                  class="ml-2"
+                  >Male</label
+                >
+              </div>
+              <div class="flex align-items-center">
+                <RadioButton
+                  v-model="data.form.gender"
+                  input-id="gender-female"
+                  name="gender"
+                  value="female"
+                />
+                <label
+                  for="gender-female"
+                  class="ml-2"
+                  >Female</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <div class="field col-12 md:col-4">
-        <label for="position">Position</label>
-        <InputText
-          id="position"
-          type="text"
-          v-model="data.form.position"
-        />
-      </div>
-    </div>
+        <div class="p-fluid formgrid grid">
+          <div class="field col-12 md:col-4">
+            <label for="firstname2">Date Hired</label>
+            <Calendar
+              pattern="dd-MM-yyyy"
+              id="date-hired"
+              v-model="data.form.date_hired"
+              mask="true"
+            />
+          </div>
+          <div class="field col-12 md:col-4">
+            <label for="department">Department</label>
+            <InputText
+              id="department"
+              type="text"
+              v-model="data.form.department"
+            />
+          </div>
 
-    <div class="p-fluid formgrid grid">
-      <div class="field col-12 md:col-4">
-        <label for="employee-no">Employee No.</label>
-        <InputText
-          id="employee-no"
-          v-model="data.form.employee_no"
-          type="text"
-        />
-      </div>
-      <div class="field col-12 md:col-4">
-        <label for="tin-no">TIN No.</label>
-        <InputText
-          id="tin-no"
-          v-model="data.form.tin_no"
-          type="text"
-        />
-      </div>
+          <div class="field col-12 md:col-4">
+            <label for="position">Position</label>
+            <InputText
+              id="position"
+              type="text"
+              v-model="data.form.position"
+            />
+          </div>
+        </div>
 
-      <div class="field col-12 md:col-4">
-        <label for="email-address">Email Address</label>
-        <InputText
-          id="email-address"
-          v-model="data.form.email_address"
-          type="text"
-        />
+        <div class="p-fluid formgrid grid">
+          <div class="field col-12 md:col-4">
+            <label for="employee-no">Employee No.</label>
+            <InputText
+              id="employee-no"
+              v-model="data.form.employee_no"
+              type="text"
+            />
+          </div>
+          <div class="field col-12 md:col-4">
+            <label for="tin-no">TIN No.</label>
+            <InputText
+              id="tin-no"
+              v-model="data.form.tin_no"
+              type="text"
+            />
+          </div>
+
+          <div class="field col-12 md:col-4">
+            <label for="email-address">Email Address</label>
+            <InputText
+              id="email-address"
+              v-model="data.form.email_address"
+              type="text"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -426,12 +445,15 @@
       />
     </h5>
 
-    <MemberBeneficiaryForm
+    <template
       v-for="index in data.form.beneficiaries.length"
       :key="index"
-      v-model="data.form.beneficiaries[index - 1]"
-      @on-click-remove="handleRemoveBeneficiary(index - 1)"
-    />
+    >
+      <MemberBeneficiaryForm
+        v-model="data.form.beneficiaries[index - 1]"
+        @on-click-remove="handleRemoveBeneficiary(index - 1)"
+      />
+    </template>
 
     <div class="p-fluid mt-5 formgrid grid">
       <div class="field col-12 md:col-4">
@@ -443,7 +465,6 @@
           v-model="data.form.member_at"
         />
       </div>
-
       <div class="field col-12 md:col-4">
         <div class="flex align-items-center p-1">
           <Checkbox
@@ -456,11 +477,16 @@
             for="ingredient1"
             class="ml-2"
           >
-            Done Orientation?
+            Done PMES?
           </label>
         </div>
       </div>
     </div>
+
+    <CameraPlugin
+      v-model:visible="modals.capture_image"
+      @image-taken="handleImageTaken"
+    />
   </div>
 </template>
 
@@ -468,7 +494,7 @@
 import Calendar from 'primevue/calendar';
 import RadioButton from 'primevue/radiobutton';
 import MemberAddress from '@/views/pages/members/components/MemberAddress.vue';
-import { computed, onMounted, reactive, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { MemberType } from '@/constants/ui/members';
 import type { MemberForm } from '@/types/ui/members';
 import useAlert from '@/composables/useAlert';
@@ -480,6 +506,8 @@ import { required } from '@vuelidate/validators';
 import useValidation from '@/composables/useValidation';
 import MemberBeneficiaryForm from '@/views/pages/members/components/MemberBeneficiaryForm.vue';
 import Checkbox from 'primevue/checkbox';
+import CameraPlugin from '@/components/CameraPlugin.vue';
+import Image from 'primevue/image';
 
 interface Props {
   modelValue?: MemberForm;
@@ -492,7 +520,9 @@ const { showError } = useAlert();
 const rules = computed(() => ({
   surname: { required },
 }));
-
+const modals = ref({
+  capture_image: false,
+});
 const data = reactive<{ form: MemberForm }>({
   form: {
     father: {},
@@ -547,5 +577,12 @@ const handleRemoveBeneficiary = (index: number) => {
     return;
   }
   data.form.beneficiaries.splice(index, 1);
+};
+
+const handleImageTaken = (value: any) => {
+  data.form.image = {
+    data: value.blob,
+    base64: value.image_data_url,
+  };
 };
 </script>

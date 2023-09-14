@@ -3,7 +3,7 @@ import { ref } from 'vue';
 
 import AppMenuItem from '@/layout/AppMenuItem.vue';
 import {
-ROUTE_NAME_COLLECTIONS,
+  ROUTE_NAME_COLLECTIONS,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOAN_PRODUCTS,
   ROUTE_NAME_MEMBERS,
@@ -23,8 +23,30 @@ const model = ref<any>([
       { label: 'Loans', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS } },
       { label: 'Repayments', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_REPAYMENTS } },
       { label: 'Collections', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_COLLECTIONS } },
-      { label: 'Due & Missed Loans', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS }, class: 'line-through pointer-events-none' },
-      { label: 'Share Capitals', icon: 'pi pi-fw pi-globe', to: '/uikit/invalidstate', class: 'line-through pointer-events-none' },
+      {
+        label: 'Due & Missed Loans',
+        icon: 'pi pi-fw pi-history',
+        to: { name: ROUTE_NAME_LOANS },
+        class: 'line-through pointer-events-none',
+      },
+      {
+        label: 'Share Capitals',
+        icon: 'pi pi-fw pi-globe',
+        to: '/uikit/invalidstate',
+        class: 'line-through pointer-events-none',
+      },
+      {
+        label: 'Expenses',
+        icon: 'pi pi-fw pi-history',
+        to: { name: ROUTE_NAME_LOANS },
+        class: 'line-through pointer-events-none',
+      },
+      {
+        label: 'Reports',
+        icon: 'pi pi-fw pi-chart-bar',
+        to: { name: ROUTE_NAME_LOANS },
+        class: 'line-through pointer-events-none',
+      },
     ],
   },
 
@@ -33,10 +55,30 @@ const model = ref<any>([
     items: [
       { label: 'Users', icon: 'pi pi-fw pi-users', to: { name: ROUTE_NAME_USERS } },
       { label: 'Loan Products', icon: 'pi pi-fw pi-book', to: { name: ROUTE_NAME_LOAN_PRODUCTS } },
-      { label: 'Fees', icon: 'pi pi-fw pi-book', to: '/admin/loan-products', class: 'line-through pointer-events-none' },
-      { label: 'Account Types', icon: 'pi pi-fw pi-book', to: '/utilities/icons', class: 'line-through pointer-events-none' },
-      { label: 'Disbursment Channel', icon: 'pi pi-fw pi-book', to: '/admin/loan-products', class: 'line-through pointer-events-none' },
-      { label: 'Penalties', icon: 'pi pi-fw pi-book', to: '/admin/loan-products', class: 'line-through pointer-events-none' },
+      {
+        label: 'Fees',
+        icon: 'pi pi-fw pi-book',
+        to: '/admin/loan-products',
+        class: 'line-through pointer-events-none',
+      },
+      {
+        label: 'Account Types',
+        icon: 'pi pi-fw pi-book',
+        to: '/utilities/icons',
+        class: 'line-through pointer-events-none',
+      },
+      {
+        label: 'Disbursment Channel',
+        icon: 'pi pi-fw pi-book',
+        to: '/admin/loan-products',
+        class: 'line-through pointer-events-none',
+      },
+      {
+        label: 'Penalties',
+        icon: 'pi pi-fw pi-book',
+        to: '/admin/loan-products',
+        class: 'line-through pointer-events-none',
+      },
     ],
   },
 ]);

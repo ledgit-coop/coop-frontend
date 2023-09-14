@@ -1,3 +1,5 @@
+import type { Loan } from '../ui/loans';
+
 export interface LoanApplicationPayload {
   member_account_id: number;
   member_id: number;
@@ -27,4 +29,14 @@ export interface LoanApplicationPayload {
   repayment_mode?: string | null;
   salary_range?: string | null;
   work_industry?: string;
+  applied_date?: string;
+}
+
+export interface LoanListPayload {
+  filters: any;
+  member_id?: string;
+}
+
+export interface ListLoanResponse {
+  data: Loan[];
 }

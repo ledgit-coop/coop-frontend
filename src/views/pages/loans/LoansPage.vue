@@ -10,7 +10,7 @@
           ></Button>
         </PageContentHeader>
 
-        <MemberLoansTable
+        <LoansTable
           :model-value="loans"
           @on-loan-click="handleViewLoanClick"
         >
@@ -50,7 +50,9 @@
               <Button
                 icon="pi pi-eye"
                 v-tooltip="'View'"
-                text raised rounded
+                text
+                raised
+                rounded
                 class="mr-2 mb-2"
                 size="small"
                 @click="handleViewLoanClick(slotProps.data)"
@@ -60,8 +62,10 @@
                 icon="pi pi-pencil"
                 v-tooltip="'Edit'"
                 severity="warning"
-                text raised rounded
-                class="  mr-2 mb-2"
+                text
+                raised
+                rounded
+                class="mr-2 mb-2"
                 size="small"
                 @click="handleViewLoanClick(slotProps.data)"
               />
@@ -70,42 +74,42 @@
                 v-if="[MemberLoanStatus.PENDING,MemberLoanStatus.EVAULUATION, MemberLoanStatus.PRE_APPROVED].includes(slotProps.data.status as MemberLoanStatus)"
                 icon="pi pi-thumbs-down-fill"
                 v-tooltip="'Reject'"
-                text raised rounded
-                class="  mr-2 mb-2"
+                text
+                raised
+                rounded
+                class="mr-2 mb-2"
                 size="small"
                 severity="danger"
                 @click="handleViewLoanClick(slotProps.data)"
               />
 
               <Button
-                v-if="slotProps.data.status === MemberLoanStatus.PENDING" 
+                v-if="slotProps.data.status === MemberLoanStatus.PENDING"
                 v-tooltip="'Pre-Approved'"
                 icon="pi pi-check"
-                text raised rounded
-                class="  mr-2 mb-2  "
+                text
+                raised
+                rounded
+                class="mr-2 mb-2"
                 size="small"
                 @click="handleViewLoanClick(slotProps.data)"
               />
               <Button
                 v-if="slotProps.data.status === MemberLoanStatus.PRE_APPROVED"
-          
                 icon="pi pi-thumbs-up-fill"
                 v-tooltip="'Approved'"
-
-                text raised rounded
-                class=" mr-2 mb-2"
+                text
+                raised
+                rounded
+                class="mr-2 mb-2"
                 size="small"
                 @click="handleViewLoanClick(slotProps.data)"
               />
             </div>
           </template>
-        </MemberLoansTable>
+        </LoansTable>
 
-        <MembersLoanView
-          v-model:visible="modalsVisibility.view_loan"
-          :loan_id="selected_loan?.id"
-        />
-        <ApplyLoan v-model:visible="modalsVisibility.apply_form" />
+        <LoanSave v-model:visible="modalsVisibility.apply_form" />
       </div>
     </div>
   </div>
@@ -114,13 +118,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import Button from 'primevue/button';
-import ApplyLoan from '@components/ApplyLoan.vue';
+import LoanSave from '@components/LoanSave.vue';
 import type { MemberLoanTable } from '@/types/ui/members';
-import MembersLoanView from '@/components/MembersLoanView.vue';
-import MemberLoansTable from '@components/MemberLoansTable.vue';
 import PageContentHeader from '@components/PageContentHeader.vue';
 import LoanService from '@/service/LoanService';
 import { MemberLoanStatus } from '@/constants/ui/members';
+import LoansTable from '@/components/LoansTable.vue';
 
 interface ModalsVisibility {
   apply_form: boolean;

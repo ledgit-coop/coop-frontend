@@ -51,7 +51,6 @@
     >
     </Column>
 
-
     <Column
       v-if="!hideColumns?.includes('loan_number')"
       field="loan_number"
@@ -81,7 +80,7 @@
       header="Penalty"
     >
       <template #body="slotProps">
-        {{ formatCurrency(slotProps.data.due_amount)}}
+        {{ formatCurrency(slotProps.data.due_amount) }}
       </template>
     </Column>
 
@@ -91,11 +90,9 @@
       header="Due Amount"
     >
       <template #body="slotProps">
-        {{ formatCurrency(slotProps.data.due_amount)}}
+        {{ formatCurrency(slotProps.data.due_amount) }}
       </template>
     </Column>
-
- 
   </DataTable>
 </template>
 <script setup lang="ts">

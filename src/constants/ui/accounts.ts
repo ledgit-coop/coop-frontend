@@ -9,9 +9,7 @@ export enum AccountType {
   SHARE_CAPITAL = 'share-capita',
 }
 
-
-export enum AccountTransactionType
-{ WITHDRAWAL = 'withdrawal',
-    DEPOSIT = 'deposit',
-    
+export enum AccountTransactionType {
+  WITHDRAWAL = 'withdrawal',
+  DEPOSIT = 'deposit',
 }

@@ -1,4 +1,4 @@
-import type { AccountTransactionType } from "@/constants/ui/accounts";
+import type { AccountTransactionType } from '@/constants/ui/accounts';
 
 export interface AccountTransactionHistory {
   id: string;

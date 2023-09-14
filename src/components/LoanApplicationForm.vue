@@ -18,7 +18,6 @@
           >
           </Dropdown>
         </div>
-
         <div class="field col-12">
           <label for="contact_number">Contact Number</label>
           <InputText
@@ -315,6 +314,16 @@
         id="username-help"
         ><i class="pi pi-info-circle pr-2"></i> Create account if not exists.</small
       >
+    </div>
+
+    <div class="field col-12 md:col-6">
+      <label for="name">Applied Date</label>
+      <Calendar
+        pattern="dd-MM-yyyy"
+        mask="true"
+        id="applied-date"
+        v-model="data.form.applied_date"
+      />
     </div>
   </div>
 

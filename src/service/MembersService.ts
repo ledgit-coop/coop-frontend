@@ -23,6 +23,10 @@ class MembersService {
     return apiClient.post('/api/members', params);
   }
 
+  patchMembers(id: string, params?: PostMemberPayload): AxiosPromise<Member> {
+    return apiClient.patch(`/api/members/${id}`, params);
+  }
+
   postAddAccount(member_number: string, account_id: string): AxiosPromise {
     return apiClient.post(`${PATH}/accounts/add/${member_number}/${account_id}`);
   }

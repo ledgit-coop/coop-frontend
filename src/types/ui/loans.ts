@@ -1,3 +1,5 @@
+import type { LoanProduct } from "./loan-products";
+
 export interface LoanType {
   name: string;
   id: string;
@@ -5,9 +7,44 @@ export interface LoanType {
 }
 
 export interface Loan {
-  name: string;
-  id: string;
-  interest_percentage_rate: number;
+  id: number;
+  member_id: number;
+  loan_product_id: number;
+  member_account_id: number;
+  status: string;
+  contact_number: string;
+  age: number;
+  email?: string;
+  civil_status: string;
+  present_address: string;
+  home_address: string;
+  valid_id: string;
+  tin_number: string;
+  number_of_children: number;
+  application_type: string;
+  employer_name: string;
+  occupation: string;
+  work_address: string;
+  work_industry: string;
+  loan_purpose: string;
+  salary_range: string;
+  applied_amount: string;
+  principal_amount: string | null;
+  disbursed_channel: string;
+  interest_method: string;
+  interest_type: string;
+  loan_interest: string;
+  loan_interest_period: string;
+  loan_duration: number;
+  loan_duration_type: string | null;
+  repayment_cycle: string;
+  number_of_repayments: number;
+  repayment_mode: string | null;
+  created_at: string;
+  updated_at: string;
+  releasing_date: string | null;
+  applied_date?: string;
+  loan_product?: LoanProduct;
 }
 
 export interface LoanForm {
@@ -34,6 +71,7 @@ export interface LoanForm {
   loan_product_id?: number;
   status?: string;
   applied_amount?: number | null;
+  applied_date?: string;
   loan_term?: LoanTermForm;
 }
 

@@ -9,6 +9,7 @@ import {
   ROUTE_NAME_LOAN_PRODUCTS,
   ROUTE_NAME_MEMBERS,
   ROUTE_NAME_MEMBERS_CREATE,
+  ROUTE_NAME_MEMBERS_EDIT,
   ROUTE_NAME_MEMBERS_VIEW,
   ROUTE_NAME_REPAYMENTS,
   ROUTE_NAME_USERS,
@@ -67,7 +68,7 @@ const router = createRouter({
             {
               path: 'create',
               name: ROUTE_NAME_MEMBERS_CREATE,
-              component: () => import('@/views/pages/members/MembersCreate.vue'),
+              component: () => import('@/views/pages/members/MembersSave.vue'),
               meta: {
                 title: 'Create Member',
               },
@@ -78,6 +79,14 @@ const router = createRouter({
               component: () => import('@/views/pages/members/MembersView.vue'),
               meta: {
                 title: 'View Member',
+              },
+            },
+            {
+              path: 'edit/:id',
+              name: ROUTE_NAME_MEMBERS_EDIT,
+              component: () => import('@/views/pages/members/MembersSave.vue'),
+              meta: {
+                title: 'Edit Member',
               },
             },
           ],

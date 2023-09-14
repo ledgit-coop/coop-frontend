@@ -32,31 +32,37 @@
       field="withdrawals"
       header="Withdrawals"
     >
-    <template #body="slotProps">
-        {{ slotProps.data.transaction_type === AccountTransactionType.WITHDRAWAL ? formatCurrency(slotProps.data.amount) : '' }}
+      <template #body="slotProps">
+        {{
+          slotProps.data.transaction_type === AccountTransactionType.WITHDRAWAL
+            ? formatCurrency(slotProps.data.amount)
+            : ''
+        }}
       </template>
-  </Column>
+    </Column>
     <Column
       v-if="!hideColumns?.includes('deposits')"
       field="deposits"
       header="Deposits"
     >
-  
-    <template #body="slotProps">
-        {{ slotProps.data.transaction_type === AccountTransactionType.DEPOSIT ? formatCurrency(slotProps.data.amount) : '' }}
+      <template #body="slotProps">
+        {{
+          slotProps.data.transaction_type === AccountTransactionType.DEPOSIT
+            ? formatCurrency(slotProps.data.amount)
+            : ''
+        }}
       </template>
-  </Column>
+    </Column>
 
     <Column
       v-if="!hideColumns?.includes('running_balance')"
       field="running_balance"
       header="Balance"
     >
-   
-    <template #body="slotProps">
+      <template #body="slotProps">
         {{ formatCurrency(slotProps.data.remaining_balance) }}
       </template>
-  </Column>
+    </Column>
 
     <ColumnGroup type="footer">
       <Row>
@@ -64,9 +70,8 @@
           footer="Total:"
           :colspan="6 - (hideColumns?.length ?? 0)"
           footer-style="text-align:right"
-        /> 
+        />
         <Column :footer="formatCurrency(transactions?.reduce((n, p) => n + (p?.amount ?? 0), 0) ?? 0)" />
-
       </Row>
     </ColumnGroup>
   </DataTable>
