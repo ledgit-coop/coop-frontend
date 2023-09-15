@@ -1,6 +1,9 @@
 <template>
   <div class="p-datatable-wrapper">
-    <table class="p-datatable-table">
+    <table
+      class="p-datatable-table"
+      :class="tableClass"
+    >
       <tbody class="p-datatable-tbody">
         <tr
           v-for="(value, index) in info"
@@ -12,13 +15,12 @@
           >
             {{ value.label }}:
           </td>
-          <td class="pl-5 pb-2 pt-1 vertical-align-top">
+          <td class="pb-2 pt-1 vertical-align-top">
             <Skeleton
               v-if="loading"
               class="w-full"
             ></Skeleton>
-            <span v-else-if="!isEmptyText(value.value)">{{ value.value }}</span>
-            <span v-else>---</span>
+            <span v-else>{{ display(value.value) }}</span>
           </td>
         </tr>
       </tbody>
@@ -32,7 +34,15 @@ import { isEmptyText } from '@/helpers';
 interface Props {
   info: InformationItem[];
   loading?: boolean;
+  tableClass?: string;
 }
 
 defineProps<Props>();
+
+const display = (value: string | string[]) => {
+  let t: string[] = [];
+  if (typeof value === 'string') t.push(value);
+  else t = [...value];
+  return t.map((r) => (!isEmptyText(r) ? r : '---')).join(' ');
+};
 </script>

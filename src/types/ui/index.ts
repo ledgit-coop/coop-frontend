@@ -1,11 +1,19 @@
 export interface InformationItem {
   label: string;
-  value: string;
+  value: string | string[];
 }
 
 export interface DropdownOption {
   label: string;
   value: string;
+  disabled?: boolean;
+  extra?: any;
+}
+
+export interface GuarantorDropdown extends DropdownOption {
+  extra: {
+    guarantor_twice: boolean;
+  };
 }
 
 export interface CheckBoxOption {

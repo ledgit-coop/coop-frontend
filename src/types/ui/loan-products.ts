@@ -1,19 +1,30 @@
+import type { LoanTermForm } from './loans';
+
+export interface LoanProductForm {
+  name?: string;
+  default_principal_amount?: number | null;
+  min_principal_amount?: number | null;
+  max_principal_amount?: number | null;
+  loan_term?: LoanTermForm;
+}
+
 export interface LoanProduct {
-    id: number;
-    name: string;
-    percentage_against_share_capital: number | null;
-    default_principal_amount: string;
-    min_principal_amount: string;
-    max_principal_amount: string;
-    disbursed_channel: string;
-    interest_method: string;
-    interest_type: string;
-    loan_interest_period: string;
-    default_loan_interest: string;
-    loan_duration_period: string;
-    default_duration_period: string;
-    repayment_cycle: string;
-    default_number_of_repayments: number;
-    created_at: string;
-    updated_at: string;
-  }
+  id: number;
+  name: string;
+  locked?: boolean;
+  default_principal_amount: number | null;
+  min_principal_amount: number | null;
+  max_principal_amount: number | null;
+  disbursed_channel: string | null;
+  interest_method: string | null;
+  interest_type: string | null;
+  loan_interest_period: string | null;
+  default_loan_interest: number | null;
+  loan_duration_type: string | null;
+  default_loan_duration: number | null;
+  repayment_cycle: string | null;
+  default_number_of_repayments: number | null;
+  repayment_mode: string | null;
+  created_at: string;
+  updated_at: string;
+}

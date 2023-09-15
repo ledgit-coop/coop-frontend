@@ -2,6 +2,7 @@ import type { ListLoanResponse, LoanApplicationPayload, LoanListPayload } from '
 import type { AxiosPromise } from 'axios';
 import apiClient from '@/http-common';
 import type { Loan } from '@/types/ui/loans';
+import type { MemberLoanStatus } from '@/constants/ui/members';
 
 const PATH = '/api/loans';
 class LoanService {
@@ -19,6 +20,18 @@ class LoanService {
 
   update(id: number, params: LoanApplicationPayload): AxiosPromise<Loan> {
     return apiClient.patch(`${PATH}/${id}`, params);
+  }
+
+  updateStatus(id: string, status: MemberLoanStatus): AxiosPromise<Loan> {
+    return apiClient.post(`${PATH}/status/${id}`, { status });
+  }
+
+  activeLoans(member_id?: string): AxiosPromise<Loan[]> {
+    return apiClient.get(`${PATH}/active-loans/${member_id}`);
+  }
+
+  destroy(id: number): AxiosPromise<Loan> {
+    return apiClient.delete(`${PATH}/${id}`);
   }
 }
 

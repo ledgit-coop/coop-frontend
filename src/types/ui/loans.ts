@@ -1,4 +1,5 @@
-import type { LoanProduct } from "./loan-products";
+import type { LoanProduct } from './loan-products';
+import type { Member, MemberAccount } from './members';
 
 export interface LoanType {
   name: string;
@@ -29,11 +30,11 @@ export interface Loan {
   loan_purpose: string;
   salary_range: string;
   applied_amount: string;
-  principal_amount: string | null;
+  principal_amount: number | null;
   disbursed_channel: string;
   interest_method: string;
   interest_type: string;
-  loan_interest: string;
+  loan_interest: number;
   loan_interest_period: string;
   loan_duration: number;
   loan_duration_type: string | null;
@@ -42,9 +43,18 @@ export interface Loan {
   repayment_mode: string | null;
   created_at: string;
   updated_at: string;
-  releasing_date: string | null;
+  released_date: string | null;
   applied_date?: string;
+  guarantor_first_id?: string;
+  guarantor_second_id?: string;
   loan_product?: LoanProduct;
+  member?: Member;
+  member_account?: MemberAccount;
+
+  guarantor_first?: LoanGuarantor;
+  guarantor_second?: LoanGuarantor;
+
+  released?: boolean;
 }
 
 export interface LoanForm {
@@ -63,15 +73,17 @@ export interface LoanForm {
   occupation?: string;
   work_address?: string;
   loan_purpose?: string;
-  comaker_first?: string;
-  comaker_second?: string;
   salary_range?: string;
   work_industry?: string;
   member_account_id?: number;
   loan_product_id?: number;
   status?: string;
   applied_amount?: number | null;
+  principal_amount?: number | null;
   applied_date?: string;
+  released_date?: string;
+  guarantor_first_id?: string;
+  guarantor_second_id?: string;
   loan_term?: LoanTermForm;
 }
 
@@ -86,4 +98,30 @@ export interface LoanTermForm {
   repayment_cycle?: string | null;
   number_of_repayments?: number | null;
   repayment_mode?: string | null;
+}
+
+export interface LoanSchedule {
+  month: number;
+  date: string;
+  principal: number;
+  interest: number;
+  total_payment: number;
+  loan_balance: number;
+  description?: string;
+}
+
+export interface LoanCalculator {
+  schedules?: LoanSchedule[];
+  total_principal?: number;
+  total_interest?: number;
+  total_payment?: number;
+}
+
+export interface LoanGuarantor {
+  id: number;
+  first_name: string;
+  full_name?: string;
+  middle_name?: string | null; // Marked as optional with `?`
+  last_name: string;
+  contact?: string | null; // Marked as optional with `?`
 }

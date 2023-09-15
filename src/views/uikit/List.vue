@@ -74,6 +74,7 @@ const onSortChange = (event) => {
             <div class="grid grid-nogutter">
               <div class="col-6 text-left">
                 <Dropdown
+                  showClear
                   v-model="sortKey"
                   :options="sortOptions"
                   option-label="label"

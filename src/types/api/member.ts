@@ -20,7 +20,7 @@ export interface PostMemberPayload {
   oriented?: boolean;
   mobile_number?: string;
   telephone_number?: string;
-
+  profile_picture_url?: string;
   permanent_address?: {
     house_block_lot?: string;
     street?: string;
@@ -28,7 +28,7 @@ export interface PostMemberPayload {
     barangay?: string;
     city_municipality?: string;
     province?: string;
-    zip_code?: string;
+    zip_code?: number;
   };
 
   present_address?: {
@@ -38,7 +38,7 @@ export interface PostMemberPayload {
     barangay?: string;
     city_municipality?: string;
     province?: string;
-    zip_code?: string;
+    zip_code?: number;
     residency_status?: string;
   };
 
@@ -48,7 +48,7 @@ export interface PostMemberPayload {
 
   beneficiaries: {
     name?: string;
-    birthdate?: string;
+    birthdate?: string | null;
     relationship?: string;
   }[];
 }
@@ -58,7 +58,7 @@ export interface PostMemberPerson {
   first_name?: string;
   middle_name?: string;
   name_extension?: string;
-  date_of_birth?: string;
+  date_of_birth?: string | null;
   occupation?: string;
   contact_number?: string;
   type?: string;

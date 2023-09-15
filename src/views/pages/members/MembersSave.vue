@@ -60,17 +60,23 @@ import useValidation from '@/composables/useValidation';
 import useAlert from '@/composables/useAlert';
 import MembersService from '@/service/MembersService';
 import { mapMemberFormToPostMemberPayload } from '@/constants/mapping/members';
-import { TEST_MEMBER_FORM } from '@/constants/tests/members';
 import type { AxiosError } from 'axios';
 import { useRoute } from 'vue-router';
 import type { Member } from '@/types/ui/members';
+import { TEST_MEMBER_FORM } from '@/constants/tests/members';
 
-const { showApiError, showSuccess } = useAlert();
+const { showApiError, showError, showSuccess } = useAlert();
 const loadings = ref({
   saving: false,
   fetching: false,
 });
 const model = reactive<{ form: MemberForm }>({
+  // form: {
+  //   beneficiaries: [],
+  //   spouse: {},
+  //   mother: {},
+  //   father: {},
+  // },
   form: TEST_MEMBER_FORM,
 });
 const member = ref<Member>();
@@ -86,10 +92,11 @@ onMounted(() => {
 });
 
 const handleSubmit = async () => {
-  // @ts-ignore
-  console.log(validation.value);
-  // const valid = await validation.value?.$validate();
-  // if (!valid) showError('Please complete required fields.');
+  await validation.value?.$validate();
+  if (validation.value?.$invalid) {
+    showError('Please complete required fields.');
+    return;
+  }
 
   if (!loadings.value.saving) {
     loadings.value.saving = true;

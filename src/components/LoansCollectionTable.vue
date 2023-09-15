@@ -16,8 +16,8 @@
       />
     </template>
 
-    <template #empty> No loans found. </template>
-    <template #loading> Loading loans data. Please wait. </template>
+    <template #empty> No records found. </template>
+    <template #loading> Loading records. Please wait. </template>
 
     <Column
       v-if="!hideColumns?.includes('member')"

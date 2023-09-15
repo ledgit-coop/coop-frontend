@@ -10,6 +10,7 @@
     size="h5"
   >
     <Dropdown
+      showClear
       filter
       option-value="value"
       option-label="label"
@@ -22,6 +23,7 @@
     </Dropdown>
 
     <Dropdown
+      showClear
       filter
       option-value="value"
       option-label="label"
@@ -62,8 +64,8 @@ const props = defineProps<Props>();
 const yearOptions = computed(() => generateYearListDropdown());
 
 const filters = ref({
-  member_account_id: '',
-  year: '',
+  member_account_id: undefined,
+  year: undefined,
 });
 const { showApiError } = useAlert();
 const loadings = ref({
@@ -78,7 +80,7 @@ const accountsWidget = computed<MemberSavingsAccountWidgetItem[]>(() => [
     balance: savings.balance ?? 0,
     last_deposit_date: dateFormat(savings.latest_transaction?.transaction_date ?? null, DATE_FORMAT_DATE),
     last_deposit_amount: savings.latest_transaction?.amount ?? 0,
-    interest_per_anum: savings.interest_per_anum,
+    earn_interest_per_anum: savings.earn_interest_per_anum,
   })) ?? []),
 ]);
 

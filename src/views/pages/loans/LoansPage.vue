@@ -10,7 +10,7 @@
           ></Button>
         </PageContentHeader>
 
-        <LoansTable
+        <!-- <LoansTable
           :model-value="loans"
           @on-loan-click="handleViewLoanClick"
         >
@@ -25,7 +25,7 @@
               />
 
               <div class="grid gap-1 m-0 align-items-start ml-auto">
-                <Dropdown
+                <Dropdown showClear 
                   filter
                   option-value="value"
                   option-label="label"
@@ -107,7 +107,7 @@
               />
             </div>
           </template>
-        </LoansTable>
+        </LoansTable> -->
 
         <LoanSave v-model:visible="modalsVisibility.apply_form" />
       </div>

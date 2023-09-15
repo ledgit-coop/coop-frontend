@@ -4,9 +4,10 @@
       <div class="field col-12 md:col-12 lg:col-2">
         <div class="flex gap-2 flex-column ml-auto">
           <Image
-            :src="data.form.image?.base64 ?? '/images/default-user.png'"
+            :src="data.form.profile_picture_url ?? '/images/default-user.png'"
             alt="Image"
             height="150"
+            class="align-self-center"
             preview
           />
 
@@ -20,7 +21,7 @@
         <div class="p-fluid formgrid grid">
           <div class="field col-12 md:col-4">
             <Label
-              for="firstname2"
+              for="surname"
               :required="true"
               >Surname</Label
             >
@@ -73,7 +74,7 @@
             />
           </div>
           <div class="field col-12 md:col-2">
-            <label for="lastname2">Name Extension (Jr., Sr.)</label>
+            <label for="lastname2">Name Ext. (Jr., Sr.)</label>
             <InputText
               id="name-ext"
               v-model="data.form.name_extension"
@@ -90,6 +91,7 @@
               >Date of Birth</Label
             >
             <Calendar
+              showButtonBar
               pattern="dd-MM-yyyy"
               mask="true"
               id="date-of-birth"
@@ -119,7 +121,11 @@
             />
           </div>
           <div class="field col-12 md:col-2">
-            <label for="gender">Gender</label>
+            <Label
+              required
+              for="gender"
+              >Gender</Label
+            >
             <div class="flex flex-wrap gap-3">
               <div class="flex align-items-center">
                 <RadioButton
@@ -148,6 +154,10 @@
                 >
               </div>
             </div>
+            <FieldErrorMessage
+              :validation="validation"
+              field="gender"
+            />
           </div>
         </div>
 
@@ -155,10 +165,16 @@
           <div class="field col-12 md:col-4">
             <label for="firstname2">Date Hired</label>
             <Calendar
+              showButtonBar
               pattern="dd-MM-yyyy"
               id="date-hired"
               v-model="data.form.date_hired"
               mask="true"
+              v-validation="validation"
+            />
+            <FieldErrorMessage
+              :validation="validation"
+              field="date_hired"
             />
           </div>
           <div class="field col-12 md:col-4">
@@ -279,6 +295,7 @@
       <div class="field col-12 md:col-4">
         <label for="spouses-date-of-birth">Date of Birth</label>
         <Calendar
+          showButtonBar
           id="spouses-date-of-birth"
           v-model="data.form.spouse.date_of_birth"
           pattern="dd-MM-yyyy"
@@ -345,6 +362,7 @@
       <div class="field col-12 md:col-4">
         <label for="fathers-date-of-birth">Date of Birth</label>
         <Calendar
+          showButtonBar
           id="fathers-date-of-birth"
           v-model="data.form.father.date_of_birth"
           pattern="dd-MM-yyyy"
@@ -411,6 +429,7 @@
       <div class="field col-12 md:col-4">
         <label for="mothers-date-of-birth">Date of Birth</label>
         <Calendar
+          showButtonBar
           id="mothers-date-of-birth"
           v-model="data.form.mother.date_of_birth"
           pattern="dd-MM-yyyy"
@@ -446,6 +465,7 @@
     </h5>
 
     <template
+      v-if="data.form.beneficiaries"
       v-for="index in data.form.beneficiaries.length"
       :key="index"
     >
@@ -457,16 +477,26 @@
 
     <div class="p-fluid mt-5 formgrid grid">
       <div class="field col-12 md:col-4">
-        <Label for="member-at">Application Date</Label>
+        <Label
+          required
+          for="member-at"
+          >Application Date</Label
+        >
         <Calendar
+          showButtonBar
           id="member-at"
           pattern="dd-MM-yyyy"
           mask="true"
           v-model="data.form.member_at"
+          validate="member_at"
+          v-validation="validation"
         />
-      </div>
-      <div class="field col-12 md:col-4">
-        <div class="flex align-items-center p-1">
+        <FieldErrorMessage
+          :validation="validation"
+          field="member_at"
+        />
+
+        <div class="flex align-items-center pt-3">
           <Checkbox
             inputId="oriented"
             name="oriented"
@@ -519,6 +549,12 @@ const { showError } = useAlert();
 
 const rules = computed(() => ({
   surname: { required },
+  member_at: { required },
+  first_name: { required },
+  middle_name: { required },
+  gender: { required },
+  date_of_birth: { required },
+  place_of_birth: { required },
 }));
 const modals = ref({
   capture_image: false,
@@ -528,13 +564,7 @@ const data = reactive<{ form: MemberForm }>({
     father: {},
     mother: {},
     spouse: {},
-    beneficiaries: [
-      {
-        name: '',
-        birthdate: undefined,
-        relationship: '',
-      },
-    ],
+    beneficiaries: [{}],
   },
 });
 
@@ -544,7 +574,7 @@ const { validation } = useValidation({
   rules,
   model: form,
   globalConfig: {
-    $scope: 'test',
+    $autoDirty: true,
   },
 });
 
@@ -568,21 +598,20 @@ watch(
 );
 
 const handleAddBeneficiary = () => {
-  data.form.beneficiaries.push({});
+  if (data.form.beneficiaries) data.form.beneficiaries.push({});
 };
 
 const handleRemoveBeneficiary = (index: number) => {
-  if (data.form.beneficiaries.length <= 1) {
-    showError('Member must have at least one beneficiary.');
-    return;
+  if (data.form.beneficiaries) {
+    if (data.form.beneficiaries.length <= 1) {
+      showError('Member must have at least one beneficiary.');
+      return;
+    }
+    data.form.beneficiaries.splice(index, 1);
   }
-  data.form.beneficiaries.splice(index, 1);
 };
 
 const handleImageTaken = (value: any) => {
-  data.form.image = {
-    data: value.blob,
-    base64: value.image_data_url,
-  };
+  data.form.profile_picture_url = value.image_data_url;
 };
 </script>

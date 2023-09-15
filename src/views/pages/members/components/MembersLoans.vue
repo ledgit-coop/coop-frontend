@@ -1,44 +1,54 @@
 <template>
-  <PageContentHeader
-    class="mt-5"
-    title="Active Loans"
-    size="h5"
-  >
-  </PageContentHeader>
+  <template v-if="loansWidget.length > 0">
+    <PageContentHeader
+      class="mt-5 mb-5"
+      title="Active Loans"
+      size="h5"
+    >
+    </PageContentHeader>
 
-  <MembersLoanWidget
-    v-if="loans.length > 1"
-    :loans="loans"
-    @sort="onSort"
-    :total-records="totalRecords"
-    @page="onPageChange"
-  />
+    <MembersLoanWidget
+      v-if="loansWidget.length > 0"
+      :loans="loansWidget"
+      @sort="onSort"
+      :total-records="totalRecords"
+      @page="onPageChange"
+    />
+  </template>
 
   <PageContentHeader
-    class="mt-5"
     title="History"
     size="h5"
   >
     <Dropdown
+      showClear
       filter
       option-value="value"
       option-label="label"
+      v-model="filters.loan_product_id"
+      @change="loadTable(params)"
+      :loading="loadings.loan_products"
       placeholder="Select Loan"
+      :options="loanProducts"
     >
     </Dropdown>
 
     <Dropdown
+      showClear
       filter
+      :options="years"
+      v-model="filters.year"
       option-value="value"
       option-label="label"
       placeholder="Select a Year"
+      @change="loadTable(params)"
     >
     </Dropdown>
   </PageContentHeader>
 
   <LoansTable
     :hide-columns="['member']"
-    :model-value="history"
+    :model-value="loans"
     :rows="rows"
     :loading="loadings.table"
   >
@@ -51,7 +61,7 @@
   </LoansTable>
 </template>
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import MembersLoanWidget from './MembersLoanWidget.vue';
 import type { MemberLoanWidgetItem, Member } from '@/types/ui/members';
 import PageContentHeader from '@components/PageContentHeader.vue';
@@ -63,47 +73,41 @@ import type { AxiosError } from 'axios';
 import type { Loan } from '@/types/ui/loans';
 import LoansTable from '@/components/LoansTable.vue';
 import LoanActions from '@/components/LoanActions.vue';
+import UtilityService from '@/service/UtilityService';
+import type { DropdownOption } from '@/types/ui';
+import { generateYearListDropdown } from '@/helpers';
 
 interface Props {
   member?: Member;
 }
 
 const filters = ref({
-  status: '',
-  keyword: '',
+  loan_product_id: undefined,
+  year: undefined,
 });
 
 const loadings = ref({
   table: false,
+  loan_products: false,
 });
 const props = defineProps<Props>();
 const { showApiError } = useAlert();
 const { rows, onSort, paginate, totalRecords, onPageChange, params } = useTableParameters(filters);
-const history = ref<Loan[]>();
-const loans = ref<MemberLoanWidgetItem[]>([
-  {
-    type: 'Salary Loan',
+const loans = ref<Loan[]>();
+const loansWidget = ref<MemberLoanWidgetItem[]>([]);
+const loanProducts = ref<DropdownOption[]>([]);
+const years = computed(() => generateYearListDropdown());
 
-    balance: 202040.2,
-    terms: 12,
-    paid: 2,
-    currency: 'Php',
-  },
-  {
-    type: 'Emergency Loan',
-
-    balance: 200000,
-    terms: 12,
-    paid: 2,
-    currency: 'Php',
-  },
-]);
+onMounted(() => {
+  loadLoanProducts();
+});
 
 watch(
   () => props.member?.id,
   (value) => {
     if (value) {
       loadTable(params.value);
+      loadWidgetData();
     }
   }
 );
@@ -119,12 +123,41 @@ const loadTable = async (params: LoanListPayload) => {
       ...params,
       member_id: props.member?.id,
     });
-    history.value = data.data;
+
+    loans.value = data.data;
 
     paginate(data);
   } catch (error) {
     showApiError(error as AxiosError);
   }
   loadings.value.table = false;
+};
+
+const loadWidgetData = async () => {
+  loadings.value.table = true;
+  try {
+    const { data } = await LoanService.activeLoans(props.member?.id);
+    loansWidget.value = data.map((l) => ({
+      type: l.loan_product?.name ?? '',
+
+      balance: 202040.2,
+      terms: l.loan_duration,
+      paid: 2,
+      currency: 'Php',
+    }));
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.table = false;
+};
+const loadLoanProducts = async () => {
+  loadings.value.loan_products = true;
+  try {
+    const { data } = await UtilityService.getLoanProducts();
+    loanProducts.value = data;
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.loan_products = false;
 };
 </script>

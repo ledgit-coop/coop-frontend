@@ -12,8 +12,18 @@ export interface AccountTransactionHistory {
 }
 
 export interface Account {
+  id: number;
+  key: string;
   name: string;
-  id: string;
+  type: string; // Changed from enum to string
+  earn_interest_per_anum?: number | null;
+  maintaining_balance?: number | null;
+  penalty_below_maintaining_method?: string | null; // Changed from enum to string
+  penalty_below_maintaining?: number | null;
+  penalty_below_maintaining_cycle?: string | null; // Changed from enum to string
+  penalty_below_maintaining_duration?: number | null;
+  created_at: string; // Timestamp in ISO 8601 format
+  updated_at: string; // Timestamp in ISO 8601 format
 }
 
 export interface AccountTransaction {

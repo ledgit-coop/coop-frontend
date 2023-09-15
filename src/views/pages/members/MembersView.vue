@@ -14,7 +14,17 @@
       >
       <div class="card">
         <div class="grid m-0 align-items-center">
+          <Image
+            alt="Image"
+            height="50"
+            class="align-self-center"
+            preview
+            image-class="border-circle"
+            v-if="member?.profile_picture_url"
+            :src="member?.profile_picture_url"
+          />
           <Avatar
+            v-else
             label="P"
             class="mr-2"
             size="xlarge"
@@ -46,6 +56,7 @@
               outlined
               @click="router.push({ name: ROUTE_NAME_MEMBERS })"
             ></Button>
+
             <Button
               icon="pi pi-print"
               label="Print"
@@ -137,6 +148,7 @@
                     <Information
                       :loading="loadings.member_fetch"
                       :info="address_info"
+                      table-class="w-7"
                     />
                   </div>
                 </div>
@@ -149,6 +161,7 @@
                     <Information
                       :loading="loadings.member_fetch"
                       :info="spouse_information"
+                      table-class="w-4"
                     />
                   </div>
                 </div>
@@ -260,6 +273,7 @@ import Skeleton from 'primevue/skeleton';
 import type { AxiosError } from 'axios';
 import InlineMessage from 'primevue/inlinemessage';
 import LoanSave from '@/components/LoanSave.vue';
+import Image from 'primevue/image';
 
 interface ModalsVisibility {
   apply_form: boolean;
@@ -320,7 +334,11 @@ const address_info = computed<InformationItem[]>(() => [
 const spouse_information = computed<InformationItem[]>(() => [
   {
     label: 'Name of Spouse',
-    value: `${member.value?.spouse.first_name} ${member.value?.spouse.middle_name} ${member.value?.spouse.surname}`,
+    value: [
+      member.value?.spouse.first_name ?? '',
+      member.value?.spouse.middle_name ?? '',
+      member.value?.spouse.surname ?? '',
+    ],
   },
   { label: 'Date of Birth', value: member.value?.spouse.date_of_birth ?? '' },
   { label: 'Occupation', value: member.value?.spouse.occupation ?? '' },
@@ -330,7 +348,12 @@ const spouse_information = computed<InformationItem[]>(() => [
 const father_information = computed<InformationItem[]>(() => [
   {
     label: 'Name of Father',
-    value: `${member.value?.father.first_name} ${member.value?.father.middle_name} ${member.value?.father.surname}`,
+
+    value: [
+      member.value?.father.first_name ?? '',
+      member.value?.father.middle_name ?? '',
+      member.value?.father.surname ?? '',
+    ],
   },
   { label: 'Date of Birth', value: member.value?.father.date_of_birth ?? '' },
   { label: 'Occupation', value: member.value?.father.occupation ?? '' },
@@ -340,7 +363,11 @@ const father_information = computed<InformationItem[]>(() => [
 const mother_information = computed<InformationItem[]>(() => [
   {
     label: 'Name of Mother',
-    value: `${member.value?.mother.first_name} ${member.value?.mother.middle_name} ${member.value?.mother.surname}`,
+    value: [
+      member.value?.mother.first_name ?? '',
+      member.value?.mother.middle_name ?? '',
+      member.value?.mother.surname ?? '',
+    ],
   },
   { label: 'Date of Birth', value: member.value?.mother.date_of_birth ?? '' },
   { label: 'Occupation', value: member.value?.mother.occupation ?? '' },

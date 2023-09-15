@@ -169,6 +169,7 @@ const dropdownItem = ref(null);
           <div class="field col-12 md:col-3">
             <label for="state">State</label>
             <Dropdown
+              showClear
               id="state"
               v-model="dropdownItem"
               :options="dropdownItems"

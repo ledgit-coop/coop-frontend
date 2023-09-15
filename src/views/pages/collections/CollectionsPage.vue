@@ -28,6 +28,7 @@
               </div>
               <div class="grid gap-1 m-0 align-items-start ml-auto">
                 <Dropdown
+                  showClear
                   filter
                   option-value="value"
                   option-label="label"

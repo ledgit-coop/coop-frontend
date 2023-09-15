@@ -44,6 +44,14 @@
     value="Rejected"
   ></Tag>
   <Tag
+    v-else-if="status == MemberLoanStatus.RELEASED"
+    severity="info"
+    rounded
+    class="white-space-nowrap"
+    icon="pi pi-send"
+    value="Released"
+  ></Tag>
+  <Tag
     v-else-if="status == MemberLoanStatus.OVERDUE"
     severity="danger"
     rounded

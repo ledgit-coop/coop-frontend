@@ -1,35 +1,29 @@
 <template>
   <div class="p-fluid formgrid grid">
     <div class="field col-12 md:col-4">
-      <Label
-        required
-        for="name"
-        >Name (Last Name, First Name, Middle Name)</Label
-      >
+      <Label for="name">Name (Last Name, First Name, Middle Name)</Label>
       <InputText
-        id="beneficiary-name"
-        v-model="model.name"
+        id="name"
+        v-model="model.form.name"
         type="text"
-      />
-      <FieldErrorMessage
-        :validation="validation"
-        field="surname"
       />
     </div>
     <div class="field col-12 md:col-4">
-      <label for="firstname2">Birthdate</label>
+      <label for="birthdate">Birthdate</label>
       <Calendar
-        v-model="model.birthdate"
+        showButtonBar
+        id="birthdate"
+        v-model="model.form.birthdate"
         pattern="dd-MM-yyyy"
         mask="true"
       />
     </div>
     <div class="flex align-items-center col-12 md:col-4">
       <div class="field">
-        <label for="lastname2">Relationship</label>
+        <label for="relationship">Relationship</label>
         <InputText
-          id="lastname2"
-          v-model="model.relationship"
+          id="relationship"
+          v-model="model.form.relationship"
           type="text"
         />
       </div>
@@ -48,11 +42,8 @@ import type { MemberFormBeneficiary } from '@/types/ui/members';
 import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import InputText from 'primevue/inputtext';
-import { computed, onMounted, ref, watch } from 'vue';
-import { required } from '@vuelidate/validators';
+import { onMounted, ref, watch } from 'vue';
 import Label from '@/components/Label.vue';
-import FieldErrorMessage from '@/components/FieldErrorMessage.vue';
-import useValidation from '@/composables/useValidation';
 
 interface Props {
   modelValue?: MemberFormBeneficiary;
@@ -61,14 +52,14 @@ interface Props {
 const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue', 'update:validated', 'onClickRemove']);
 
-const model = ref<MemberFormBeneficiary>({});
-const form = computed(() => model);
+const model = ref<{ form: MemberFormBeneficiary }>({ form: {} });
+
 onMounted(() => {
-  if (props.modelValue) model.value = props.modelValue;
+  if (props.modelValue) model.value.form = props.modelValue;
 });
 
 watch(
-  () => model.value,
+  () => model.value.form,
   (value: MemberFormBeneficiary) => {
     emit('update:modelValue', value);
   },
@@ -78,23 +69,11 @@ watch(
 watch(
   () => props.modelValue,
   (value?: MemberFormBeneficiary) => {
-    if (value) model.value = value;
+    if (value) model.value.form = value;
   }
 );
 
-const rules = computed(() => ({
-  name: { required },
-  birthdate: { required },
-  relationship: { required },
-}));
-
-const { validation } = useValidation({
-  rules,
-  model: form,
-});
-
 const handleRemoveBeneficiary = () => {
   emit('onClickRemove');
-  console.log(validation.value);
 };
 </script>

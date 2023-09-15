@@ -350,6 +350,7 @@ const initFilters = () => {
               >Inventory Status</label
             >
             <Dropdown
+              showClear
               id="inventoryStatus"
               v-model="product.inventoryStatus"
               :options="statuses"

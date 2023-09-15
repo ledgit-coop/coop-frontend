@@ -25,6 +25,7 @@
     "vee-validate": "^4.11.6",
     "vue": "^3.3.4",
     "vue-camera-lib": "^1.0.4",
+    "vue-picture-cropper": "^0.6.2",
     "vue-router": "^4.2.4",
     "vuex": "^4.1.0"
   },

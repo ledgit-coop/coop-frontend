@@ -82,6 +82,8 @@ export const ROUTE_NAME_USERS = 'users';
 
 export const ROUTE_NAME_COLLECTIONS = 'collections';
 
+export const ROUTE_LOAN_CALCULATOR = 'collections';
+
 export const PUBLIC_ROUTES: Array<string> = [
   ROUTE_NAME_LOGIN,
   ROUTE_NAME_REGISTER,

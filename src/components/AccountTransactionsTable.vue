@@ -64,6 +64,8 @@
       </template>
     </Column>
 
+    <template #empty> No records found. </template>
+
     <ColumnGroup type="footer">
       <Row>
         <Column

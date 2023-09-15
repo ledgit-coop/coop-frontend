@@ -118,6 +118,7 @@ const searchCountry = (event) => {
             <div class="field">
               <label for="dropdown">Dropdown</label>
               <Dropdown
+                showClear
                 id="dropdown"
                 v-model="value7"
                 :options="cities"

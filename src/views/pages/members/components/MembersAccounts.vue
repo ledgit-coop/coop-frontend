@@ -4,6 +4,7 @@
     size="h5"
   >
     <Dropdown
+      showClear
       filter
       option-value="value"
       option-label="label"
@@ -12,6 +13,7 @@
     </Dropdown>
 
     <Dropdown
+      showClear
       filter
       option-value="value"
       option-label="label"
@@ -102,6 +104,7 @@
       size="h5"
     >
       <Calendar
+        showButtonBar
         selection-mode="range"
         :manual-input="false"
         placeholder="Select a Date"
@@ -116,7 +119,7 @@
 </template>
 <script setup lang="ts">
 import DataTable from 'primevue/datatable';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import type { Member, MemberLoanTable } from '@/types/ui/members';
 import type { AccountTransaction } from '@/types/ui/accounts';
 

@@ -1,4 +1,4 @@
-import type { AccountTransaction } from './accounts';
+import type { Account, AccountTransaction } from './accounts';
 
 export interface MemberForm {
   surname?: string;
@@ -18,16 +18,13 @@ export interface MemberForm {
   gender?: string;
   telephone_number?: string;
   mobile_number?: string;
-  beneficiaries: MemberFormBeneficiary[];
+  beneficiaries?: MemberFormBeneficiary[];
   present_address?: MemberAddress;
   permanent_address?: MemberAddress;
   father: MemberRelatedPerson;
   mother: MemberRelatedPerson;
   spouse: MemberRelatedPerson;
-  image?: {
-    data?: Blob;
-    base64?: string;
-  };
+  profile_picture_url?: string;
 }
 
 export interface Member extends MemberForm {
@@ -40,6 +37,7 @@ export interface Member extends MemberForm {
   full_present_address?: string;
   full_permanent_address?: string;
   residency_status?: string;
+  profile_picture_url?: string;
   share_capital: {
     id: number;
     balance: number;
@@ -49,7 +47,7 @@ export interface Member extends MemberForm {
     id: number;
     balance: number;
     name?: string;
-    interest_per_anum?: number;
+    earn_interest_per_anum?: number;
     latest_transaction: AccountTransaction;
   }[];
 }
@@ -61,7 +59,7 @@ export interface MemberAddress {
   barangay?: string;
   city_municipality?: string;
   province?: string;
-  zip_code?: string;
+  zip_code?: number;
   residency_status?: string;
 }
 
@@ -95,7 +93,7 @@ export interface MemberSavingsAccountWidgetItem {
   balance: number;
   last_deposit_date: string;
   last_deposit_amount: number;
-  interest_per_anum?: number;
+  earn_interest_per_anum?: number;
 }
 
 export interface MembersTable {
@@ -126,7 +124,7 @@ export interface MembersShareCapitalPatronageHistory {
   percentage: string;
   year: string;
   recorded_share_capital: string;
-  release_date: string;
+  released_date: string;
 }
 
 export interface MemberLoanTable {
@@ -156,4 +154,24 @@ export interface MemberAccountTransactionForm {
   amount?: number;
   particular?: string;
   transaction_date?: string;
+}
+
+export interface MemberAccount {
+  id: number;
+  account_number: string;
+  account_holder: string;
+  member_id: number;
+  account_id: number;
+  status: string;
+  passbook_count: number;
+  balance: number;
+  earn_interest_per_anum?: number | null;
+  maintaining_balance?: number | null;
+  penalty_below_maintaining_method?: string | null;
+  penalty_below_maintaining?: number | null;
+  penalty_below_maintaining_cycle?: string | null;
+  penalty_below_maintaining_duration?: number | null;
+  created_at: string;
+  updated_at: string;
+  account?: Account;
 }

@@ -9,7 +9,6 @@
             @click="router.push({ name: ROUTE_NAME_MEMBERS_CREATE })"
           ></Button>
         </PageContentHeader>
-
         <DataTable
           ref="table"
           scrollable
@@ -51,6 +50,7 @@
 
               <div class="grid gap-1 m-0 align-items-start ml-auto">
                 <Dropdown
+                  showClear
                   v-model="filters.status"
                   :options="statuses"
                   filter
@@ -74,7 +74,7 @@
               </div>
             </div>
           </template>
-          <template #empty> No members found. </template>
+          <template #empty> No records found. </template>
           <Column
             field="member_number"
             header="ID Number"

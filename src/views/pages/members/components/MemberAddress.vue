@@ -3,64 +3,133 @@
 
   <div class="p-fluid formgrid grid">
     <div class="field col-12 md:col-3">
-      <label for="house-block-lot">House/Block/Lot No.</label>
+      <Label
+        required
+        for="house-block-lot"
+        >House/Block/Lot No.</Label
+      >
       <InputText
         id="house-block-lot"
         type="text"
         v-model="data.form.house_block_lot"
+        validate="house_block_lot"
+        v-validation="validation"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="house_block_lot"
       />
     </div>
     <div class="field col-12 md:col-3">
-      <label for="street">Street</label>
+      <Label
+        required
+        for="street"
+        >Street</Label
+      >
       <InputText
         id="street"
         type="text"
         v-model="data.form.street"
+        validate="street"
+        v-validation="validation"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="street"
       />
     </div>
 
     <div class="field col-12 md:col-3">
-      <label for="subdivision-village">Subdivision/Village</label>
+      <Label
+        required
+        for="subdivision-village"
+        >Subdivision/Village</Label
+      >
       <InputText
         id="subdivision-village"
         type="text"
         v-model="data.form.subdivision_village"
+        validate="subdivision_village"
+        v-validation="validation"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="subdivision_village"
       />
     </div>
 
     <div class="field col-12 md:col-3">
-      <label for="barangay">Barangay</label>
+      <Label
+        required
+        for="barangay"
+        >Barangay</Label
+      >
       <InputText
         id="barangay"
         v-model="data.form.barangay"
         type="text"
+        validate="barangay"
+        v-validation="validation"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="barangay"
       />
     </div>
 
     <div class="field col-12 md:col-3">
-      <label for="city-municipality">City/Municipality</label>
+      <Label
+        required
+        for="city-municipality"
+        >City/Municipality</Label
+      >
       <InputText
         id="city-municipality"
         v-model="data.form.city_municipality"
+        validate="city_municipality"
+        v-validation="validation"
         type="text"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="city_municipality"
       />
     </div>
 
     <div class="field col-12 md:col-3">
-      <label for="province">Province</label>
+      <Label
+        required
+        for="province"
+        >Province</Label
+      >
       <InputText
         id="province"
         v-model="data.form.province"
+        validate="province"
+        v-validation="validation"
         type="text"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="province"
       />
     </div>
 
     <div class="field col-12 md:col-3">
-      <label for="zip-code">Zip Code</label>
-      <InputText
+      <Label
+        required
+        for="zip-code"
+        >Zip Code</Label
+      >
+      <InputNumber
         id="zip-code"
         v-model="data.form.zip_code"
-        type="text"
+        validate="zip_code"
+        v-validation="validation"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="zip_code"
       />
     </div>
   </div>
@@ -78,10 +147,10 @@
             name="residency_status"
             value="owned"
           />
-          <label
+          <Label
             for="residency-status-owned"
             class="ml-2"
-            >Owned</label
+            >Owned</Label
           >
         </div>
         <div class="flex align-items-center">
@@ -91,10 +160,10 @@
             name="residency_status"
             value="rented"
           />
-          <label
+          <Label
             for="residency-status-rented"
             class="ml-2"
-            >Rented/Boarder</label
+            >Rented/Boarder</Label
           >
         </div>
         <div class="flex align-items-center">
@@ -104,10 +173,10 @@
             name="residency_status"
             value="parents_or_relatives"
           />
-          <label
+          <Label
             for="residency-status-living"
             class="ml-2"
-            >Living with Parents/Relatives</label
+            >Living with Parents/Relatives</Label
           >
         </div>
       </div>
@@ -120,6 +189,9 @@ import { MemberType } from '@/constants/ui/members';
 import type { MemberAddress } from '@/types/ui/members';
 import { required } from '@vuelidate/validators';
 import useValidation from '@/composables/useValidation';
+import FieldErrorMessage from '@/components/FieldErrorMessage.vue';
+import Label from '@/components/Label.vue';
+import InputNumber from 'primevue/inputnumber';
 
 interface Props {
   type: MemberType;
@@ -142,6 +214,12 @@ const addressName = computed(() => (props.type === MemberType.PRESENT ? 'Present
 
 const rules = computed(() => ({
   house_block_lot: { required },
+  street: { required },
+  subdivision_village: { required },
+  barangay: { required },
+  city_municipality: { required },
+  province: { required },
+  zip_code: { required },
 }));
 
 const { validation } = useValidation({

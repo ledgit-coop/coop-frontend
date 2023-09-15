@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 import AppMenuItem from '@/layout/AppMenuItem.vue';
 import {
+  ROUTE_LOAN_CALCULATOR,
   ROUTE_NAME_COLLECTIONS,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOAN_PRODUCTS,
@@ -23,6 +24,7 @@ const model = ref<any>([
       { label: 'Loans', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS } },
       { label: 'Repayments', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_REPAYMENTS } },
       { label: 'Collections', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_COLLECTIONS } },
+      { label: 'Loan Calculator', icon: 'pi pi-fw pi-history', to: { name: ROUTE_LOAN_CALCULATOR } },
       {
         label: 'Due & Missed Loans',
         icon: 'pi pi-fw pi-history',

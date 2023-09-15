@@ -3,8 +3,13 @@
     <div class="col-12 md:col-6">
       <div class="p-fluid formgrid grid">
         <div class="field col-12">
-          <label for="name">Member</label>
+          <Label
+            required
+            for="name"
+            >Member</Label
+          >
           <Dropdown
+            showClear
             v-model="data.form.member_id"
             :disabled="disableMember"
             :options="members"
@@ -15,75 +20,127 @@
             class="w-full"
             :loading="loadings.members"
             @change="handleChangeMember"
+            validate="member_id"
+            v-validation="validation"
           >
           </Dropdown>
+
+          <FieldErrorMessage
+            :validation="validation"
+            field="member_id"
+          />
         </div>
         <div class="field col-12">
-          <label for="contact_number">Contact Number</label>
+          <Label
+            required
+            for="contact_number"
+            >Contact Number</Label
+          >
           <InputText
             v-model="data.form.contact_number"
             id="contact-number"
             type="text"
+            validate="contact_number"
+            v-validation="validation"
+          />
+          <FieldErrorMessage
+            :validation="validation"
+            field="contact_number"
           />
         </div>
 
         <div class="field col-12">
-          <label for="age">Age</label>
+          <Label
+            required
+            for="age"
+            >Age</Label
+          >
           <InputNumber
             id="age"
             v-model="data.form.age"
+            validate="age"
+            v-validation="validation"
+          />
+          <FieldErrorMessage
+            :validation="validation"
+            field="age"
           />
         </div>
 
         <div class="field col-12">
-          <label for="civil_status">Civil Status</label>
+          <Label
+            required
+            for="civil_status"
+            >Civil Status</Label
+          >
           <InputText
             id="civil-status"
             v-model="data.form.civil_status"
             type="text"
+            validate="civil_status"
+            v-validation="validation"
+          />
+          <FieldErrorMessage
+            :validation="validation"
+            field="civil_status"
           />
         </div>
 
         <div class="field col-12">
-          <label for="present_address">Present Address</label>
+          <Label
+            required
+            for="present_address"
+            >Present Address</Label
+          >
           <InputText
             id="present_address"
             v-model="data.form.present_address"
             type="text"
+            validate="present_address"
+            v-validation="validation"
+          />
+          <FieldErrorMessage
+            :validation="validation"
+            field="present_address"
           />
         </div>
 
         <div class="field col-12">
-          <label for="home_address">Home Address</label>
+          <Label
+            required
+            for="home_address"
+            >Home Address</Label
+          >
           <InputText
             id="home_address"
             v-model="data.form.home_address"
             type="text"
+            validate="home_address"
+            v-validation="validation"
+          />
+          <FieldErrorMessage
+            :validation="validation"
+            field="home_address"
           />
         </div>
 
         <div class="field col-12">
-          <label for="valid_id">Valid ID</label>
+          <Label
+            required
+            for="valid_id"
+            >Valid ID</Label
+          >
           <InputText
             id="valid_id"
             type="text"
             v-model="data.form.valid_id"
+            validate="valid_id"
+            v-validation="validation"
           />
-        </div>
-
-        <div class="field col-12">
-          <label for="name">Industry</label>
-          <Dropdown
-            v-model="data.form.work_industry"
-            :options="workIndustries"
-            filter
-            option-value="value"
-            option-label="label"
-            placeholder="Select Industry"
-            class="w-full"
-            :loading="loadings.work_industries"
-          >
-          </Dropdown>
+          <FieldErrorMessage
+            :validation="validation"
+            field="valid_id"
+          />
         </div>
       </div>
     </div>
@@ -96,61 +153,140 @@
             id="email"
             v-model="data.form.email"
             type="email"
+            validate="email"
+            v-validation="validation"
+          />
+
+          <FieldErrorMessage
+            :validation="validation"
+            field="email"
           />
         </div>
 
         <div class="field col-12">
-          <label for="dsspacc_id">DSSP Account ID</label>
-          <InputText
-            id="dsspacc_id"
-            v-model="data.form.member_id"
-            type="text"
-            :readonly="true"
-          />
-        </div>
-
-        <div class="field col-12">
-          <label for="tin_number">TIN Number</label>
+          <Label
+            required
+            for="tin_number"
+            >TIN Number</Label
+          >
           <InputText
             id="tin_number"
             v-model="data.form.tin_number"
             type="text"
+            validate="tin_number"
+            v-validation="validation"
+          />
+
+          <FieldErrorMessage
+            :validation="validation"
+            field="tin_number"
           />
         </div>
 
         <div class="field col-12">
-          <label for="number_of_children">Number of Children</label>
+          <Label
+            required
+            for="number_of_children"
+            >Number of Children</Label
+          >
           <InputNumber
             id="number_of_children"
             v-model="data.form.number_of_children"
             type="text"
+            validate="number_of_children"
+            v-validation="validation"
+          />
+
+          <FieldErrorMessage
+            :validation="validation"
+            field="number_of_children"
           />
         </div>
 
         <div class="field col-12">
-          <label for="employer_name">Employer Name</label>
+          <Label
+            required
+            for="employer_name"
+            >Employer Name</Label
+          >
           <InputText
             id="employer_name"
             v-model="data.form.employer_name"
             type="text"
+            validate="employer_name"
+            v-validation="validation"
+          />
+
+          <FieldErrorMessage
+            :validation="validation"
+            field="employer_name"
           />
         </div>
 
         <div class="field col-12">
-          <label for="occupation">Occupation</label>
+          <Label
+            required
+            for="occupation"
+            >Occupation</Label
+          >
           <InputText
             id="occupation"
             v-model="data.form.occupation"
             type="text"
+            validate="occupation"
+            v-validation="validation"
+          />
+
+          <FieldErrorMessage
+            :validation="validation"
+            field="occupation"
           />
         </div>
 
         <div class="field col-12">
-          <label for="work_address">Work Address</label>
+          <Label
+            required
+            for="work_address"
+            >Work Address</Label
+          >
           <InputText
             id="work_address"
             v-model="data.form.work_address"
             type="text"
+            validate="work_address"
+            v-validation="validation"
+          />
+
+          <FieldErrorMessage
+            :validation="validation"
+            field="work_address"
+          />
+        </div>
+
+        <div class="field col-12">
+          <Label
+            required
+            for="name"
+            >Industry</Label
+          >
+          <Dropdown
+            showClear
+            v-model="data.form.work_industry"
+            :options="workIndustries"
+            filter
+            option-value="value"
+            option-label="label"
+            placeholder="Select Industry"
+            class="w-full"
+            :loading="loadings.work_industries"
+            validate="work_industry"
+            v-validation="validation"
+          >
+          </Dropdown>
+
+          <FieldErrorMessage
+            :validation="validation"
+            field="work_industry"
           />
         </div>
       </div>
@@ -182,6 +318,10 @@
           >
         </div>
       </div>
+      <FieldErrorMessage
+        :validation="validation"
+        field="salary_range"
+      />
     </div>
   </div>
 
@@ -224,6 +364,10 @@
           >
         </div>
       </div>
+      <FieldErrorMessage
+        :validation="validation"
+        field="application_type"
+      />
     </div>
 
     <div class="col-12">
@@ -245,6 +389,7 @@
             :input-id="'loan-type' + index"
             name="loan_type"
             :value="loan_type.value"
+            @change="handleTypeLoanClick(data.form.loan_product_id)"
           />
           <label
             :for="'loan-type' + index"
@@ -259,46 +404,78 @@
           class="mb-2"
         ></Skeleton>
       </div>
+
+      <FieldErrorMessage
+        :validation="validation"
+        field="loan_product_id"
+      />
+    </div>
+
+    <div class="col-12 pb-3">
+      <InlineMessage
+        v-if="allowableLoanAmountMessage"
+        severity="warn"
+        >{{ allowableLoanAmountMessage }}</InlineMessage
+      >
     </div>
 
     <div class="field col-12 md:col-6">
-      <label for="loan_purpose">Loan Amount</label>
+      <Label
+        required
+        for="applied-amount"
+        >Loan Amount</Label
+      >
       <InputNumber
-        id="loan_purpose"
+        id="applied-amount"
         v-model="data.form.applied_amount"
         type="text"
+        validate="applied_amount"
+        v-validation="validation"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="applied_amount"
       />
     </div>
 
     <div class="field col-12 md:col-6">
-      <label for="loan_purpose">Loan Purpose</label>
+      <label for="principal-amount">Approved Amount</label>
+      <InputNumber
+        id="principal-amount"
+        v-model="data.form.principal_amount"
+        type="text"
+        validate="principal_amount"
+        v-validation="validation"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="principal_amount"
+      />
+    </div>
+
+    <div class="field col-12 md:col-6">
+      <Label
+        required
+        for="loan-purpose"
+        >Loan Purpose</Label
+      >
       <InputText
-        id="loan_purpose"
+        id="loan-purpose"
         v-model="data.form.loan_purpose"
         type="text"
+        validate="loan_purpose"
+        v-validation="validation"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="loan_purpose"
       />
     </div>
 
-    <div class="field col-12 md:col-6">
-      <label for="payment_method">Co-maker (1)</label>
-      <ComakerSearch
-        id="comaker-first"
-        v-model="data.form.comaker_first"
-        name="comaker_first"
-      />
-    </div>
-
-    <div class="field col-12 md:col-6">
-      <label for="payment_method">Co-maker (2)</label>
-      <ComakerSearch
-        id="comaker-second"
-        v-model="data.form.comaker_second"
-        name="comaker_second"
-      />
-    </div>
     <div class="field col-12 md:col-6">
       <label for="name">Account</label>
       <Dropdown
+        showClear
         v-model="data.form.member_account_id"
         :options="accounts"
         filter
@@ -306,6 +483,8 @@
         option-label="label"
         placeholder="Select Account"
         :loading="loadings.accounts"
+        validate="member_account_id"
+        v-validation="validation"
         class="w-full"
       >
       </Dropdown>
@@ -314,15 +493,84 @@
         id="username-help"
         ><i class="pi pi-info-circle pr-2"></i> Create account if not exists.</small
       >
+
+      <FieldErrorMessage
+        :validation="validation"
+        field="member_account_id"
+      />
     </div>
 
     <div class="field col-12 md:col-6">
-      <label for="name">Applied Date</label>
+      <Label
+        required
+        for="payment_method"
+        >Guarantor (1)</Label
+      >
+      <GuarantorsDropdown
+        id="guarantor-first-id"
+        v-model="data.form.guarantor_first_id"
+        name="guarantor_first_id"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="guarantor_first_id"
+      />
+    </div>
+
+    <div class="field col-12 md:col-6">
+      <Label
+        required
+        for="payment_method"
+        >Guarantor (2)</Label
+      >
+      <GuarantorsDropdown
+        id="guarantor-second-id"
+        v-model="data.form.guarantor_second_id"
+        name="guarantor_second_id"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="guarantor_second_id"
+      />
+    </div>
+
+    <div class="field col-12 md:col-6">
+      <Label
+        required
+        for="name"
+        >Applied Date</Label
+      >
       <Calendar
         pattern="dd-MM-yyyy"
         mask="true"
         id="applied-date"
         v-model="data.form.applied_date"
+        validate="applied_date"
+        v-validation="validation"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="applied_date"
+      />
+    </div>
+
+    <div class="field col-12 md:col-6">
+      <Label
+        required
+        for="name"
+        >Released Date</Label
+      >
+      <Calendar
+        pattern="dd-MM-yyyy"
+        mask="true"
+        id="applied-date"
+        v-model="data.form.released_date"
+        validate="released_date"
+        v-validation="validation"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="released_date"
       />
     </div>
   </div>
@@ -337,7 +585,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import type { DropdownOption, CheckBoxOption } from '@/types/ui';
-import ComakerSearch from './ComakerSearch.vue';
+import GuarantorsDropdown from './GuarantorsDropdown.vue';
 import LoanTerm from './LoanTerm.vue';
 import PageContentHeader from './PageContentHeader.vue';
 import UtilityService from '@/service/UtilityService';
@@ -347,6 +595,15 @@ import { SalaryRange } from '@/constants/ui/loans';
 import InputNumber from 'primevue/inputnumber';
 import Skeleton from 'primevue/skeleton';
 import type { LoanForm } from '@/types/ui/loans';
+import LoanProductService from '@/service/LoanProductService';
+import InlineMessage from 'primevue/inlinemessage';
+import type { LoanProduct } from '@/types/ui/loan-products';
+import { formatNumber } from '@/helpers';
+import { mapLoanProductToTerms } from '@/constants/mapping/loan-products';
+import useValidation from '@/composables/useValidation';
+import FieldErrorMessage from './FieldErrorMessage.vue';
+import Label from './Label.vue';
+import { required } from '@vuelidate/validators';
 
 interface Props {
   modelValue?: LoanForm;
@@ -367,15 +624,57 @@ const netIncomeList = computed<CheckBoxOption[]>(() => {
     value: salary.toString(),
   }));
 });
-
+const selectedLoanProduct = ref<LoanProduct | undefined>();
 const accounts = ref<DropdownOption[]>([]);
 const members = ref<DropdownOption[]>([]);
 const workIndustries = ref<DropdownOption[]>([]);
 const loanProducts = ref<DropdownOption[]>([]);
 const data = reactive<{ form: LoanForm }>({
-  form: {
-    comaker_second: 'test',
+  form: {},
+});
+
+const form = computed(() => data.form);
+const { validation } = useValidation({
+  rules: {
+    member_id: { required },
+    contact_number: { required },
+    age: { required },
+    civil_status: { required },
+    present_address: { required },
+    home_address: { required },
+    valid_id: { required },
+    work_industry: { required },
+    email: { required },
+    tin_number: { required },
+    number_of_children: { required },
+    employer_name: { required },
+    occupation: { required },
+    work_address: { required },
+    salary_range: { required },
+    application_type: { required },
+    loan_product_id: { required },
+    applied_amount: { required },
+    principal_amount: { required },
+    loan_purpose: { required },
+    member_account_id: { required },
+    guarantor_first_id: { required },
+    guarantor_second_id: { required },
+    applied_date: { required },
+    released_date: { required },
   },
+  model: form,
+  globalConfig: {
+    $autoDirty: true,
+  },
+});
+
+const allowableLoanAmountMessage = computed(() => {
+  const min = selectedLoanProduct.value?.min_principal_amount;
+  const max = selectedLoanProduct.value?.max_principal_amount;
+
+  return selectedLoanProduct.value && min && max
+    ? `Allowable loan amount is from ${formatNumber(min)} to ${formatNumber(max)}`
+    : null;
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -383,7 +682,6 @@ const props = defineProps<Props>();
 
 onMounted(() => {
   data.form = props.modelValue ?? {};
-
   getMembers();
   getWorkIndustries();
   getLoanProducts();
@@ -438,6 +736,7 @@ const getWorkIndustries = async () => {
 
 const getLoanProducts = async () => {
   try {
+    selectedLoanProduct.value = undefined;
     loadings.value.loan_products = true;
     const { data: dropdown } = await UtilityService.getLoanProducts();
     loanProducts.value = dropdown;
@@ -445,6 +744,22 @@ const getLoanProducts = async () => {
     showApiError(error as AxiosError);
   }
   loadings.value.loan_products = false;
+};
+
+const getLoanProduct = async (id: number) => {
+  try {
+    loadings.value.loan_products = true;
+    const { data: product } = await LoanProductService.show(id);
+    selectedLoanProduct.value = product;
+    data.form.loan_term = mapLoanProductToTerms(product);
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.loan_products = false;
+};
+
+const handleTypeLoanClick = (id: any) => {
+  getLoanProduct(id);
 };
 
 const getMemberAccount = async (member_id: string) => {

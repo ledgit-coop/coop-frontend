@@ -59,6 +59,7 @@ import LoanService from '@/service/LoanService';
 import useAlert from '@/composables/useAlert';
 import type { AxiosError } from 'axios';
 import Skeleton from 'primevue/skeleton';
+import useValidation from '@/composables/useValidation';
 
 interface Props {
   visible: boolean;
@@ -69,45 +70,11 @@ interface Props {
 
 const props = defineProps<Props>();
 const emit = defineEmits(['update:visible', 'saved']);
-const { showApiError, showSuccess } = useAlert();
+const { showApiError, showSuccess, showError } = useAlert();
 
+const { validation } = useValidation();
 const model = reactive<{ form?: LoanForm }>({
-  form: {
-    member_id: '1',
-    contact_number: '555-555-5555',
-    age: 35,
-    civil_status: 'Married',
-    present_address: '123 Main Street',
-    home_address: '456 Elm Avenue',
-    email: 'example@example.com',
-    valid_id: 'ABCD1234',
-    tin_number: '987654321',
-    number_of_children: 2,
-    application_type: 'new',
-    employer_name: 'ABC Company',
-    occupation: 'Software Developer',
-    work_address: '789 Tech Road',
-    loan_purpose: 'Home Improvement',
-    comaker_first: 'John Doe',
-    comaker_second: 'Jane Smith',
-    salary_range: '31K-40K',
-    work_industry: 'IT Software',
-    member_account_id: 1,
-    loan_product_id: 1,
-    applied_amount: 15000.0,
-    loan_term: {
-      disbursed_channel: 'cash',
-      interest_method: 'flat-rate',
-      interest_type: 'percentage-base',
-      loan_interest: 5.5,
-      loan_interest_period: 'per-day',
-      loan_duration: 12,
-      loan_duration_type: 'months',
-      repayment_cycle: 'daily',
-      number_of_repayments: 12,
-      repayment_mode: 'collections',
-    },
-  },
+  form: {},
 });
 
 const isEditing = computed(() => !!props.loanIdForEdit);
@@ -118,7 +85,7 @@ const loadings = ref({
 });
 
 onMounted(() => {
-  setMemberId();
+  setMember();
   showModal.value = props.visible ?? false;
 });
 
@@ -135,8 +102,8 @@ watch(
 
 watch(
   () => props.member,
-  () => {
-    setMemberId();
+  (value) => {
+    if (value) setMember();
   },
   {
     deep: true,
@@ -147,11 +114,18 @@ watch(showModal, (value) => {
   if (value && isEditing.value) loadLoan();
 });
 
-const setMemberId = () => {
+const setMember = () => {
   model.form!.member_id = props.member?.id?.toString();
+  model.form!.email = props.member?.email_address?.toString();
 };
 
 const handleSaveClick = async () => {
+  await validation.value?.$validate();
+  if (validation.value?.$invalid) {
+    showError('Please complete the required fields.');
+    return;
+  }
+
   try {
     loadings.value.save = true;
     if (isEditing.value) await LoanService.update(props.loanIdForEdit ?? 0, mapLoanFormToPayload(model.form!));
@@ -169,7 +143,7 @@ const loadLoan = async () => {
   loadings.value.fetching = true;
   try {
     const { data } = await LoanService.show(props.loanIdForEdit ?? 0);
-  model.form = mapLoanToLoanForm(data);
+    model.form = mapLoanToLoanForm(data);
   } catch (error) {
     showApiError(error as AxiosError);
   }

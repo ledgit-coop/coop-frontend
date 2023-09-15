@@ -1,18 +1,17 @@
-import type { ComakersResponse } from '@/types/api/utility';
 import type { AxiosPromise } from 'axios';
-import axios from 'axios';
 import apiClient from '@/http-common';
-import type { DropdownOption } from '@/types/ui';
+import type { DropdownOption, GuarantorDropdown } from '@/types/ui';
 import type { AccountType } from '@/constants/ui/accounts';
+import type { LoanCalculatorRequest } from '@/types/api/loans';
 
 const PATH = '/api/utility';
 class UtilityService {
-  getCoMakers(params?: Record<string, any>): AxiosPromise<ComakersResponse[]> {
-    return axios.get('/demo/data/comakers.json', { params });
+  getGuarantors(): AxiosPromise<GuarantorDropdown[]> {
+    return apiClient.get(`${PATH}/guarantors/dropdown`);
   }
 
   getMemembersDropdown(): AxiosPromise<DropdownOption[]> {
-    return apiClient.get(`${PATH}/members-dropdown`);
+    return apiClient.get(`${PATH}/members/dropdown`);
   }
 
   getAccountDropdown(): AxiosPromise<DropdownOption[]> {
@@ -29,6 +28,14 @@ class UtilityService {
 
   getLoanProducts(): AxiosPromise<DropdownOption[]> {
     return apiClient.get(`${PATH}/loan-products/dropdown`);
+  }
+
+  loanCalculator(params: LoanCalculatorRequest): AxiosPromise {
+    return apiClient.get(`${PATH}/loan-calculator`, { params });
+  }
+
+  getMemberAccountHoldersDropdown(member_id: string): AxiosPromise<DropdownOption[]> {
+    return apiClient.get(`${PATH}/members/${member_id}/account-holders/dropdown`);
   }
 }
 

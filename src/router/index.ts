@@ -3,6 +3,7 @@ import AppLayout from '@/layout/AppLayout.vue';
 import AuthService from '@/service/AuthService';
 import {
   PUBLIC_ROUTES,
+  ROUTE_LOAN_CALCULATOR,
   ROUTE_NAME_COLLECTIONS,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOANS_CREATE,
@@ -127,6 +128,15 @@ const router = createRouter({
           component: () => import('@/views/pages/collections/CollectionsPage.vue'),
           meta: {
             title: 'Collections',
+          },
+        },
+
+        {
+          path: '/loan-calculator',
+          name: ROUTE_LOAN_CALCULATOR,
+          component: () => import('@/views/pages/loan-calculator/LoanCalculatorPage.vue'),
+          meta: {
+            title: 'Loan Calculator',
           },
         },
 

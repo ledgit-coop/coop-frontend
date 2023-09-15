@@ -27,8 +27,8 @@ class MembersService {
     return apiClient.patch(`/api/members/${id}`, params);
   }
 
-  postAddAccount(member_number: string, account_id: string): AxiosPromise {
-    return apiClient.post(`${PATH}/accounts/add/${member_number}/${account_id}`);
+  postAddAccount(member_number: string, account_id: string, account_holder: string): AxiosPromise {
+    return apiClient.post(`${PATH}/accounts/add/${member_number}/${account_id}`, { account_holder });
   }
 
   postAttendedOrientation(member_number: string): AxiosPromise {

@@ -122,6 +122,7 @@ const searchCountry = (event) => {
       <div class="field col-12 md:col-4">
         <span class="p-float-label">
           <Dropdown
+            showClear
             id="dropdown"
             v-model="value8"
             :options="cities"

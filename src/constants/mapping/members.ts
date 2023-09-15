@@ -18,19 +18,21 @@ export function mapMemberFormToPostMemberPayload(memberForm: MemberForm): PostMe
     employee_no: memberForm.employee_no ?? '',
     tin_no: memberForm.tin_no ?? '',
     email_address: memberForm.email_address ?? '',
-    member_at: memberForm.member_at ?? '',
+    member_at: moment(memberForm.member_at).format(DATE_FORMAT_DB),
     mobile_number: memberForm.mobile_number ?? '',
     telephone_number: memberForm.telephone_number ?? '',
     oriented: memberForm.oriented ?? false,
+    profile_picture_url: memberForm.profile_picture_url,
     permanent_address: mapMemberAddressPermanent(memberForm.permanent_address),
     present_address: mapMemberAddressPresent(memberForm.present_address),
     father: mapMemberRelatedPerson(memberForm.father),
     mother: mapMemberRelatedPerson(memberForm.mother),
     spouse: mapMemberRelatedPerson(memberForm.spouse),
-    beneficiaries: memberForm.beneficiaries.map((r) => ({
-      ...r,
-      birthdate: moment(r.birthdate).format(DATE_FORMAT_DB),
-    })),
+    beneficiaries:
+      memberForm.beneficiaries?.map((r) => ({
+        ...r,
+        birthdate: r.birthdate ? moment(r.birthdate).format(DATE_FORMAT_DB) : null,
+      })) ?? [],
   };
 
   return postMemberPayload;
@@ -48,7 +50,7 @@ function mapMemberAddressPresent(memberAddress: MemberAddress | undefined): Post
     barangay: memberAddress.barangay ?? '',
     city_municipality: memberAddress.city_municipality ?? '',
     province: memberAddress.province ?? '',
-    zip_code: memberAddress.zip_code ?? '',
+    zip_code: memberAddress.zip_code ?? undefined,
     residency_status: memberAddress.residency_status ?? '',
   };
 }
@@ -65,7 +67,7 @@ function mapMemberAddressPermanent(memberAddress: MemberAddress | undefined): Po
     barangay: memberAddress.barangay ?? '',
     city_municipality: memberAddress.city_municipality ?? '',
     province: memberAddress.province ?? '',
-    zip_code: memberAddress.zip_code ?? '',
+    zip_code: memberAddress.zip_code ?? undefined,
   };
 }
 
@@ -75,7 +77,9 @@ function mapMemberRelatedPerson(memberRelatedPerson: MemberRelatedPerson): PostM
     first_name: memberRelatedPerson.first_name ?? '',
     middle_name: memberRelatedPerson.middle_name ?? '',
     name_extension: memberRelatedPerson.name_extension ?? '',
-    date_of_birth: moment(memberRelatedPerson.date_of_birth).format(DATE_FORMAT_DB),
+    date_of_birth: memberRelatedPerson.date_of_birth
+      ? moment(memberRelatedPerson.date_of_birth).format(DATE_FORMAT_DB)
+      : null,
     occupation: memberRelatedPerson.occupation ?? '',
     contact_number: memberRelatedPerson.contact_number ?? '',
     type: memberRelatedPerson.type ?? '',

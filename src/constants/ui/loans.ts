@@ -8,6 +8,7 @@ export enum RepaymentCycle {
   BIMONTHLY = 'bimonthly',
   QUARTERLY = 'quarterly',
   YEARLY = 'yearly',
+  LUMP_SUM = 'lump-sum',
 }
 
 export enum SalaryRange {
@@ -65,9 +66,10 @@ export enum LoanInterestPeriod {
 export const REPAYMENT_CYCLE_DROPDOWN: DropdownOption[] = [
   { label: 'Daily', value: RepaymentCycle.DAILY },
   { label: 'Weekly', value: RepaymentCycle.WEEKLY },
-  { label: 'Biweekly', value: RepaymentCycle.BIMONTHLY },
+  { label: 'Biweekly', value: RepaymentCycle.BIWEEKLY },
   { label: 'Monthly', value: RepaymentCycle.MONTHLY },
   { label: 'Bimonthly', value: RepaymentCycle.BIMONTHLY },
   { label: 'Quarterly', value: RepaymentCycle.QUARTERLY },
   { label: 'Yearly', value: RepaymentCycle.YEARLY },
+  { label: 'Lump-Sum', value: RepaymentCycle.LUMP_SUM },
 ];

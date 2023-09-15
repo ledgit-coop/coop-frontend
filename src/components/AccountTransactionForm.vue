@@ -7,6 +7,7 @@
         >Account</Label
       >
       <Dropdown
+        showClear
         id="accounts"
         :options="accounts"
         filter
@@ -116,6 +117,7 @@
         mask="true"
         validate="transaction_date"
         v-validation="validation"
+        showButtonBar
       />
 
       <FieldErrorMessage

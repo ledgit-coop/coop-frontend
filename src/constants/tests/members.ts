@@ -10,7 +10,7 @@ export const TEST_MEMBER_FORM: MemberForm = {
   date_hired: '2020-05-10',
   department: 'Sales',
   position: 'Manager',
-  employee_no: '12345',
+  employee_no: 12345,
   tin_no: '67890',
   email_address: 'john.smith@example.com',
   member_at: '2001-01-15',
@@ -36,7 +36,7 @@ export const TEST_MEMBER_FORM: MemberForm = {
     barangay: 'Central',
     city_municipality: 'Metropolis',
     province: 'State',
-    zip_code: '12345',
+    zip_code: 12345,
     residency_status: 'owned',
   },
   permanent_address: {
@@ -46,7 +46,7 @@ export const TEST_MEMBER_FORM: MemberForm = {
     barangay: 'North',
     city_municipality: 'Metropolis',
     province: 'State',
-    zip_code: '67890',
+    zip_code: 12345,
   },
   father: {
     surname: 'Smith Sr.',

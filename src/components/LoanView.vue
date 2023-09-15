@@ -5,15 +5,20 @@
     maximizable
     header="Emergency Loan - 1000023"
   >
-    <LoanStatus status="approved" />
-
     <PageContentHeader
       title="Loan Information"
       size="h6"
     >
+      <LoanStatus :status="loan?.status" />
+
       <Button
         icon="pi pi-download"
         label="Download Agreement"
+        v-tooltip="'Edit'"
+        severity="warning"
+        text
+        raised
+        rounded
       ></Button>
 
       <Button
@@ -29,7 +34,34 @@
     </PageContentHeader>
 
     <div class="p-2"></div>
-    <Information :info="basic_information" />
+
+    <div class="flex">
+      <div class="col-12 md:col-6 p-0">
+        <Information :info="basic_information_1" />
+      </div>
+      <div class="col-12 md:col-6 p-0">
+        <Information :info="basic_information_2" />
+      </div>
+    </div>
+
+    <div class="p-3"></div>
+
+    <div class="flex flex-column gap-2">
+      <span
+        ><i
+          class="pi pi-file-pdf pr-2"
+          style="color: var(--gray-700)"
+        ></i
+        ><a href="http://">Download Agreement</a></span
+      >
+      <span
+        ><i
+          class="pi pi-file-pdf pr-2"
+          style="color: var(--gray-700)"
+        ></i
+        ><a href="http://">Download Form</a></span
+      >
+    </div>
     <div class="p-3"></div>
 
     <PageContentHeader
@@ -100,6 +132,11 @@ import MembersService from '@/service/MembersService';
 import type { MemberLoanSchedule } from '@/types/ui/members';
 import LoanStatus from './LoanStatus.vue';
 import Chatter from './Chatter.vue';
+import LoanService from '@/service/LoanService';
+import type { Loan } from '@/types/ui/loans';
+import useAlert from '@/composables/useAlert';
+import type { AxiosError } from 'axios';
+import { formatNumber } from '@/helpers';
 
 interface Props {
   visible: boolean;
@@ -110,23 +147,51 @@ interface Props {
 const props = defineProps<Props>();
 const emit = defineEmits(['update:visible']);
 const showModal = ref(false);
+const loan = ref<Loan>();
 const schedules = ref<MemberLoanSchedule[]>([]);
-const basic_information = computed<InformationItem[]>(() => [
-  { label: 'Loan Number', value: '1000023' },
-  { label: 'Term', value: '12 mos.' },
-  { label: 'Due Every', value: '5th of the month' },
-  { label: 'Interest Rate', value: '1.5%' },
-  { label: 'Application Type', value: 'New' },
-  { label: 'Purpose', value: 'Home Improvement' },
-  { label: 'Payment Mode', value: 'Cash' },
-  { label: 'Payment Method', value: 'Over the counter' },
-  { label: 'Applied Amount', value: '10,000.00' },
-  { label: 'Approved Amount', value: '20,000.00' },
-  { label: 'Disbursed Date', value: 'Sept 2, 2023' },
-  { label: 'Disbursement Channel', value: 'Over the counter' },
-  { label: 'Co-maker 1', value: 'Kevin Loquencio' },
-  { label: 'Co-maker 2', value: 'Mark Lien' },
+const basic_information_1 = computed<InformationItem[]>(() => [
+  { label: 'Member', value: loan.value?.member?.full_name ?? '' },
+  { label: 'Contact Number', value: loan.value?.contact_number ?? '' },
+  { label: 'Age', value: loan.value?.age.toString() ?? '' },
+  { label: 'Civil Status', value: loan.value?.civil_status ?? '' },
+  { label: 'Present Address', value: loan.value?.present_address ?? '' },
+  { label: 'Home Address', value: loan.value?.home_address ?? '' },
+  { label: 'Valid ID', value: loan.value?.valid_id ?? '' },
+  { label: 'Email', value: loan.value?.email ?? '' },
+  { label: 'TIN Number', value: loan.value?.tin_number ?? '' },
+  { label: 'Number of Children', value: loan.value?.number_of_children.toString() ?? '' },
+  { label: 'Employer Name', value: loan.value?.employer_name ?? '' },
+  { label: 'Occupation', value: loan.value?.occupation ?? '' },
+  { label: 'Work Address', value: loan.value?.work_address ?? '' },
+  { label: 'Industry', value: loan.value?.work_industry ?? '' },
+  { label: 'Salary Range', value: loan.value?.salary_range ?? '' },
+  { label: 'Application Type', value: loan.value?.application_type ?? '' },
+  { label: 'Type Of Loan Applied', value: loan.value?.loan_product?.name ?? '' },
+  { label: 'Loan Amount', value: formatNumber(Number(loan.value?.applied_amount ?? 0)) },
+  { label: 'Approved Amount', value: formatNumber(Number(loan.value?.principal_amount ?? 0)) },
+  { label: 'Loan Purpose', value: loan.value?.loan_purpose ?? '' },
 ]);
+
+const basic_information_2 = computed<InformationItem[]>(() => [
+  { label: 'Account', value: loan.value?.member_account?.account?.name ?? '' },
+  { label: 'Guarantor (1)', value: loan.value?.guarantor_first?.full_name ?? '' },
+  { label: 'Guarantor (2)', value: loan.value?.guarantor_second?.full_name ?? '' },
+  { label: 'Applied Date', value: loan.value?.applied_date ?? '' },
+  { label: 'Released Date', value: loan.value?.released_date ?? '' },
+  { label: 'Interest Method', value: loan.value?.interest_method ?? '' },
+  { label: 'Interest Period', value: loan.value?.loan_interest_period ?? '' },
+  { label: 'Interest', value: (loan.value?.loan_interest.toString() ?? '') + '%' },
+  { label: 'Loan Duration Period', value: loan.value?.loan_duration_type ?? '' },
+  { label: 'Loan Duration', value: loan.value?.loan_duration.toString() ?? '' },
+  { label: 'Repayment Cycle', value: loan.value?.repayment_cycle ?? '' },
+  { label: 'Number of Repayments', value: loan.value?.number_of_repayments.toString() ?? '' },
+  { label: 'Repayment Mode', value: loan.value?.repayment_mode ?? '' },
+  { label: 'Disbursement Channels', value: loan.value?.disbursed_channel ?? '' },
+]);
+const { showApiError } = useAlert();
+const loadings = ref({
+  fetching: false,
+});
 
 onMounted(() => {
   showModal.value = props.visible ?? false;
@@ -140,9 +205,23 @@ watch(
   () => props.visible,
   (value) => {
     showModal.value = value ?? false;
-    if (showModal.value) loadInfo();
+    if (showModal.value) {
+      loadLoan();
+      loadInfo();
+    }
   }
 );
+
+const loadLoan = async () => {
+  loadings.value.fetching = true;
+  try {
+    const { data } = await LoanService.show(Number(props.loanId ?? 0));
+    loan.value = data;
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.fetching = false;
+};
 
 const loadInfo = async () => {
   schedules.value = await MembersService.getMemberLoanSchedule('1');

@@ -29,6 +29,7 @@
     size="h5"
   >
     <Dropdown
+      showClear
       filter
       option-value="value"
       option-label="label"
@@ -82,7 +83,7 @@
       </Row>
     </ColumnGroup>
 
-    <template #empty> No data found. </template>
+    <template #empty> No records found. </template>
   </DataTable>
 
   <PageContentHeader
@@ -91,6 +92,7 @@
     size="h5"
   >
     <Dropdown
+      showClear
       filter
       option-value="value"
       option-label="label"
@@ -123,7 +125,7 @@
       header="Percentage"
     ></Column>
     <Column
-      field="release_date"
+      field="released_date"
       header="Release Date"
       sortable
     ></Column>
@@ -144,7 +146,7 @@
         <Column footer="1,100.00" />
       </Row>
     </ColumnGroup>
-    <template #empty> No data found. </template>
+    <template #empty> No records found. </template>
   </DataTable>
 </template>
 <script setup lang="ts">

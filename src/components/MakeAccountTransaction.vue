@@ -98,7 +98,7 @@ const handleMakeTransaction = async () => {
             particular: model.form?.particular,
             transaction_date: moment(model.form.transaction_date).format(DATE_FORMAT_DB),
           });
-          showSuccess('Transaction successfullly added.');
+          showSuccess('Transaction successfully added.');
         } catch (error) {
           showApiError(error as AxiosError);
         }

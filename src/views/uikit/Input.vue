@@ -306,6 +306,7 @@ const searchCountry = (event) => {
 
         <h5>Dropdown</h5>
         <Dropdown
+          showClear
           v-model="dropdownValue"
           :options="dropdownValues"
           option-label="name"

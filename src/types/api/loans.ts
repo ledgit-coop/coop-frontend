@@ -18,6 +18,7 @@ export interface LoanApplicationPayload {
   work_address?: string | null;
   loan_purpose?: string | null;
   applied_amount?: number | null;
+  principal_amount?: number | null;
   disbursed_channel?: string | null;
   interest_method?: string | null;
   interest_type?: string | null;
@@ -30,6 +31,7 @@ export interface LoanApplicationPayload {
   salary_range?: string | null;
   work_industry?: string;
   applied_date?: string;
+  released_date?: string;
 }
 
 export interface LoanListPayload {
@@ -39,4 +41,16 @@ export interface LoanListPayload {
 
 export interface ListLoanResponse {
   data: Loan[];
+}
+
+export interface LoanCalculatorRequest {
+  principal_amount?: number | null;
+  loan_interest?: number | null;
+  loan_duration?: number | null;
+  interest_method?: string | null;
+  number_of_repayments?: number | null;
+  repayment_cycle?: string | null;
+  loan_duration_type?: string | null;
+  loan_interest_period?: string | null;
+  released_date?: string | null;
 }
