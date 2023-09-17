@@ -23,6 +23,7 @@ export function mapLoanFormToPayload(loanForm: LoanForm): LoanApplicationPayload
     principal_amount,
     loan_term,
     applied_date,
+    loan_fees,
     released_date,
     ...rest // Extract other properties
   } = loanForm;
@@ -61,6 +62,7 @@ export function mapLoanFormToPayload(loanForm: LoanForm): LoanApplicationPayload
     principal_amount: principal_amount || null,
     applied_date: moment(applied_date).format(DATE_FORMAT_DB),
     released_date: moment(released_date).format(DATE_FORMAT_DB),
+    loan_fees,
     ...loanTerm,
     ...rest, // Spread other properties
   };
@@ -102,7 +104,9 @@ export function mapLoanToLoanForm(loan: Loan): LoanForm {
     interest_type,
     disbursed_channel,
     loan_interest,
+    loan_fees,
     loan_interest_period,
+    released_date,
   } = loan;
   const loanTerm: LoanTermForm = {
     loan_duration,
@@ -126,6 +130,7 @@ export function mapLoanToLoanForm(loan: Loan): LoanForm {
     home_address,
     valid_id,
     tin_number,
+    released_date: released_date ?? '',
     number_of_children,
     application_type,
     email,
@@ -133,6 +138,7 @@ export function mapLoanToLoanForm(loan: Loan): LoanForm {
     occupation,
     work_address,
     work_industry,
+    loan_fees,
     guarantor_first_id,
     guarantor_second_id,
     loan_purpose,

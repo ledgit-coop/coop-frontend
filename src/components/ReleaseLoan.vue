@@ -67,6 +67,9 @@ const basic_information = computed<InformationItem[]>(() => [
   { label: 'Disbursement Channels', value: props?.loan?.disbursed_channel ?? '' },
   { label: 'Loan Amount', value: formatNumber(Number(props?.loan?.applied_amount ?? 0)) },
   { label: 'Approved Amount', value: formatNumber(Number(props?.loan?.principal_amount ?? 0)) },
+  { label: 'Fees', value: formatNumber(props.loan?.loan_fees?.reduce((n, p) => n + (p?.amount ?? 0), 0) ?? 0) },
+  { label: 'Released Amount', value: formatNumber(Number(props?.loan?.released_amount ?? 0)) },
+
   { label: 'Loan Purpose', value: props?.loan?.loan_purpose ?? '' },
 ]);
 

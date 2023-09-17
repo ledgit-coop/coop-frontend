@@ -1,12 +1,5 @@
 <template>
   <template v-if="loansWidget.length > 0">
-    <PageContentHeader
-      class="mt-5 mb-5"
-      title="Active Loans"
-      size="h5"
-    >
-    </PageContentHeader>
-
     <MembersLoanWidget
       v-if="loansWidget.length > 0"
       :loans="loansWidget"
@@ -17,33 +10,10 @@
   </template>
 
   <PageContentHeader
+    class="mt-5"
     title="History"
     size="h5"
   >
-    <Dropdown
-      showClear
-      filter
-      option-value="value"
-      option-label="label"
-      v-model="filters.loan_product_id"
-      @change="loadTable(params)"
-      :loading="loadings.loan_products"
-      placeholder="Select Loan"
-      :options="loanProducts"
-    >
-    </Dropdown>
-
-    <Dropdown
-      showClear
-      filter
-      :options="years"
-      v-model="filters.year"
-      option-value="value"
-      option-label="label"
-      placeholder="Select a Year"
-      @change="loadTable(params)"
-    >
-    </Dropdown>
   </PageContentHeader>
 
   <LoansTable
@@ -52,6 +22,36 @@
     :rows="rows"
     :loading="loadings.table"
   >
+    <template #header>
+      <div class="flex justify-content-between flex-column sm:flex-row">
+        <div class="grid gap-1 m-0 align-items-start ml-auto">
+          <Dropdown
+            showClear
+            filter
+            option-value="value"
+            option-label="label"
+            v-model="filters.loan_product_id"
+            @change="loadTable(params)"
+            :loading="loadings.loan_products"
+            placeholder="Select Loan"
+            :options="loanProducts"
+          >
+          </Dropdown>
+
+          <Dropdown
+            showClear
+            filter
+            :options="years"
+            v-model="filters.year"
+            option-value="value"
+            option-label="label"
+            placeholder="Select a Year"
+            @change="loadTable(params)"
+          >
+          </Dropdown>
+        </div>
+      </div>
+    </template>
     <template #action="slotProps">
       <LoanActions
         :loan="slotProps.data"
@@ -90,6 +90,7 @@ const loadings = ref({
   table: false,
   loan_products: false,
 });
+
 const props = defineProps<Props>();
 const { showApiError } = useAlert();
 const { rows, onSort, paginate, totalRecords, onPageChange, params } = useTableParameters(filters);
@@ -137,12 +138,12 @@ const loadWidgetData = async () => {
   loadings.value.table = true;
   try {
     const { data } = await LoanService.activeLoans(props.member?.id);
+    console.log(data);
     loansWidget.value = data.map((l) => ({
       type: l.loan_product?.name ?? '',
-
-      balance: 202040.2,
-      terms: l.loan_duration,
-      paid: 2,
+      balance: l.outstanding ?? 0,
+      terms: l.loan_duration ?? 0,
+      paid: l.loan_schedules?.filter((r) => r.paid).length ?? 0,
       currency: 'Php',
     }));
   } catch (error) {

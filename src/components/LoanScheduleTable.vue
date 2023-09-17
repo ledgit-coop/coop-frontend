@@ -17,7 +17,6 @@
     </template>
 
     <template #empty> No records found. </template>
-    <template #loading> Loading records. Please wait. </template>
 
     <Column
       field="month"

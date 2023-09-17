@@ -68,7 +68,6 @@ const saveProduct = () => {
 
 const editProduct = (editProduct) => {
   product.value = { ...editProduct };
-  console.log(product);
   productDialog.value = true;
 };
 
@@ -417,6 +416,8 @@ const initFilters = () => {
             <div class="field col">
               <label for="price">Price</label>
               <InputNumber
+                :minFractionDigits="2"
+                :maxFractionDigits="3"
                 id="price"
                 v-model="product.price"
                 mode="currency"
@@ -434,6 +435,8 @@ const initFilters = () => {
             <div class="field col">
               <label for="quantity">Quantity</label>
               <InputNumber
+                :minFractionDigits="2"
+                :maxFractionDigits="3"
                 id="quantity"
                 v-model="product.quantity"
                 integeronly

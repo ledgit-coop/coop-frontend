@@ -7,6 +7,8 @@ import {
   ROUTE_NAME_COLLECTIONS,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOANS_CREATE,
+  ROUTE_NAME_LOAN_FEES,
+  ROUTE_NAME_LOAN_GUARANTORS,
   ROUTE_NAME_LOAN_PRODUCTS,
   ROUTE_NAME_MEMBERS,
   ROUTE_NAME_MEMBERS_CREATE,
@@ -157,6 +159,22 @@ const router = createRouter({
                 },
               ],
             },
+
+            {
+              path: 'loan-guarantors',
+              redirect: 'loan-guarantors/list',
+              children: [
+                {
+                  path: 'list',
+                  name: ROUTE_NAME_LOAN_GUARANTORS,
+                  component: () => import('@/views/pages/administration/loan-guarantors/LoanGuarantorsPage.vue'),
+                  meta: {
+                    title: 'Users',
+                  },
+                },
+              ],
+            },
+
             {
               path: 'loan-products',
               redirect: 'loan-products/list',
@@ -167,6 +185,20 @@ const router = createRouter({
                   component: () => import('@/views/pages/administration/loan-products/LoanProductsPage.vue'),
                   meta: {
                     title: 'Loan Products',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'loan-fees',
+              redirect: 'loan-fees/list',
+              children: [
+                {
+                  path: 'list',
+                  name: ROUTE_NAME_LOAN_FEES,
+                  component: () => import('@/views/pages/administration/loan-fee-templates/LoanFeePage.vue'),
+                  meta: {
+                    title: 'Loan Fees',
                   },
                 },
               ],

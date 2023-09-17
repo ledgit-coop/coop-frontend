@@ -56,6 +56,8 @@
             >Age</Label
           >
           <InputNumber
+            :minFractionDigits="2"
+            :maxFractionDigits="3"
             id="age"
             v-model="data.form.age"
             validate="age"
@@ -190,6 +192,8 @@
             >Number of Children</Label
           >
           <InputNumber
+            :minFractionDigits="2"
+            :maxFractionDigits="3"
             id="number_of_children"
             v-model="data.form.number_of_children"
             type="text"
@@ -426,6 +430,8 @@
         >Loan Amount</Label
       >
       <InputNumber
+        :minFractionDigits="2"
+        :maxFractionDigits="3"
         id="applied-amount"
         v-model="data.form.applied_amount"
         type="text"
@@ -441,6 +447,8 @@
     <div class="field col-12 md:col-6">
       <label for="principal-amount">Approved Amount</label>
       <InputNumber
+        :minFractionDigits="2"
+        :maxFractionDigits="3"
         id="principal-amount"
         v-model="data.form.principal_amount"
         type="text"
@@ -580,6 +588,10 @@
     <LoanTerm v-model="data.form.loan_term" />
   </div>
 
+  <div class="grid p-fluid formgrid">
+    <LoanFeeForm v-model="data.form.loan_fees" />
+  </div>
+
   <div class="p-1"></div>
 </template>
 <script setup lang="ts">
@@ -604,6 +616,7 @@ import useValidation from '@/composables/useValidation';
 import FieldErrorMessage from './FieldErrorMessage.vue';
 import Label from './Label.vue';
 import { required } from '@vuelidate/validators';
+import LoanFeeForm from './LoanFeeForm.vue';
 
 interface Props {
   modelValue?: LoanForm;

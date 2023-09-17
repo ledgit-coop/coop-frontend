@@ -3,9 +3,22 @@
     <div class="col-12">
       <div class="card">
         <PageContentHeader title="Loan Repayments" />
-        <MemberLoansRepaymentTable
-          :model-value="loans"
-          @on-loan-click="handleViewLoanClick"
+
+        <DataTable
+          :paginator="true"
+          :row-hover="true"
+          scrollable
+          :value="loans"
+          table-style="min-width: 50rem"
+          :row-class="rowClass"
+          :loading="loadings.table"
+          :rows="rows"
+          :lazy="true"
+          :total-records="totalRecords"
+          @sort="onSort"
+          export-filename="loan-repayments"
+          @page="onPageChange"
+          ref="dt"
         >
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
@@ -24,17 +37,31 @@
                   label="Export"
                   class="p-button-outlined mb-2"
                   size="small"
+                  @click="handleExport"
                 />
               </div>
 
               <div class="grid gap-1 m-0 align-items-start ml-auto">
+                <Calendar
+                  pattern="dd-MM-yyyy"
+                  id="date-hired"
+                  mask="true"
+                  v-model="filters.due_date"
+                  placeholder="Due date"
+                  showButtonBar
+                  @update:model-value="handleDueDateChange"
+                />
+
                 <Dropdown
                   showClear
                   filter
+                  v-model="filters.status"
+                  :options="statuses"
                   option-value="value"
                   option-label="label"
                   placeholder="Select Status"
                   style="min-width: 10rem"
+                  @change="handleStatusChanged"
                 >
                 </Dropdown>
 
@@ -42,40 +69,204 @@
                   <i class="pi pi-search" />
                   <InputText
                     placeholder="Keyword Search"
-                    style="width: 100%"
+                    v-model="filters.keyword"
+                    @keydown.enter="loadTable"
                   />
                 </span>
               </div>
             </div>
           </template>
 
-          <template #action="slotProps">
-            <div class="flex gap-2">
-              <Button
-                label="Pay"
-                icon="pi pi-eye"
-                class="p-button-raised mr-2 mb-2"
-                size="small"
-                @click="handleViewLoanClick(slotProps.data)"
-              />
-            </div>
-          </template>
-        </MemberLoansRepaymentTable>
+          <template #empty> No records found. </template>
 
-        <RepaymentCreate v-model:visible="modalsVisibility.repay" />
+          <Column
+            field="loan.member.full_name"
+            header="Member"
+            sortable
+          >
+            <template #body="slotProps">
+              <Button
+                class="white-space-nowrap"
+                :label="slotProps.data.loan.member.full_name"
+                @click="
+                  router.push({
+                    name: ROUTE_NAME_MEMBERS_VIEW,
+                    params: { id: slotProps.data.loan.member.member_number },
+                  })
+                "
+                link
+              />
+            </template>
+          </Column>
+
+          <Column
+            field="loan.present_address"
+            header="Present Address"
+            sortable
+            hidden
+          >
+          </Column>
+          <Column
+            field="loan.home_address"
+            header="Home Address"
+            sortable
+            hidden
+          >
+          </Column>
+          <Column
+            field="loan.contact_number"
+            header="Contact"
+            sortable
+            hidden
+          >
+          </Column>
+
+          <Column
+            field="loan.loan_number"
+            header="Loan No."
+            sortable
+          >
+          </Column>
+
+          <Column
+            field="loan.loan_product.name"
+            header="Type"
+            class="white-space-nowrap"
+            sortable
+          ></Column>
+
+          <Column
+            field="due_date"
+            header="Due Date"
+            sortable
+          ></Column>
+
+          <Column
+            field="fee_amount"
+            header="Penalty"
+          >
+            <template #body="slotProps">
+              {{
+                Number(slotProps.data.fee_amount).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
+            </template>
+          </Column>
+
+          <Column
+            field="penalty_amount"
+            header="Penalty"
+          >
+            <template #body="slotProps">
+              {{
+                Number(slotProps.data.penalty_amount).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
+            </template>
+          </Column>
+
+          <Column
+            field="due_amount"
+            header="Due Amount"
+          >
+            <template #body="slotProps">
+              {{
+                Number(slotProps.data.due_amount).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
+            </template>
+          </Column>
+
+          <Column
+            field="amount_paid"
+            header="Amount Paid"
+          >
+            <template #body="slotProps">
+              {{
+                Number(slotProps.data.amount_paid).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              }}
+            </template>
+          </Column>
+
+          <Column
+            field="due_humans"
+            header="#"
+            class="white-space-nowrap"
+            sortable
+          ></Column>
+
+          <Column
+            field="id"
+            header="Action"
+            align-frozen="right"
+            style="min-width: 6rem; width: 6rem"
+            :exportable="false"
+            frozen
+          >
+            <template #body="slotProps">
+              <div class="flex gap-2">
+                <Button
+                  icon="pi pi-eye"
+                  v-tooltip="'View'"
+                  text
+                  raised
+                  rounded
+                  class="mr-2 mb-2"
+                  size="small"
+                  @click="handleViewLoanClick(slotProps.data)"
+                />
+                <Button
+                  label="Pay"
+                  icon="pi pi-eye"
+                  class="p-button-raised mr-2 mb-2"
+                  size="small"
+                  v-if="!slotProps.data.paid"
+                  @click="handlePayload(slotProps.data)"
+                />
+              </div>
+            </template>
+          </Column>
+        </DataTable>
+
+        <RepaymentCreate
+          @updated="loadTable"
+          v-model:visible="modalsVisibility.repay"
+          :due-amount="dueAmount"
+          :schedule-id="scheduleId"
+        />
+
+        <LoanView
+          v-model:visible="modalsVisibility.view_loan"
+          :loan-id="selectedLoanId"
+        />
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import Button from 'primevue/button';
-import type { MemberLoanTable } from '@/types/ui/members';
+import type { MemberLoanSchedule } from '@/types/ui/members';
 import PageContentHeader from '@components/PageContentHeader.vue';
 import LoanRepaymentService from '@/service/LoanRepaymentService';
-import MemberLoansRepaymentTable from '@/components/MemberLoansRepaymentTable.vue';
+import router from '@/router';
 import RepaymentCreate from './RepaymentCreate.vue';
-import Cone from './test-validation/Cone.vue';
+import useAlert from '@/composables/useAlert';
+import type { AxiosError } from 'axios';
+import type { DropdownOption } from '@/types/ui';
+import Calendar from 'primevue/calendar';
+import { ROUTE_NAME_MEMBERS_VIEW } from '@/constants';
+import useTableParameters from '@/composables/useTableParameters';
+import LoanView from '@/components/LoanView.vue';
 
 interface ModalsVisibility {
   repay: boolean;
@@ -86,29 +277,78 @@ const modalsVisibility = ref<ModalsVisibility>({
   repay: false,
   view_loan: false,
 });
-const loans = ref<MemberLoanTable[]>([]);
-const selected_loan = ref<MemberLoanTable | undefined>();
 
-onMounted(() => {
-  list();
+const statuses = ref<DropdownOption[]>([
+  { label: 'Past Due', value: 'past-due' },
+  { label: 'Due Today', value: 'due-today' },
+  { label: 'Due in 4 days', value: 'due-4-days' },
+  { label: 'Due Next Month', value: 'due-next-month' },
+  { label: 'Paid', value: 'paid' },
+]);
+const dt = ref();
+const loans = ref<MemberLoanSchedule[]>([]);
+const selected_loan = ref<MemberLoanSchedule | undefined>();
+const filters = ref({
+  keyword: '',
+  status: undefined,
+  due_date: undefined,
 });
 
-const list = async () => {
-  const { data } = await LoanRepaymentService.list({});
-  loans.value = data;
+const { rows, onSort, paginate, totalRecords, onPageChange, params } = useTableParameters(filters);
+
+const dueAmount = computed<any>(() => selected_loan.value?.due_amount);
+const scheduleId = computed<any>(() => selected_loan.value?.id);
+const selectedLoanId = computed<any>(() => selected_loan.value?.loan_id);
+const loadings = ref({
+  table: false,
+});
+
+const { showApiError } = useAlert();
+
+onMounted(() => {
+  loadTable();
+});
+
+watch(params, () => {
+  loadTable();
+});
+
+const loadTable = async () => {
+  loadings.value.table = true;
+  try {
+    const { data } = await LoanRepaymentService.list({ ...params.value });
+    loans.value = data.data;
+    paginate(data);
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+
+  loadings.value.table = false;
 };
-const handleViewLoanClick = (value: MemberLoanTable) => {
+const handlePayload = (value: MemberLoanSchedule) => {
   selected_loan.value = value;
   modalsVisibility.value.repay = true;
 };
+
+const handleStatusChanged = () => {
+  loadTable();
+};
+const handleDueDateChange = () => {
+  filters.value.status = undefined;
+  loadTable();
+};
+const handleExport = () => {
+  dt.value.exportCSV();
+};
+
+const handleViewLoanClick = (value: MemberLoanSchedule) => {
+  selected_loan.value = value;
+  modalsVisibility.value.view_loan = true;
+};
+
+const rowClass = (data: MemberLoanSchedule) => {
+  if (data.paid) return 'paid';
+  else if (data.almost_due) return 'almost-due';
+  else if (data.overdue) return 'overdue';
+};
 </script>
-
-<style scoped lang="scss">
-::v-deep(.p-datatable-frozen-tbody) {
-  font-weight: bold;
-}
-
-::v-deep(.p-datatable-scrollable .p-frozen-column) {
-  font-weight: bold;
-}
-</style>

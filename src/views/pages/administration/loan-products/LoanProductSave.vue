@@ -112,7 +112,6 @@ const loadProduct = async () => {
   try {
     const { data } = await LoanProductService.show(props.id ?? 0);
     model.value.form = mapProductSavePayloadToLoanProduct(data);
-    console.log(model.value.form);
   } catch (error) {
     showApiError(error as AxiosError);
   }

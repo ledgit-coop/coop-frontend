@@ -22,14 +22,14 @@ import Dropdown from 'primevue/dropdown';
 import { onMounted, ref, watch } from 'vue';
 
 interface Props {
-  modelValue?: string;
+  modelValue?: number | string;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue']);
 const { showApiError } = useAlert();
 const guarantors = ref<GuarantorDropdown[]>([]);
-const guarantor = ref<string>();
+const guarantor = ref<string | number>();
 const loading = ref(false);
 
 onMounted(() => {});

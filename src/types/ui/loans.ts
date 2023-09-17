@@ -1,5 +1,6 @@
+import type { LoanFeeTemplate, LoanFeeTemplateForm } from './loan-fee-templates';
 import type { LoanProduct } from './loan-products';
-import type { Member, MemberAccount } from './members';
+import type { Member, MemberAccount, MemberLoanSchedule } from './members';
 
 export interface LoanType {
   name: string;
@@ -55,6 +56,14 @@ export interface Loan {
   guarantor_second?: LoanGuarantor;
 
   released?: boolean;
+  loan_fees?: LoanFee[];
+
+  released_amount?: number;
+  interest_amount?: number;
+  due_amount?: number;
+  outstanding?: number;
+
+  loan_schedules?: MemberLoanSchedule[];
 }
 
 export interface LoanForm {
@@ -85,6 +94,7 @@ export interface LoanForm {
   guarantor_first_id?: string;
   guarantor_second_id?: string;
   loan_term?: LoanTermForm;
+  loan_fees?: LoanFee[];
 }
 
 export interface LoanTermForm {
@@ -98,6 +108,12 @@ export interface LoanTermForm {
   repayment_cycle?: string | null;
   number_of_repayments?: number | null;
   repayment_mode?: string | null;
+}
+
+export interface LoanFee extends LoanFeeTemplateForm {
+  amount?: number;
+  loan_product_template?: LoanFeeTemplate;
+  loan_fee_template?: LoanFeeTemplate;
 }
 
 export interface LoanSchedule {
@@ -115,6 +131,14 @@ export interface LoanCalculator {
   total_principal?: number;
   total_interest?: number;
   total_payment?: number;
+  fees?: {
+    name?: string;
+    amount?: number;
+  }[];
+  released_amount?: number;
+  amortization_starting_date?: string;
+  maturity_date?: string;
+  released_date?: string;
 }
 
 export interface LoanGuarantor {
@@ -124,4 +148,18 @@ export interface LoanGuarantor {
   middle_name?: string | null; // Marked as optional with `?`
   last_name: string;
   contact?: string | null; // Marked as optional with `?`
+}
+
+export interface LoanSummaryTable {
+  released_date?: string;
+  first_amortization_date?: string;
+  maturity_date?: string;
+  principal?: number;
+  interest?: number;
+  payment?: number;
+  released_amount?: number;
+  fees?: {
+    name?: string;
+    amount?: number;
+  }[];
 }

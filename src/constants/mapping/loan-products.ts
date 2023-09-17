@@ -16,7 +16,9 @@ export function mapLoanProductToProductSavePayload(loanProduct: LoanProductForm)
     default_loan_duration: loanProduct.loan_term?.loan_duration || null,
     loan_duration_type: loanProduct.loan_term?.loan_duration_type || null,
     repayment_cycle: loanProduct.loan_term?.repayment_cycle || null,
-    number_of_repayments: loanProduct.loan_term?.number_of_repayments || null,
+    default_number_of_repayments: loanProduct.loan_term?.number_of_repayments || null,
+    repayment_mode: loanProduct.loan_term?.repayment_mode || null,
+    loan_product_fees: loanProduct.loan_product_fees ?? [],
   };
 
   return productSavePayload;
@@ -32,15 +34,16 @@ export function mapProductSavePayloadToLoanProduct(productSavePayload: ProductSa
     loan_duration: productSavePayload.default_loan_duration || null,
     loan_duration_type: productSavePayload.loan_duration_type || null,
     repayment_cycle: productSavePayload.repayment_cycle || null,
-    number_of_repayments: productSavePayload.number_of_repayments || null,
+    number_of_repayments: productSavePayload.default_number_of_repayments || null,
+    repayment_mode: productSavePayload.repayment_mode || null,
   };
-
   const loanProductForm: LoanProductForm = {
     name: productSavePayload.name ?? '',
     default_principal_amount: productSavePayload.default_principal_amount || null,
     min_principal_amount: productSavePayload.min_principal_amount || null,
     max_principal_amount: productSavePayload.max_principal_amount || null,
     loan_term: loanTermForm,
+    loan_product_fees: productSavePayload.loan_product_fees ?? [],
   };
 
   return loanProductForm;
@@ -57,6 +60,6 @@ export function mapLoanProductToTerms(product: LoanProduct): LoanTermForm {
     loan_interest: product.default_loan_interest,
     number_of_repayments: product.default_number_of_repayments,
     loan_duration_type: product.loan_duration_type,
-    repayment_mode: product.repayment_cycle,
+    repayment_mode: product.repayment_mode,
   };
 }

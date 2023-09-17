@@ -6,7 +6,7 @@
     ></PageContentHeader>
   </div>
 
-  <div class="field col-6">
+  <div class="field col-12 lg:col-4">
     <label for="interest-method">Interest Method</label>
     <Dropdown
       showClear
@@ -91,16 +91,18 @@
     <span class="p-input-icon-right">
       <i class="pi pi-percentage" />
       <InputNumber
+        :minFractionDigits="2"
+        :maxFractionDigits="3"
         placeholder="Loan Interest"
         v-model="data.form.loan_interest"
         validate="loan_interest"
         v-validation="validation"
       />
-      <FieldErrorMessage
-        :validation="validation"
-        field="loan_interest"
-      />
     </span>
+    <FieldErrorMessage
+      :validation="validation"
+      field="loan_interest"
+    />
   </div>
 
   <div class="col-12">
@@ -133,6 +135,8 @@
   <div class="field col-12 lg:col-4">
     <label for="loan-duration-type">Duration</label>
     <InputNumber
+      :minFractionDigits="2"
+      :maxFractionDigits="3"
       showButtons
       id="loan-duration-type"
       v-model="data.form.loan_duration"
@@ -176,6 +180,8 @@
   <div class="field col-12 lg:col-4">
     <label for="number-repayments">Number of Repayments</label>
     <InputNumber
+      :minFractionDigits="2"
+      :maxFractionDigits="3"
       showButtons
       id="number-repayments"
       v-model="data.form.number_of_repayments"
@@ -218,11 +224,11 @@
           >
         </div>
       </div>
+      <FieldErrorMessage
+        :validation="validation"
+        field="repayment_mode"
+      />
     </div>
-    <FieldErrorMessage
-      :validation="validation"
-      field="repayment_mode"
-    />
   </template>
 
   <template v-if="!hideDisbursementChannel">
@@ -253,12 +259,11 @@
           >
         </div>
       </div>
+      <FieldErrorMessage
+        :validation="validation"
+        field="disbursed_channel"
+      />
     </div>
-
-    <FieldErrorMessage
-      :validation="validation"
-      field="disbursed_channel"
-    />
   </template>
 </template>
 

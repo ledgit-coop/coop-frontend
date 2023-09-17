@@ -3,6 +3,7 @@ import type { AxiosPromise } from 'axios';
 import apiClient from '@/http-common';
 import type { Loan } from '@/types/ui/loans';
 import type { MemberLoanStatus } from '@/constants/ui/members';
+import type { MemberLoanSchedule } from '@/types/ui/members';
 
 const PATH = '/api/loans';
 class LoanService {
@@ -28,6 +29,10 @@ class LoanService {
 
   activeLoans(member_id?: string): AxiosPromise<Loan[]> {
     return apiClient.get(`${PATH}/active-loans/${member_id}`);
+  }
+
+  schedule(id: number): AxiosPromise<MemberLoanSchedule[]> {
+    return apiClient.get(`${PATH}/schedule/${id}`);
   }
 
   destroy(id: number): AxiosPromise<Loan> {

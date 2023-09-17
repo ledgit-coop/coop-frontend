@@ -1,4 +1,5 @@
 import type { Account, AccountTransaction } from './accounts';
+import type { Loan } from './loans';
 
 export interface MemberForm {
   surname?: string;
@@ -43,13 +44,7 @@ export interface Member extends MemberForm {
     balance: number;
     latest_transaction: AccountTransaction;
   };
-  savings_accounts: {
-    id: number;
-    balance: number;
-    name?: string;
-    earn_interest_per_anum?: number;
-    latest_transaction: AccountTransaction;
-  }[];
+  savings_accounts: MemberAccount[];
 }
 
 export interface MemberAddress {
@@ -142,10 +137,25 @@ export interface MemberLoanTable {
 }
 
 export interface MemberLoanSchedule {
+  id: number;
+  loan_id: number;
   due_date: string;
-  amount_due: string;
-  late_fees: string;
-  amount_paid: string;
+  principal_amount: number;
+  interest_amount: number;
+  fee_amount: number;
+  penalty_amount: number;
+  due_amount: number;
+  principal_balance: number;
+  is_maturity: number;
+  paid: number;
+  overdue: number;
+  amount_paid: number | null;
+  transaction_id: number | null;
+  due_humans?: string;
+  created_at: string;
+  updated_at: string;
+  almost_due?: boolean;
+  loan?: Loan;
 }
 
 export interface MemberAccountTransactionForm {
@@ -173,5 +183,6 @@ export interface MemberAccount {
   penalty_below_maintaining_duration?: number | null;
   created_at: string;
   updated_at: string;
+  latest_transaction?: AccountTransaction;
   account?: Account;
 }

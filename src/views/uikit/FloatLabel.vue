@@ -98,6 +98,8 @@ const searchCountry = (event) => {
       <div class="field col-12 md:col-4">
         <span class="p-float-label">
           <InputNumber
+            :minFractionDigits="2"
+            :maxFractionDigits="3"
             id="inputnumber"
             v-model="value6"
           ></InputNumber>

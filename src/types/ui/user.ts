@@ -11,3 +11,10 @@ export interface AuthUser extends User {
 }
 
 export interface UsersTable extends User {}
+
+export interface UserSaveForm {
+  name?: string;
+  email?: string;
+  password?: string;
+  password_confirmation?: string; // Optional field for confirmation
+}

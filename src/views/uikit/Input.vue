@@ -174,6 +174,8 @@ const searchCountry = (event) => {
 
         <h5>Spinner</h5>
         <InputNumber
+          :minFractionDigits="2"
+          :maxFractionDigits="3"
           v-model="inputNumberValue"
           show-buttons
           mode="decimal"

@@ -1,3 +1,4 @@
+import type { LoanFeeTemplate, LoanFeeTemplateForm } from './loan-fee-templates';
 import type { LoanTermForm } from './loans';
 
 export interface LoanProductForm {
@@ -6,6 +7,7 @@ export interface LoanProductForm {
   min_principal_amount?: number | null;
   max_principal_amount?: number | null;
   loan_term?: LoanTermForm;
+  loan_product_fees?: LoanProductFee[];
 }
 
 export interface LoanProduct {
@@ -27,4 +29,9 @@ export interface LoanProduct {
   repayment_mode: string | null;
   created_at: string;
   updated_at: string;
+  loan_product_fees?: LoanProductFee[];
+}
+
+export interface LoanProductFee extends LoanFeeTemplateForm {
+  loan_product_template?: LoanFeeTemplate;
 }

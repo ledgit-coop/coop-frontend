@@ -76,11 +76,11 @@ const memberAccounts = ref<DropdownOption[]>([]);
 
 const accountsWidget = computed<MemberSavingsAccountWidgetItem[]>(() => [
   ...(props.member?.savings_accounts?.map((savings) => ({
-    type: savings.name ?? '',
+    type: savings.account?.name ?? '',
     balance: savings.balance ?? 0,
     last_deposit_date: dateFormat(savings.latest_transaction?.transaction_date ?? null, DATE_FORMAT_DATE),
     last_deposit_amount: savings.latest_transaction?.amount ?? 0,
-    earn_interest_per_anum: savings.earn_interest_per_anum,
+    earn_interest_per_anum: savings.earn_interest_per_anum ?? 0,
   })) ?? []),
 ]);
 

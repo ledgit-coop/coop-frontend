@@ -110,6 +110,8 @@ const searchCountry = (event) => {
             <div class="field">
               <label for="inputnumber">InputNumber</label>
               <InputNumber
+                :minFractionDigits="2"
+                :maxFractionDigits="3"
                 id="inputnumber"
                 v-model="value6"
                 class="p-invalid"

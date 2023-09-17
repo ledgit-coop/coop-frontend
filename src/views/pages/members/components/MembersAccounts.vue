@@ -3,53 +3,93 @@
     title="Accounts"
     size="h5"
   >
-    <Dropdown
-      showClear
-      filter
-      option-value="value"
-      option-label="label"
-      placeholder="Select a Status"
-    >
-    </Dropdown>
-
-    <Dropdown
-      showClear
-      filter
-      option-value="value"
-      option-label="label"
-      placeholder="Select a Opened Year"
-    >
-    </Dropdown>
   </PageContentHeader>
 
   <DataTable
     :value="accounts"
+    :loading="loadings.accounts_table"
     table-style="min-width: 50rem"
     scrollable
+    export-filename="accounts"
+    ref="accountsTable"
   >
+    <template #header>
+      <div class="flex justify-content-between flex-column sm:flex-row">
+        <Button
+          type="button"
+          icon="pi pi-download"
+          label="Export"
+          class="p-button-outlined mb-2"
+          size="small"
+          @click="$refs?.accountsTable?.exportCSV()"
+        />
+
+        <div class="grid gap-1 m-0 align-items-start ml-auto">
+          <Dropdown
+            showClear
+            filter
+            v-model="filters.status"
+            option-value="value"
+            option-label="label"
+            :options="accountStatuses"
+            placeholder="Select a Status"
+            @change="loadAccounts"
+          >
+          </Dropdown>
+
+          <Dropdown
+            showClear
+            filter
+            option-value="value"
+            option-label="label"
+            v-model="filters.year"
+            :options="years"
+            placeholder="Select a Opened Year"
+            @change="loadAccounts"
+          >
+          </Dropdown>
+        </div>
+      </div>
+    </template>
+
+    <template #empty> No records found. </template>
+
     <Column
       field="account_number"
       header="Account No."
       sortable
     ></Column>
     <Column
+      field="account_holder"
+      header="Holder"
+    ></Column>
+
+    <Column
       field="type"
       header="Type"
       sortable
-    ></Column>
+    >
+      <template #body="slotProps">
+        {{ slotProps.data.account?.name }}
+      </template>
+    </Column>
     <Column
-      field="opened_date"
+      field="created_at"
       header="Opened Date"
       sortable
-    ></Column>
+    >
+      <template #body="slotProps">
+        {{ dateFormat(slotProps.data.created_at) }}
+      </template>
+    </Column>
     <Column
-      field="current_balance"
+      field="balance"
       header="Current Balance"
-    ></Column>
-    <Column
-      field="passbook_count"
-      header="Passbook(s)"
-    ></Column>
+    >
+      <template #body="slotProps">
+        {{ formatCurrency(slotProps.data.balance) }}
+      </template>
+    </Column>
 
     <Column
       field="status"
@@ -100,15 +140,9 @@
     :style="{ width: '50vw' }"
   >
     <PageContentHeader
-      :title="selected_account?.type"
+      :title="selected_account?.account?.name"
       size="h5"
     >
-      <Calendar
-        showButtonBar
-        selection-mode="range"
-        :manual-input="false"
-        placeholder="Select a Date"
-      />
     </PageContentHeader>
 
     <AccountTransactionsTable
@@ -119,11 +153,10 @@
 </template>
 <script setup lang="ts">
 import DataTable from 'primevue/datatable';
-import { onMounted, ref } from 'vue';
-import type { Member, MemberLoanTable } from '@/types/ui/members';
+import { computed, ref, watch } from 'vue';
+import type { Member, MemberAccount } from '@/types/ui/members';
 import type { AccountTransaction } from '@/types/ui/accounts';
 
-import AccountsService from '@/service/AccountsService';
 import PageContentHeader from '@components/PageContentHeader.vue';
 import Button from 'primevue/button';
 import { AccountStatus } from '@/constants/ui/accounts';
@@ -133,43 +166,62 @@ import Dialog from 'primevue/dialog';
 import MembersService from '@/service/MembersService';
 import useAlert from '@/composables/useAlert';
 import type { AxiosError } from 'axios';
-
-const showModal = ref(false);
-const accounts = ref<MemberLoanTable[]>();
-const selected_account = ref<undefined | MemberLoanTable>();
-
-const selected_account_transactions = ref<AccountTransaction[]>();
+import { dateFormat, formatCurrency, generateYearListDropdown } from '@/helpers';
+import moment from 'moment';
+import type { DropdownOption } from '@/types/ui';
 
 interface Props {
   member?: Member;
 }
 
+const filters = ref({
+  year: moment().get('year').toString(),
+  status: undefined,
+});
+
+const years = computed(() => generateYearListDropdown());
+const accountStatuses = computed<DropdownOption[]>(() => [
+  { label: 'Active', value: AccountStatus.ACTIVE },
+  { label: 'Dormant', value: AccountStatus.DORMANT },
+]);
+
+const showModal = ref(false);
+const accounts = ref<MemberAccount[]>();
+const selected_account = ref<undefined | MemberAccount>();
+const selected_account_transactions = ref<AccountTransaction[]>();
+
 const props = defineProps<Props>();
 const loadings = ref({
   transaction_table: false,
+  accounts_table: false,
 });
 const { showApiError } = useAlert();
 
-onMounted(async () => {});
+watch(
+  () => props.member?.id,
+  (value) => {
+    if (value) {
+      loadAccounts();
+    }
+  }
+);
 
-onMounted(async () => {
-  accounts.value = await AccountsService.getMemberAccounts('12');
-});
-
-// watch(
-//   () => props.member?.id,
-//   (value) => {
-//     if (value) {
-//       handleGetTransactions();
-//     }
-//   }
-// );
+const loadAccounts = async () => {
+  loadings.value.accounts_table = true;
+  try {
+    const { data } = await MembersService.getAccounts(Number(props.member?.id ?? 0), { ...filters.value });
+    accounts.value = data;
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.accounts_table = false;
+};
 
 const handleGetTransactions = async () => {
   loadings.value.transaction_table = true;
   try {
     const { data } = await MembersService.getMemberAccountTrasactions(props.member?.id ?? '', {
-      member_account_id: '2',
+      member_account_id: selected_account.value?.id.toString() ?? '',
     });
 
     selected_account_transactions.value = data;
@@ -178,7 +230,7 @@ const handleGetTransactions = async () => {
   }
   loadings.value.transaction_table = false;
 };
-const handleViewTransactionClick = (value: MemberLoanTable) => {
+const handleViewTransactionClick = (value: MemberAccount) => {
   selected_account.value = value;
   showModal.value = true;
   handleGetTransactions();

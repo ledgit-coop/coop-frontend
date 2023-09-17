@@ -1,10 +1,16 @@
-import type { MemberLoanTable } from '@/types/ui/members';
+import type { ListLoanRepaymentResponse, LoanRepaymentPayload } from '@/types/api/loan-repayments';
+import type { LoanListPayload } from '@/types/api/loans';
 import type { AxiosPromise } from 'axios';
-import axios from 'axios';
+import apiClient from '@/http-common';
 
+const PATH = '/api/loan-repayments';
 class LoanRepaymentService {
-  list(params?: Record<string, any>): AxiosPromise<MemberLoanTable[]> {
-    return axios.get('/demo/data/loans-repayment.json', { params });
+  list(params?: LoanListPayload): AxiosPromise<ListLoanRepaymentResponse> {
+    return apiClient.get(`${PATH}`, { params });
+  }
+
+  store(schedule_id?: string, params?: LoanRepaymentPayload): AxiosPromise<ListLoanRepaymentResponse> {
+    return apiClient.post(`${PATH}/${schedule_id}`, params);
   }
 }
 

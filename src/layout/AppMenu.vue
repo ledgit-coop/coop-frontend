@@ -4,8 +4,9 @@ import { ref } from 'vue';
 import AppMenuItem from '@/layout/AppMenuItem.vue';
 import {
   ROUTE_LOAN_CALCULATOR,
-  ROUTE_NAME_COLLECTIONS,
   ROUTE_NAME_LOANS,
+  ROUTE_NAME_LOAN_FEES,
+  ROUTE_NAME_LOAN_GUARANTORS,
   ROUTE_NAME_LOAN_PRODUCTS,
   ROUTE_NAME_MEMBERS,
   ROUTE_NAME_REPAYMENTS,
@@ -23,14 +24,8 @@ const model = ref<any>([
       { label: 'Members', icon: 'pi pi-fw pi-id-card', to: { name: ROUTE_NAME_MEMBERS } },
       { label: 'Loans', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS } },
       { label: 'Repayments', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_REPAYMENTS } },
-      { label: 'Collections', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_COLLECTIONS } },
       { label: 'Loan Calculator', icon: 'pi pi-fw pi-history', to: { name: ROUTE_LOAN_CALCULATOR } },
-      {
-        label: 'Due & Missed Loans',
-        icon: 'pi pi-fw pi-history',
-        to: { name: ROUTE_NAME_LOANS },
-        class: 'line-through pointer-events-none',
-      },
+
       {
         label: 'Share Capitals',
         icon: 'pi pi-fw pi-globe',
@@ -58,11 +53,17 @@ const model = ref<any>([
       { label: 'Users', icon: 'pi pi-fw pi-users', to: { name: ROUTE_NAME_USERS } },
       { label: 'Loan Products', icon: 'pi pi-fw pi-book', to: { name: ROUTE_NAME_LOAN_PRODUCTS } },
       {
-        label: 'Fees',
+        label: 'Loan Fees',
         icon: 'pi pi-fw pi-book',
-        to: '/admin/loan-products',
-        class: 'line-through pointer-events-none',
+        to: { name: ROUTE_NAME_LOAN_FEES },
       },
+
+      {
+        label: 'Loan Guarantors',
+        icon: 'pi pi-fw pi-book',
+        to: { name: ROUTE_NAME_LOAN_GUARANTORS },
+      },
+
       {
         label: 'Account Types',
         icon: 'pi pi-fw pi-book',
@@ -102,18 +103,6 @@ const model = ref<any>([
         class="menu-separator"
       ></li>
     </template>
-    <li>
-      <a
-        href="https://www.primefaces.org/primeblocks-vue/#/"
-        target="_blank"
-      >
-        <img
-          src="/layout/images/banner-primeblocks.png"
-          alt="Prime Blocks"
-          class="w-full mt-3"
-        />
-      </a>
-    </li>
   </ul>
 </template>
 

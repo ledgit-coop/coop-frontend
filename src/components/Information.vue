@@ -1,7 +1,7 @@
 <template>
-  <div class="p-datatable-wrapper">
+  <div class="pr-3 pb-3">
     <table
-      class="p-datatable-table"
+      class="info-table"
       :class="tableClass"
     >
       <tbody class="p-datatable-tbody">
@@ -46,3 +46,20 @@ const display = (value: string | string[]) => {
   return t.map((r) => (!isEmptyText(r) ? r : '---')).join(' ');
 };
 </script>
+
+<style lang="scss" scoped>
+.info-table {
+  border-collapse: collapse;
+  width: 100%;
+
+  th,
+  td {
+    border: 1px solid rgba(182, 182, 182, 0.633);
+    padding: 0.3rem;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+}
+</style>

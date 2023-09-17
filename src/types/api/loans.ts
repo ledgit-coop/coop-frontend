@@ -1,3 +1,4 @@
+import type { LoanProductFee } from '../ui/loan-products';
 import type { Loan } from '../ui/loans';
 
 export interface LoanApplicationPayload {
@@ -32,10 +33,11 @@ export interface LoanApplicationPayload {
   work_industry?: string;
   applied_date?: string;
   released_date?: string;
+  loan_fees?: LoanProductFee[];
 }
 
 export interface LoanListPayload {
-  filters: any;
+  filters?: any;
   member_id?: string;
 }
 
@@ -53,4 +55,8 @@ export interface LoanCalculatorRequest {
   loan_duration_type?: string | null;
   loan_interest_period?: string | null;
   released_date?: string | null;
+  fees: {
+    loan_fee_template_id?: number;
+    fee?: number;
+  }[];
 }

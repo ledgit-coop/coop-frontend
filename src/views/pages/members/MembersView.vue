@@ -62,6 +62,7 @@
               label="Print"
               rounded
               outlined
+              disabled
             ></Button>
 
             <Button
@@ -113,6 +114,7 @@
               outlined
               severity="danger"
               @click="handleTerminateClick"
+              disabled
             ></Button>
           </div>
         </div>
@@ -224,7 +226,17 @@
               <MembersAccounts :member="member" />
             </TabPanel>
 
-            <TabPanel header="Logs">
+            <TabPanel
+              :disabled="true"
+              header="Income"
+            >
+              <MembersIncome />
+            </TabPanel>
+
+            <TabPanel
+              :disabled="true"
+              header="Logs"
+            >
               <MembersLogs />
             </TabPanel>
           </TabView>
@@ -274,6 +286,7 @@ import type { AxiosError } from 'axios';
 import InlineMessage from 'primevue/inlinemessage';
 import LoanSave from '@/components/LoanSave.vue';
 import Image from 'primevue/image';
+import MembersIncome from './components/MembersIncome.vue';
 
 interface ModalsVisibility {
   apply_form: boolean;

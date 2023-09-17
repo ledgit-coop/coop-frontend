@@ -8,37 +8,49 @@
     <div class="grid p-fluid formgrid">
       <div class="field col-12">
         <Label for="name">Due Amount</Label>
-        <InputText
+        <InputNumber
+          :minFractionDigits="2"
+          :maxFractionDigits="3"
           id="lastname2"
           type="text"
-          value="1,200.32"
+          :model-value="dueAmount"
           readonly
         />
       </div>
 
       <div class="field col-12">
         <Label
-          for="name"
+          for="amount-paid"
           required
           >Amount Paid</Label
         >
-        <InputText
-          id="lastname2"
-          type="text"
+        <InputNumber
+          :minFractionDigits="2"
+          :maxFractionDigits="3"
+          id="amount-paid"
+          v-model="model.amount_paid"
+          validate="amount_paid"
+          v-validation="validation"
+        />
+
+        <FieldErrorMessage
+          :validation="validation"
+          field="amount_paid"
         />
       </div>
 
-      <div class="col-12">
-        <PageContentHeader
-          title="Payment Channels"
-          size="h6"
-        ></PageContentHeader>
+      <div class="col-12 pb-3">
+        <Label
+          for="payment-channel"
+          required
+          >Payment Channel</Label
+        >
       </div>
 
       <div class="field col-12 flex flex-wrap gap-3">
         <div class="flex align-items-center">
           <RadioButton
-            v-model="payment_channel"
+            v-model="model.payment_channel"
             input-id="application-type"
             name="loan_type"
             value="payroll"
@@ -51,7 +63,7 @@
         </div>
         <div class="flex align-items-center">
           <RadioButton
-            v-model="payment_channel"
+            v-model="model.payment_channel"
             input-id="application-type"
             name="loan_type"
             value="cash"
@@ -65,7 +77,7 @@
 
         <div class="flex align-items-center">
           <RadioButton
-            v-model="payment_channel"
+            v-model="model.payment_channel"
             input-id="application-type"
             name="loan_type"
             value="cheque"
@@ -79,7 +91,7 @@
 
         <div class="flex align-items-center">
           <RadioButton
-            v-model="payment_channel"
+            v-model="model.payment_channel"
             input-id="application-type"
             name="loan_type"
             value="online-transfer"
@@ -93,7 +105,7 @@
 
         <div class="flex align-items-center">
           <RadioButton
-            v-model="payment_channel"
+            v-model="model.payment_channel"
             input-id="application-type"
             name="loan_type"
             value="e-wallet"
@@ -105,7 +117,12 @@
           >
         </div>
       </div>
-
+      <div class="col-12">
+        <FieldErrorMessage
+          :validation="validation"
+          field="payment_channel"
+        />
+      </div>
       <div class="p-1"></div>
 
       <div class="field col-12">
@@ -113,6 +130,7 @@
         <InputText
           id="lastname2"
           type="text"
+          v-model="model.payment_reference"
           placeholder="Reference Number"
         />
       </div>
@@ -121,37 +139,11 @@
         <Label for="name">Remarks</Label>
         <InputText
           id="lastname2"
+          v-model="model.payment_remarks"
           type="text"
           placeholder="Remarks"
         />
       </div>
-
-      <template v-if="payment_channel === 'payroll'">
-        <div class="field col-6">
-          <Label
-            for="name"
-            required
-            >Amount Withdrawn from Payroll</Label
-          >
-          <InputText
-            id="lastname2"
-            type="text"
-            placeholder="Amount"
-          />
-        </div>
-        <div class="field col-6">
-          <Label
-            for="name"
-            required
-            >Payroll Remaining Balance</Label
-          >
-          <InputText
-            id="lastname2"
-            type="text"
-            placeholder="Amount"
-          />
-        </div>
-      </template>
     </div>
 
     <template #footer>
@@ -165,10 +157,13 @@
         label="Save"
         icon="pi pi-save"
         autofocus
+        @click="handleSave"
+        :loading="loadings.save"
       />
       <Button
         label="Save & Print Receipt"
         icon="pi pi-save"
+        disabled
         autofocus
       />
     </template>
@@ -176,30 +171,55 @@
 </template>
 <script setup lang="ts">
 import Dialog from 'primevue/dialog';
-import { onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import Button from 'primevue/button';
-import PageContentHeader from '@/components/PageContentHeader.vue';
 import Label from '@/components/Label.vue';
-import type { LoanForm } from '@/types/ui/loans';
+import type InputNumber from 'primevue/inputnumber';
+import useValidation from '@/composables/useValidation';
+import { required } from '@vuelidate/validators';
+import FieldErrorMessage from '@/components/FieldErrorMessage.vue';
+import useAlert from '@/composables/useAlert';
+import LoanRepaymentService from '@/service/LoanRepaymentService';
+import type { AxiosError } from 'axios';
 
 interface Props {
   visible: boolean;
-  memberId?: string;
+  dueAmount?: number;
+  scheduleId?: string | number;
 }
 
-const payment_channel = ref();
+const { showApiError, showError, showSuccess } = useAlert();
 const props = defineProps<Props>();
-const emit = defineEmits(['update:visible']);
-const model = reactive<LoanForm>({});
+const emit = defineEmits(['update:visible', 'updated']);
+const model = reactive({
+  amount_paid: undefined,
+  payment_remarks: undefined,
+  payment_reference: undefined,
+  payment_channel: undefined,
+});
 const showModal = ref(false);
+const loadings = ref({
+  save: false,
+});
+const form = computed(() => model);
+const { validation } = useValidation({
+  rules: {
+    amount_paid: { required },
+    payment_channel: { required },
+  },
+  model: form,
+  globalConfig: {
+    $autoDirty: true,
+  },
+});
 
 onMounted(() => {
-  setMemberId();
   showModal.value = props.visible ?? false;
 });
 
 watch(showModal, (value) => {
   emit('update:visible', value);
+  reset();
 });
 
 watch(
@@ -209,14 +229,35 @@ watch(
   }
 );
 
-watch(
-  () => props.memberId,
-  () => {
-    setMemberId();
+const handleSave = async () => {
+  await validation.value?.$validate();
+  if (validation.value?.$invalid) {
+    showError('Please complete the required fields.');
+    return;
   }
-);
+  loadings.value.save = true;
+  try {
+    await LoanRepaymentService.store(props.scheduleId?.toString(), {
+      amount_paid: model.amount_paid ?? 0,
+      payment_remarks: model.payment_remarks,
+      payment_reference: model.payment_reference,
+      payment_channel: model.payment_channel,
+    });
+    emit('updated');
+    showModal.value = false;
 
-const setMemberId = () => {
-  model.member_id = props.memberId;
+    showSuccess('Payment successfully saved.');
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.save = false;
+};
+
+const reset = () => {
+  validation.value?.$reset();
+  model.amount_paid = undefined;
+  model.payment_remarks = undefined;
+  model.payment_reference = undefined;
+  model.payment_channel = undefined;
 };
 </script>

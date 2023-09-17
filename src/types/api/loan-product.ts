@@ -1,5 +1,5 @@
 import type { Pagination } from '../ui';
-import type { LoanProduct } from '../ui/loan-products';
+import type { LoanProduct, LoanProductFee } from '../ui/loan-products';
 
 export interface LoanProductListPayload {
   filters: any;
@@ -22,5 +22,7 @@ export interface ProductSavePayload {
   default_loan_duration?: number | null;
   loan_duration_type?: string | null;
   repayment_cycle?: string | null;
-  number_of_repayments?: number | null;
+  default_number_of_repayments?: number | null;
+  repayment_mode?: string | null;
+  loan_product_fees?: LoanProductFee[];
 }

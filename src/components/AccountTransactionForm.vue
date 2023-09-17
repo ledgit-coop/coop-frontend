@@ -71,9 +71,10 @@
       >
 
       <InputNumber
+        :minFractionDigits="2"
+        :maxFractionDigits="3"
         id="amount"
         input-id="locale-user"
-        :min-fraction-digits="2"
         v-validation="validation"
         validate="amount"
         v-model="data.form.amount"

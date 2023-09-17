@@ -13,3 +13,14 @@
 .p-dropdown .p-dropdown-clear-icon {
   width: 0.7rem;
 }
+
+table .almost-due {
+  background-color: antiquewhite !important;
+}
+table .overdue {
+  background-color: rgb(250, 220, 215) !important;
+}
+
+table .paid {
+  background-color: rgb(230, 243, 226) !important;
+}

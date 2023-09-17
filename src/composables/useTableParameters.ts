@@ -11,8 +11,6 @@ export default function useTableParameters(filters: Ref<any>) {
   const onSort = (event: any) => {
     sortField.value = event.sortField;
     sortOrder.value = event.sortOrder < 0 ? 'asc' : 'desc';
-
-    console.log(params.value);
   };
 
   const paginate = (pagination: Pagination) => {

@@ -3,6 +3,7 @@ import apiClient from '@/http-common';
 import type { DropdownOption, GuarantorDropdown } from '@/types/ui';
 import type { AccountType } from '@/constants/ui/accounts';
 import type { LoanCalculatorRequest } from '@/types/api/loans';
+import type { LoanFeeTemplate } from '@/types/ui/loan-fee-templates';
 
 const PATH = '/api/utility';
 class UtilityService {
@@ -32,6 +33,10 @@ class UtilityService {
 
   loanCalculator(params: LoanCalculatorRequest): AxiosPromise {
     return apiClient.get(`${PATH}/loan-calculator`, { params });
+  }
+
+  getLoanFees(): AxiosPromise<LoanFeeTemplate[]> {
+    return apiClient.get(`${PATH}/loan-fee-templates`);
   }
 
   getMemberAccountHoldersDropdown(member_id: string): AxiosPromise<DropdownOption[]> {

@@ -122,6 +122,8 @@
         >Zip Code</Label
       >
       <InputNumber
+        :minFractionDigits="2"
+        :maxFractionDigits="3"
         id="zip-code"
         v-model="data.form.zip_code"
         validate="zip_code"
@@ -229,7 +231,6 @@ const { validation } = useValidation({
 
 onMounted(() => {
   data.form = props.modelValue ?? {};
-  console.log(validation);
 });
 
 watch(

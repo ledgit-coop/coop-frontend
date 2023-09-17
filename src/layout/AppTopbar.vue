@@ -126,13 +126,6 @@ const isOutsideClicked = (event: any) => {
     >
       <button
         class="p-link layout-topbar-button"
-        @click="onTopBarMenuButton()"
-      >
-        <i class="pi pi-calendar"></i>
-        <span>Calendar</span>
-      </button>
-      <button
-        class="p-link layout-topbar-button"
         @click="toggle"
       >
         <i class="pi pi-user"></i>
@@ -145,14 +138,6 @@ const isOutsideClicked = (event: any) => {
         :model="items"
         :popup="true"
       />
-
-      <button
-        class="p-link layout-topbar-button"
-        @click="onSettingsClick()"
-      >
-        <i class="pi pi-cog"></i>
-        <span>Settings</span>
-      </button>
     </div>
   </div>
 </template>

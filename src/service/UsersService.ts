@@ -1,5 +1,5 @@
 import apiClient from '@/http-common';
-import type { ListUserResponse } from '@/types/api/users';
+import type { ListUserResponse, UserSavePayload } from '@/types/api/users';
 import type { User } from '@/types/ui/user';
 import type { AxiosPromise } from 'axios';
 
@@ -9,9 +9,21 @@ class UsersService {
     return apiClient.get(`${PATH}`, { params });
   }
 
-  show(id: string): AxiosPromise<User> {
+  store(params: UserSavePayload): AxiosPromise<User> {
+    return apiClient.post(`${PATH}`, params);
+  }
+
+  show(id: number): AxiosPromise<User> {
     return apiClient.get(`${PATH}/${id}`);
   }
+
+  update(id: number, params: UserSavePayload): AxiosPromise<User> {
+    return apiClient.patch(`${PATH}/${id}`, params);
+  }
+
+  destroy(id: number): AxiosPromise {
+    return apiClient.delete(`${PATH}/${id}`);
+  }
 }
-1;
+
 export default new UsersService();

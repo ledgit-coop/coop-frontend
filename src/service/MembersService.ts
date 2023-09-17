@@ -6,7 +6,7 @@ import type {
   PostMemberPayload,
 } from '@/types/api/member';
 import type { AccountTransaction } from '@/types/ui/accounts';
-import type { Member } from '@/types/ui/members';
+import type { Member, MemberAccount } from '@/types/ui/members';
 import type { AxiosPromise } from 'axios';
 
 const PATH = '/api/members';
@@ -27,12 +27,16 @@ class MembersService {
     return apiClient.patch(`/api/members/${id}`, params);
   }
 
+  postAttendedOrientation(member_number: string): AxiosPromise {
+    return apiClient.post(`${PATH}/update/orientation/${member_number}`);
+  }
+
   postAddAccount(member_number: string, account_id: string, account_holder: string): AxiosPromise {
     return apiClient.post(`${PATH}/accounts/add/${member_number}/${account_id}`, { account_holder });
   }
 
-  postAttendedOrientation(member_number: string): AxiosPromise {
-    return apiClient.post(`${PATH}/update/orientation/${member_number}`);
+  getAccounts(member_id: number, params?: Record<string, any>): AxiosPromise<MemberAccount[]> {
+    return apiClient.get(`${PATH}/accounts/${member_id}}`, { params });
   }
 
   postAddAccountTransaction(member_account_id: string, params: PostAddMemberAccountTransactionPayload): AxiosPromise {

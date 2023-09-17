@@ -17,6 +17,7 @@
           :paginator="true"
           :row-hover="true"
           :value="members"
+          export-filename="users"
           class="p-datatable-gridlines"
           data-key="id"
           filter-display="menu"
@@ -27,16 +28,28 @@
           @sort="onSort"
           @page="onPageChange"
         >
+          <template #empty> No records found. </template>
+
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
-              <Button
-                type="button"
-                icon="pi pi-filter-slash"
-                label="Clear"
-                class="p-button-outlined mb-2"
-                size="small"
-                @click="clearFilters()"
-              />
+              <div class="flex gap-2">
+                <Button
+                  type="button"
+                  icon="pi pi-filter-slash"
+                  label="Clear"
+                  class="p-button-outlined mb-2"
+                  size="small"
+                  @click="clearFilters()"
+                />
+                <Button
+                  type="button"
+                  icon="pi pi-download"
+                  label="Export"
+                  class="p-button-outlined mb-2"
+                  size="small"
+                  @click="$refs.table.exportCSV()"
+                />
+              </div>
 
               <div class="grid gap-1 m-0 align-items-start ml-auto">
                 <span class="p-input-icon-left mb-2">
@@ -95,6 +108,7 @@
         </DataTable>
 
         <UsersSave
+          @updated="loadTable"
           :user-id="selected_member?.id"
           v-model:visible="modalsVisibility.create"
         />

@@ -23,6 +23,8 @@
     <div class="field col-12 lg:col-4">
       <label for="min-principal-amount">Minimum</label>
       <InputNumber
+        :minFractionDigits="2"
+        :maxFractionDigits="3"
         showButtons
         id="min-principal-amount"
         placeholder="Min"
@@ -34,6 +36,8 @@
     <div class="field col-12 lg:col-4">
       <label for="default-principal-amount">Default</label>
       <InputNumber
+        :minFractionDigits="2"
+        :maxFractionDigits="3"
         showButtons
         id="default-principal-amount"
         placeholder="Default"
@@ -44,6 +48,8 @@
     <div class="field col-12 lg:col-4">
       <label for="max-principal-amount">Maximum</label>
       <InputNumber
+        :minFractionDigits="2"
+        :maxFractionDigits="3"
         showButtons
         id="max-principal-amount"
         placeholder="Max"
@@ -53,7 +59,7 @@
 
     <LoanTerm v-model="data.form.loan_term" />
 
-    <LoanFeeForm />
+    <LoanFeeForm v-model="data.form.loan_product_fees" />
   </div>
 </template>
 <script setup lang="ts">

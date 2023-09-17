@@ -85,75 +85,12 @@
 
     <template #empty> No records found. </template>
   </DataTable>
-
-  <PageContentHeader
-    class="mt-5"
-    title="Patronage Dividend History"
-    size="h5"
-  >
-    <Dropdown
-      showClear
-      filter
-      option-value="value"
-      option-label="label"
-      placeholder="Select a Year"
-    >
-    </Dropdown>
-  </PageContentHeader>
-
-  <DataTable
-    :value="patronage_history"
-    table-style="min-width: 50rem"
-  >
-    <Column
-      field="transaction_number"
-      header="Transaction No."
-      sortable
-    ></Column>
-    <Column
-      field="year"
-      header="Year"
-      sortable
-    ></Column>
-    <Column
-      field="recorded_share_capital"
-      header="Reflected Share Cap."
-      sortable
-    ></Column>
-    <Column
-      field="percentage"
-      header="Percentage"
-    ></Column>
-    <Column
-      field="released_date"
-      header="Release Date"
-      sortable
-    ></Column>
-
-    <Column
-      field="amount"
-      header="Dividend"
-      sortable
-    ></Column>
-
-    <ColumnGroup type="footer">
-      <Row>
-        <Column
-          footer="Total Dividend Released:"
-          :colspan="5"
-          footer-style="text-align:right"
-        />
-        <Column footer="1,100.00" />
-      </Row>
-    </ColumnGroup>
-    <template #empty> No records found. </template>
-  </DataTable>
 </template>
 <script setup lang="ts">
 import MembersService from '@/service/MembersService';
 import DataTable from 'primevue/datatable';
-import { computed, onMounted, ref, watch } from 'vue';
-import type { MembersShareCapitalPatronageHistory, Member } from '@/types/ui/members';
+import { computed, ref, watch } from 'vue';
+import type { Member } from '@/types/ui/members';
 import PageContentHeader from '@components/PageContentHeader.vue';
 import moment from 'moment';
 import { formatCurrency } from '@/helpers';
@@ -194,11 +131,6 @@ const last_shared_date = computed(() =>
   )
 );
 const transactions = ref<AccountTransaction[]>();
-const patronage_history = ref<MembersShareCapitalPatronageHistory[]>();
-
-onMounted(async () => {
-  // patronage_history.value = await MembersService.getMembersShareCapitalPatronageHistory('1');
-});
 
 watch(
   () => props.member?.share_capital.id,

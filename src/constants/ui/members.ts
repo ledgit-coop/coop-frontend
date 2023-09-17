@@ -20,7 +20,17 @@ export enum MemberLoanStatus {
   PENDING = 'pending',
   APPROVED = 'approved',
   REJECTED = 'rejected',
-  PAID = 'paid',
+  CLOSED = 'closed',
   OVERDUE = 'overdue',
   RELEASED = 'released',
 }
+
+export const MemberLoanStatusDropdowns: DropdownOption[] = [
+  { label: 'Pending', value: MemberLoanStatus.PENDING },
+  { label: 'Evaluation', value: MemberLoanStatus.EVAULUATION },
+  { label: 'Pre-Approved', value: MemberLoanStatus.PRE_APPROVED },
+  { label: 'Approved', value: MemberLoanStatus.APPROVED },
+  { label: 'Rejected', value: MemberLoanStatus.REJECTED },
+  { label: 'Released', value: MemberLoanStatus.RELEASED },
+  { label: 'Closed', value: MemberLoanStatus.CLOSED },
+];
