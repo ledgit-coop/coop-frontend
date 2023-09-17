@@ -38,6 +38,7 @@
               id="email1"
               v-model="email"
               type="text"
+              autocomplete="off"
               placeholder="Email address"
               class="w-full md:w-30rem mb-5"
               style="padding: 1rem"
@@ -54,6 +55,7 @@
               placeholder="Password"
               :toggle-mask="true"
               class="w-full mb-3"
+
               input-class="w-full"
               :input-style="{ padding: '1rem' }"
             ></Password>
