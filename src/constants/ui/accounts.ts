@@ -13,3 +13,16 @@ export enum AccountTransactionType {
   WITHDRAWAL = 'withdrawal',
   DEPOSIT = 'deposit',
 }
+
+export enum AccountMaintainingBalancePenaltyCycle {
+  DAY = 'day',
+  MONTH = 'month',
+  QUARTER = 'quarter',
+  YEAR = 'year',
+}
+
+export enum AccountMaintainingBalancePenaltyMethod {
+  FIXED = 'fixed',
+  PERCENTAGE = 'percentage',
+}
+

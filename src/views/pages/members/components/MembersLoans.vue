@@ -117,6 +117,10 @@ watch(params, (params) => {
   loadTable(params);
 });
 
+onMounted(() => {
+  loadTable(params.value);
+  loadWidgetData();
+});
 const loadTable = async (params: LoanListPayload) => {
   loadings.value.table = true;
   try {

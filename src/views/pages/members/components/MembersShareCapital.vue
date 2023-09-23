@@ -89,7 +89,7 @@
 <script setup lang="ts">
 import MembersService from '@/service/MembersService';
 import DataTable from 'primevue/datatable';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import type { Member } from '@/types/ui/members';
 import PageContentHeader from '@components/PageContentHeader.vue';
 import moment from 'moment';
@@ -132,8 +132,12 @@ const last_shared_date = computed(() =>
 );
 const transactions = ref<AccountTransaction[]>();
 
+onMounted(() => {
+  loadhShareCapitalTransactions();
+});
+
 watch(
-  () => props.member?.share_capital.id,
+  () => props.member?.share_capital?.id,
   (value) => {
     if (value) loadhShareCapitalTransactions();
   }
@@ -144,12 +148,13 @@ const handleShareCapitalYearChange = () => {
 };
 const loadhShareCapitalTransactions = async () => {
   loadings.value.share_capital_table = true;
-
   try {
+    console.log(props.member?.share_capital);
     const { data } = await MembersService.getMemberAccountTrasactions(props.member?.id ?? '', {
-      member_account_id: props.member?.share_capital.id.toString() ?? '',
+      member_account_id: props.member?.share_capital?.id.toString() ?? '0',
       year: filters.value.share_capital_year.toString() ?? '',
     });
+
     transactions.value = data;
   } catch (error) {
     showApiError(error as AxiosError);

@@ -50,14 +50,14 @@
               class="pi pi-file-pdf pr-2"
               style="color: var(--gray-700)"
             ></i
-            ><a href="http://">Download Agreement</a></span
+            ><a href="#" @click="handleDownload('agreement')">Download Agreement</a></span
           >
           <span
             ><i
               class="pi pi-file-pdf pr-2"
               style="color: var(--gray-700)"
             ></i
-            ><a href="http://">Download Form</a></span
+            ><a href="#">Download Form</a></span
           >
         </div>
         <div class="p-3"></div>
@@ -353,4 +353,8 @@ const loadSchedules = async () => {
   }
   loadings.value.fetch_schedule = false;
 };
+
+const handleDownload = async (type: string) => {
+  console.log(await LoanService.downloadLink(loan.value?.id ?? 0, {document: type}))
+}
 </script>

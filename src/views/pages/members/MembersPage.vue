@@ -22,6 +22,7 @@
           responsive-layout="scroll"
           @row-click="handleNavigateView"
           :rows="rows"
+          export-filename="members"
           :lazy="true"
           :total-records="totalRecords"
           @sort="onSort"
@@ -45,6 +46,7 @@
                   label="Export"
                   class="p-button-outlined mb-2"
                   size="small"
+                  @click="$refs.table.exportCSV()"
                 />
               </div>
 

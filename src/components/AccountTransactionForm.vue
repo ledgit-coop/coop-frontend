@@ -1,6 +1,34 @@
 <template>
   <div class="grid p-fluid formgrid">
+
+
     <div class="field col-12">
+      <Label
+        for="accounts"
+        required
+        >Type of Transaction</Label
+      >
+      <Dropdown
+        showClear
+        id="accounts"
+        :options="typeOfTransactions"
+        filter
+        option-value="value"
+        option-label="label"
+        placeholder="Select Account"
+        v-model="data.form.transaction_type"
+        v-validation="validation"
+        validate="member_account_id"
+        class="w-full"
+      >
+      </Dropdown>
+      <FieldErrorMessage
+        :validation="validation"
+        field="member_account_id"
+      />
+    </div>
+
+    <div v-if="data.form.transaction_type === ActionTransactionType.DepositSavings" class="field col-12">
       <Label
         for="accounts"
         required
@@ -26,42 +54,7 @@
       />
     </div>
 
-    <div class="field col-12 mt-2">
-      <h6>Transaction Type</h6>
-      <div class="flex flex-wrap gap-3">
-        <div class="flex align-items-center">
-          <RadioButton
-            v-model="data.form.transaction_type"
-            input-id="application-type"
-            name="transaction_type"
-            value="withdrawal"
-          />
-          <label
-            inputId="application-type"
-            class="ml-2"
-            >Withdrawal</label
-          >
-        </div>
-        <div class="flex align-items-center">
-          <RadioButton
-            v-model="data.form.transaction_type"
-            input-id="application-type"
-            name="transaction_type"
-            value="deposit"
-          />
-          <label
-            inputId="application-type"
-            class="ml-2"
-            >Deposit</label
-          >
-        </div>
-      </div>
-
-      <FieldErrorMessage
-        :validation="validation"
-        field="transaction_type"
-      />
-    </div>
+ 
 
     <div class="field col-12 md:col-6">
       <Label
@@ -140,6 +133,7 @@ import { required } from '@vuelidate/validators';
 import useValidation from '@/composables/useValidation';
 import FieldErrorMessage from './FieldErrorMessage.vue';
 import Label from './Label.vue';
+import {ActionTransactionType} from '@/constants/ui/transactions';
 
 interface Props {
   memberId?: string | number;
@@ -157,7 +151,19 @@ const rules = computed(() => ({
 }));
 
 const form = computed(() => data.form);
+const typeOfTransactions = computed<DropdownOption[]>(()=>([
+{label: "Deposit Share Capital", value:ActionTransactionType.DepositShareCapital},
+{label: "Withdraw Share Capital", value:ActionTransactionType.WithdrawShareCapital},
 
+{label: "Deposit Savings", value:ActionTransactionType.DepositSavings},
+{label: "Withdraw Savings", value:ActionTransactionType.WithdrawSavings},
+
+{label: "Pay Amortization", value:ActionTransactionType.PayAmortization},
+{label: "Pay Membership", value:ActionTransactionType.PayMembership},
+
+{label: "Pay Loan Pre-Termination Fee", value:ActionTransactionType.PayLoanPreTerminationFee},
+
+]));
 const accounts = ref<DropdownOption[]>([]);
 const data = reactive<{ form: MemberAccountTransactionForm }>({
   form: {

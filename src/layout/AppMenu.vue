@@ -4,9 +4,9 @@ import { ref } from 'vue';
 import AppMenuItem from '@/layout/AppMenuItem.vue';
 import {
   ROUTE_LOAN_CALCULATOR,
+  ROUTE_NAME_ACCOUNTS,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOAN_FEES,
-  ROUTE_NAME_LOAN_GUARANTORS,
   ROUTE_NAME_LOAN_PRODUCTS,
   ROUTE_NAME_MEMBERS,
   ROUTE_NAME_REPAYMENTS,
@@ -59,29 +59,11 @@ const model = ref<any>([
       },
 
       {
-        label: 'Loan Guarantors',
-        icon: 'pi pi-fw pi-book',
-        to: { name: ROUTE_NAME_LOAN_GUARANTORS },
-      },
-
-      {
         label: 'Account Types',
         icon: 'pi pi-fw pi-book',
-        to: '/utilities/icons',
-        class: 'line-through pointer-events-none',
+        to: { name: ROUTE_NAME_ACCOUNTS },
       },
-      {
-        label: 'Disbursment Channel',
-        icon: 'pi pi-fw pi-book',
-        to: '/admin/loan-products',
-        class: 'line-through pointer-events-none',
-      },
-      {
-        label: 'Penalties',
-        icon: 'pi pi-fw pi-book',
-        to: '/admin/loan-products',
-        class: 'line-through pointer-events-none',
-      },
+    
     ],
   },
 ]);

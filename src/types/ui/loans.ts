@@ -52,8 +52,8 @@ export interface Loan {
   member?: Member;
   member_account?: MemberAccount;
 
-  guarantor_first?: LoanGuarantor;
-  guarantor_second?: LoanGuarantor;
+  guarantor_first?: Member;
+  guarantor_second?: Member;
 
   released?: boolean;
   loan_fees?: LoanFee[];
@@ -64,6 +64,14 @@ export interface Loan {
   outstanding?: number;
 
   loan_schedules?: MemberLoanSchedule[];
+
+  penalty: number | null;
+  penalty_grace_period: number | null;
+  penalty_method: string | null;
+  penalty_duration: string | null;
+  pre_termination_panalty?: number | null;
+  pre_termination_panalty_method?: string | null;
+  pre_termination_fee?: number | null;
 }
 
 export interface LoanForm {
@@ -108,6 +116,14 @@ export interface LoanTermForm {
   repayment_cycle?: string | null;
   number_of_repayments?: number | null;
   repayment_mode?: string | null;
+
+  penalty?: number | null;
+  penalty_grace_period?: number | null;
+  penalty_method?: string | null;
+  penalty_duration?: string | null;
+
+  pre_termination_panalty?: number | null;
+  pre_termination_panalty_method?: string | null;
 }
 
 export interface LoanFee extends LoanFeeTemplateForm {
@@ -139,15 +155,6 @@ export interface LoanCalculator {
   amortization_starting_date?: string;
   maturity_date?: string;
   released_date?: string;
-}
-
-export interface LoanGuarantor {
-  id: number;
-  first_name: string;
-  full_name?: string;
-  middle_name?: string | null; // Marked as optional with `?`
-  last_name: string;
-  contact?: string | null; // Marked as optional with `?`
 }
 
 export interface LoanSummaryTable {

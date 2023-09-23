@@ -40,7 +40,7 @@
   />
 </template>
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import type { Member, MemberSavingsAccountWidgetItem } from '@/types/ui/members';
 import type { AccountTransaction } from '@/types/ui/accounts';
 
@@ -96,6 +96,10 @@ watch(
   }
 );
 
+onMounted(() => {
+  loadAccountDropdown();
+  loadTransactions();
+});
 const loadAccountDropdown = async () => {
   try {
     loadings.value.member_accounts = true;

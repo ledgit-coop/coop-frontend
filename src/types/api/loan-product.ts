@@ -25,4 +25,12 @@ export interface ProductSavePayload {
   default_number_of_repayments?: number | null;
   repayment_mode?: string | null;
   loan_product_fees?: LoanProductFee[];
+
+  penalty?: number | null;
+  penalty_grace_period?: number | null;
+  penalty_method?: string | null;
+  penalty_duration?: string | null;
+
+  pre_termination_panalty?: number | null;
+  pre_termination_panalty_method?: string | null;
 }

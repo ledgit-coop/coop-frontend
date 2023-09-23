@@ -30,6 +30,14 @@ export interface LoanProduct {
   created_at: string;
   updated_at: string;
   loan_product_fees?: LoanProductFee[];
+
+  penalty: number | null;
+  penalty_grace_period: number | null;
+  penalty_method: string | null;
+  penalty_duration: string | null;
+
+  pre_termination_panalty?: number | null;
+  pre_termination_panalty_method?: string | null;
 }
 
 export interface LoanProductFee extends LoanFeeTemplateForm {

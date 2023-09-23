@@ -125,6 +125,7 @@
       class="w-full"
       validate="loan_duration_type"
       v-validation="validation"
+      @change="handleLoanDurationChange"
     />
     <FieldErrorMessage
       :validation="validation"
@@ -141,6 +142,7 @@
       id="loan-duration-type"
       v-model="data.form.loan_duration"
       placeholder="Loan Duration"
+      @blur="handleLoanDurationChange"
       type="text"
       validate="loan_duration"
       v-validation="validation"
@@ -166,6 +168,7 @@
       optionLabel="label"
       option-value="value"
       v-model="data.form.repayment_cycle"
+      @change="handleLoanDurationChange"
       placeholder="Select a Repayment Cycle"
       class="w-full"
       validate="repayment_cycle"
@@ -264,6 +267,111 @@
         field="disbursed_channel"
       />
     </div>
+
+    <div class="col-12">
+      <PageContentHeader
+        title="Penalties"
+        size="h6"
+      ></PageContentHeader>
+    </div>
+
+    <div class="field col-12 lg:col-4">
+      <label for="name">Penalty Grace Period (Days)</label>
+
+      <InputNumber
+        placeholder="Grace Period"
+        v-model="data.form.penalty_grace_period"
+        validate="penalty_grace_period"
+      />
+    </div>
+
+    <div class="field col-12 lg:col-4">
+      <label for="name">Penalty</label>
+
+      <span class="p-input-icon-right">
+        <i
+          v-if="data.form.penalty_method === LoanPenaltyMethod.PERCENTAGE"
+          class="pi pi-percentage"
+        />
+        <InputNumber
+          :minFractionDigits="2"
+          :maxFractionDigits="3"
+          placeholder="Loan Interest"
+          v-model="data.form.penalty"
+          validate="penalty"
+        />
+      </span>
+    </div>
+
+    <div class="field col-12 lg:col-4">
+      <label for="name">Penalty Method</label>
+      <Dropdown
+        showClear
+        optionLabel="label"
+        option-value="value"
+        placeholder="Select a Period"
+        option-disabled="disabled"
+        v-model="data.form.penalty_method"
+        class="w-full"
+        :options="penaltyMethods"
+        validate="penalty_method"
+      />
+    </div>
+
+    <div class="field col-12">
+      <label for="name">Penalty Recurring</label>
+      <Dropdown
+        showClear
+        optionLabel="label"
+        option-value="value"
+        placeholder="Select a Period"
+        option-disabled="disabled"
+        v-model="data.form.penalty_duration"
+        class="w-full"
+        :options="penaltyDurations"
+        validate="penalty_duration"
+      />
+    </div>
+
+    <div class="col-12">
+      <PageContentHeader
+        title="Pre Termination"
+        size="h6"
+      ></PageContentHeader>
+    </div>
+
+    <div class="field col-12 lg:col-4">
+      <label for="name">Pre Termination Penalty</label>
+
+      <span class="p-input-icon-right">
+        <i
+          v-if="data.form.pre_termination_panalty_method === LoanPenaltyMethod.PERCENTAGE"
+          class="pi pi-percentage"
+        />
+        <InputNumber
+          :minFractionDigits="2"
+          :maxFractionDigits="3"
+          placeholder="Pre Termination Penalty"
+          v-model="data.form.pre_termination_panalty"
+          validate="pre_termination_panalty"
+        />
+      </span>
+    </div>
+
+    <div class="field col-12 lg:col-4">
+      <label for="name">Pre Termination Method</label>
+      <Dropdown
+        showClear
+        optionLabel="label"
+        option-value="value"
+        placeholder="Select a Method"
+        option-disabled="disabled"
+        v-model="data.form.pre_termination_panalty_method"
+        class="w-full"
+        :options="penaltyMethods"
+        validate="pre_termination_panalty_method"
+      />
+    </div>
   </template>
 </template>
 
@@ -276,6 +384,9 @@ import {
   LoanInterestPeriod,
   LoanInterestMethod,
   LoanDurationPeriod,
+  RepaymentCycle,
+  LoanPenaltyMethod,
+  LoanPenaltyFrequency,
 } from '@/constants/ui/loans';
 import type { DropdownOption } from '@/types/ui';
 import type { LoanTermForm } from '@/types/ui/loans';
@@ -286,6 +397,7 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
 import PageContentHeader from './PageContentHeader.vue';
 import FieldErrorMessage from './FieldErrorMessage.vue';
 import useValidation from '@/composables/useValidation';
+import { computeRepaymentCycleCount } from '@/helpers';
 
 interface Props {
   modelValue?: LoanTermForm;
@@ -338,12 +450,6 @@ watch(
 const form = computed(() => data.form);
 const { validation } = useValidation({
   rules: {
-    interest_method: { required },
-    interest_type: { required },
-    loan_interest_period: { required },
-    loan_interest: { required },
-    loan_duration_type: { required },
-    loan_duration: { required },
     repayment_cycle: { required },
     number_of_repayments: { required },
     repayment_mode: { required },
@@ -380,5 +486,27 @@ const interest_periods = ref<DropdownOption[]>([
   { label: 'Per Loan', value: LoanInterestPeriod.PER_LOAN },
 ]);
 
+const penaltyMethods = ref<DropdownOption[]>([
+  { label: 'Fix', value: LoanPenaltyMethod.FIX_AMOUNT },
+  { label: 'Percent', value: LoanPenaltyMethod.PERCENTAGE },
+]);
+
+const penaltyDurations = ref<DropdownOption[]>([
+  { label: 'Every Day', value: LoanPenaltyFrequency.EVERY_DAY },
+  { label: 'Every Week', value: LoanPenaltyFrequency.EVERY_WEEK },
+  { label: 'Every Month', value: LoanPenaltyFrequency.EVERY_MONTH },
+  { label: 'Every Year', value: LoanPenaltyFrequency.EVERY_YEAR },
+  { label: 'Only Amortization (One Time)', value: LoanPenaltyFrequency.EVERY_AMORTIZATION },
+]);
+
 const repaymentCycles = ref<DropdownOption[]>(REPAYMENT_CYCLE_DROPDOWN);
+
+const handleLoanDurationChange = () => {
+  const numberOfPayments = computeRepaymentCycleCount(
+    data.form.loan_duration ?? 0,
+    data.form.loan_duration_type as LoanDurationPeriod,
+    data.form.repayment_cycle as RepaymentCycle
+  );
+  data.form.number_of_repayments = numberOfPayments ?? 0;
+};
 </script>

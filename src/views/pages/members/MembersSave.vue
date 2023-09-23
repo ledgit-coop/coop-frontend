@@ -63,7 +63,6 @@ import { mapMemberFormToPostMemberPayload } from '@/constants/mapping/members';
 import type { AxiosError } from 'axios';
 import { useRoute } from 'vue-router';
 import type { Member } from '@/types/ui/members';
-import { TEST_MEMBER_FORM } from '@/constants/tests/members';
 
 const { showApiError, showError, showSuccess } = useAlert();
 const loadings = ref({
@@ -71,13 +70,12 @@ const loadings = ref({
   fetching: false,
 });
 const model = reactive<{ form: MemberForm }>({
-  // form: {
-  //   beneficiaries: [],
-  //   spouse: {},
-  //   mother: {},
-  //   father: {},
-  // },
-  form: TEST_MEMBER_FORM,
+  form: {
+    beneficiaries: [],
+    spouse: {},
+    mother: {},
+    father: {},
+  },
 });
 const member = ref<Member>();
 const route = useRoute();

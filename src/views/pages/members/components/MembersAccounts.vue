@@ -153,7 +153,7 @@
 </template>
 <script setup lang="ts">
 import DataTable from 'primevue/datatable';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import type { Member, MemberAccount } from '@/types/ui/members';
 import type { AccountTransaction } from '@/types/ui/accounts';
 
@@ -161,7 +161,6 @@ import PageContentHeader from '@components/PageContentHeader.vue';
 import Button from 'primevue/button';
 import { AccountStatus } from '@/constants/ui/accounts';
 import AccountTransactionsTable from '@components/AccountTransactionsTable.vue';
-import Calendar from 'primevue/calendar';
 import Dialog from 'primevue/dialog';
 import MembersService from '@/service/MembersService';
 import useAlert from '@/composables/useAlert';
@@ -205,6 +204,10 @@ watch(
     }
   }
 );
+
+onMounted(() => {
+  loadAccounts();
+});
 
 const loadAccounts = async () => {
   loadings.value.accounts_table = true;

@@ -13,10 +13,28 @@
     rounded
     class="white-space-nowrap"
   ></Tag>
+
+
   <Tag
-    v-else-if="status == MemberLoanStatus.PAID"
+    v-else-if="status == MemberLoanStatus.PRE_TERMINATED"
     severity="info"
-    value="Fully Paid"
+    value="Pre-Terminated"
+    class="white-space-nowrap loan-pre-terminated"
+    rounded
+  ></Tag>
+
+  <Tag
+    v-else-if="status == MemberLoanStatus.REQUEST_PRE_TERMINATION"
+    severity="info"
+    value="Pre-Termination Request"
+    class="white-space-nowrap loan-request-pre-termination"
+    rounded
+  ></Tag>
+
+  <Tag
+    v-else-if="status == MemberLoanStatus.CLOSED"
+    severity="info"
+    value="Closed"
     class="white-space-nowrap loan-paid"
     rounded
   ></Tag>

@@ -74,9 +74,11 @@ const isOutsideClicked = (event) => {
     </div>
 
     <div class="layout-main-container">
-      <Message severity="warn">The website is currently in its soft release phase. If you encounter any technical difficulties, please don't hesitate to contact us, and we will promptly resolve the issue. Your feedback is highly appreciated.</Message>
+      <Message severity="warn"
+        >The website is currently in its soft release phase. If you encounter any technical difficulties, please don't
+        hesitate to contact us, and we will promptly resolve the issue. Your feedback is highly appreciated.</Message
+      >
       <div class="layout-main">
-
         <router-view></router-view>
       </div>
       <AppFooter></AppFooter>

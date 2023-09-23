@@ -55,7 +55,6 @@
               placeholder="Password"
               :toggle-mask="true"
               class="w-full mb-3"
-
               input-class="w-full"
               :input-style="{ padding: '1rem' }"
             ></Password>

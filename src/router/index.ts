@@ -4,11 +4,11 @@ import AuthService from '@/service/AuthService';
 import {
   PUBLIC_ROUTES,
   ROUTE_LOAN_CALCULATOR,
+  ROUTE_NAME_ACCOUNTS,
   ROUTE_NAME_COLLECTIONS,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOANS_CREATE,
   ROUTE_NAME_LOAN_FEES,
-  ROUTE_NAME_LOAN_GUARANTORS,
   ROUTE_NAME_LOAN_PRODUCTS,
   ROUTE_NAME_MEMBERS,
   ROUTE_NAME_MEMBERS_CREATE,
@@ -159,22 +159,20 @@ const router = createRouter({
                 },
               ],
             },
-
             {
-              path: 'loan-guarantors',
-              redirect: 'loan-guarantors/list',
+              path: 'accounts',
+              redirect: 'accounts/list',
               children: [
                 {
                   path: 'list',
-                  name: ROUTE_NAME_LOAN_GUARANTORS,
-                  component: () => import('@/views/pages/administration/loan-guarantors/LoanGuarantorsPage.vue'),
+                  name: ROUTE_NAME_ACCOUNTS,
+                  component: () => import('@/views/pages/administration/accounts/AccountsPage.vue'),
                   meta: {
-                    title: 'Users',
+                    title: 'Accounts',
                   },
                 },
               ],
             },
-
             {
               path: 'loan-products',
               redirect: 'loan-products/list',

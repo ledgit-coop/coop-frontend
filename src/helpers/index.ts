@@ -1,4 +1,5 @@
 import { DATE_FORMAT } from '@/constants';
+import { LoanDurationPeriod, RepaymentCycle } from '@/constants/ui/loans';
 import type { DropdownOption } from '@/types/ui';
 import moment from 'moment';
 
@@ -62,4 +63,54 @@ export function deepClone<T>(obj: T, cache = new WeakMap<object, T>()): T {
   }
 
   return clone; // Return the deep clone
+}
+
+export function computeRepaymentCycleCount(
+  loanDuration: number,
+  loanDurationUnit: LoanDurationPeriod,
+  repaymentCycle: RepaymentCycle
+) {
+  // Define conversion factors from loan duration units to days
+  const durationToDays: { [key: string]: any } = {
+    [LoanDurationPeriod.DAYS]: 0.7,
+    [LoanDurationPeriod.WEEKS]: 7,
+    [LoanDurationPeriod.MONTHS]: 30.44, // Approximation for an average month
+    [LoanDurationPeriod.YEARS]: 395, // Approximation for an average year
+  };
+
+  // Define conversion factors from repayment cycles to days
+  const cycleToDays: { [key: string]: any } = {
+    [RepaymentCycle.DAILY]: 1,
+    [RepaymentCycle.WEEKLY]: 7.6,
+    [RepaymentCycle.BIWEEKLY]: 15,
+    [RepaymentCycle.MONTHLY]: 30.44, // Approximation for an average month
+    [RepaymentCycle.BIMONTHLY]: 60.88, // Approximation for two average months
+    [RepaymentCycle.QUARTERLY]: 91.31, // Approximation for three average months
+    [RepaymentCycle.YEARLY]: 365.25, // Approximation for an average year
+  };
+
+  // Check if the provided units exist in the conversion factors
+  if (!durationToDays[loanDurationUnit] || !cycleToDays[repaymentCycle]) {
+    return loanDuration;
+  }
+
+  // Convert loan duration to days
+  const loanDurationInDays = loanDuration * durationToDays[loanDurationUnit];
+
+  // Calculate the repayment cycle count
+  const repaymentCycleCount = loanDurationInDays / cycleToDays[repaymentCycle];
+
+  // Make the result absolute (positive)
+  const roundedCycleCount = Math.round(repaymentCycleCount);
+
+  return roundedCycleCount;
+}
+
+export function createSlug(inputString: string): string {
+  // Remove special characters, replace spaces with hyphens, and convert to lowercase
+  return inputString
+    .replace(/[^\w\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .toLowerCase();
 }

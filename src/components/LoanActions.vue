@@ -1,4 +1,4 @@
-import ReleaseLoan from './ReleaseLoan.vue';
+import LoanPreTerminate from './LoanPreTerminate.vue';
 <template>
   <div class="flex gap-2">
     <Button
@@ -23,6 +23,32 @@ import ReleaseLoan from './ReleaseLoan.vue';
       rounded
       class="mr-2 mb-2"
       size="small"
+    />
+
+    <Button
+      icon="pi pi-times"
+      v-tooltip="'Pre Terminate'"
+      severity="danger"
+      v-if="loan?.released && (loan?.status !== MemberLoanStatus.REQUEST_PRE_TERMINATION) "
+      text
+      raised
+      rounded
+      class="mr-2 mb-2"
+      size="small"
+      @click="modalsVisibility.request_pre_terminate = true"
+    />
+
+    <Button
+      v-if="loan?.status === MemberLoanStatus.REQUEST_PRE_TERMINATION"
+      v-tooltip="'Terminate Account'"
+      icon="pi pi-thumbs-up-fill"
+      text
+      raised
+      rounded
+      class="mr-2 mb-2"
+      size="small"
+      severity="danger"
+      @click="handleChangeStatus(MemberLoanStatus.PRE_TERMINATED)"
     />
 
     <Button
@@ -116,6 +142,12 @@ import ReleaseLoan from './ReleaseLoan.vue';
     :loan="loan"
     @updated="emit('updated')"
   />
+
+  <LoanPreTerminate
+    v-model:visible="modalsVisibility.request_pre_terminate"
+    :loan="loan"
+    @updated="emit('updated')"
+  />
 </template>
 <script setup lang="ts">
 import type { Loan } from '@/types/ui/loans';
@@ -129,6 +161,7 @@ import useAlert from '@/composables/useAlert';
 import type { AxiosError } from 'axios';
 import LoanService from '@/service/LoanService';
 import ReleaseLoan from './ReleaseLoan.vue';
+import LoanPreTerminate from './LoanPreTerminate.vue';
 
 interface Props {
   loan?: Loan;
@@ -138,6 +171,7 @@ const modalsVisibility = ref({
   view_loan: false,
   edit_loan: false,
   release: false,
+  request_pre_terminate: false,
 });
 const confirm = useConfirm();
 
@@ -206,7 +240,7 @@ const handleChangeStatus = (status: MemberLoanStatus) => {
 const updateStatus = async (status: MemberLoanStatus) => {
   try {
     await LoanService.updateStatus(props.loan?.id.toString() ?? '', status);
-    showSuccess('Loan successfully added.');
+    showSuccess('Loan successfully updated.');
     emit('updated');
   } catch (error) {
     showApiError(error as AxiosError);

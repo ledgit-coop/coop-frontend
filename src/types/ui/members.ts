@@ -34,6 +34,7 @@ export interface Member extends MemberForm {
   full_name?: string;
   member_year?: string;
   age?: number;
+  status?: string;
   oriented?: boolean;
   full_present_address?: string;
   full_permanent_address?: string;

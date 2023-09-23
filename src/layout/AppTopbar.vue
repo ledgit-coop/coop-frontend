@@ -94,7 +94,6 @@ const isOutsideClicked = (event: any) => {
 </script>
 
 <template>
-
   <div class="layout-topbar">
     <router-link
       to="/"
@@ -141,7 +140,6 @@ const isOutsideClicked = (event: any) => {
       />
     </div>
   </div>
-
 </template>
 
 <style lang="scss" scoped></style>

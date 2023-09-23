@@ -35,7 +35,7 @@ export default function useAlert() {
     const data: any = error?.response?.data;
     toast.add({
       summary: 'Contact administrator',
-      detail: data.message ?? `Something went wrong.`,
+      detail: (data ? data.message : error) ?? `Something went wrong.`,
       severity: 'error',
       life: 3000,
     });

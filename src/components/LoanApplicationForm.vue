@@ -166,11 +166,7 @@
         </div>
 
         <div class="field col-12">
-          <Label
-            required
-            for="tin_number"
-            >TIN Number</Label
-          >
+          <Label for="tin_number">TIN Number</Label>
           <InputText
             id="tin_number"
             v-model="data.form.tin_number"
@@ -658,7 +654,6 @@ const { validation } = useValidation({
     valid_id: { required },
     work_industry: { required },
     email: { required },
-    tin_number: { required },
     number_of_children: { required },
     employer_name: { required },
     occupation: { required },

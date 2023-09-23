@@ -23,8 +23,8 @@ class LoanService {
     return apiClient.patch(`${PATH}/${id}`, params);
   }
 
-  updateStatus(id: string, status: MemberLoanStatus): AxiosPromise<Loan> {
-    return apiClient.post(`${PATH}/status/${id}`, { status });
+  updateStatus(id: string, status: MemberLoanStatus, params?: Record<string, any>): AxiosPromise<Loan> {
+    return apiClient.post(`${PATH}/status/${id}`, { status, ...params ?? {}});
   }
 
   activeLoans(member_id?: string): AxiosPromise<Loan[]> {
@@ -37,6 +37,10 @@ class LoanService {
 
   destroy(id: number): AxiosPromise<Loan> {
     return apiClient.delete(`${PATH}/${id}`);
+  }
+
+  downloadLink(id: number, params: Record<string, any>): AxiosPromise<MemberLoanSchedule[]> {
+    return apiClient.get(`${PATH}/download/${id}`,{params});
   }
 }
 

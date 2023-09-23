@@ -34,6 +34,14 @@ export interface LoanApplicationPayload {
   applied_date?: string;
   released_date?: string;
   loan_fees?: LoanProductFee[];
+
+  penalty?: number | null;
+  penalty_grace_period?: number | null;
+  penalty_method?: string | null;
+  penalty_duration?: string | null;
+
+  pre_termination_panalty?: number | null;
+  pre_termination_panalty_method?: string | null;
 }
 
 export interface LoanListPayload {

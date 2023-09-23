@@ -49,6 +49,12 @@
             v-if="member"
             class="ml-auto mt-5 md:mt-0 lg:mt-0 grid gap-2"
           >
+
+        
+            
+
+          <template v-if="member.status == MemberStatus.ACTIVE">
+
             <Button
               icon="pi pi-arrow-left"
               label="Back"
@@ -107,123 +113,160 @@
               rounded
               outlined
             ></Button>
-            <Button
+
+          </template>
+           
+            
+          <Button
               icon="pi pi-print"
               label="Terminate"
               rounded
               outlined
               severity="danger"
-              @click="handleTerminateClick"
-              disabled
+              :loading="loadings.update_status"
+              v-if="member.status === MemberStatus.ACTIVE"
+              @click="handleChangeStatus(MemberStatus.TERMINATED)"
             ></Button>
+
+            <Button
+              icon="pi pi-check"
+              label="Activate"
+              rounded
+              outlined
+              severity="success"
+              :loading="loadings.update_status"
+              v-else-if="member.status === MemberStatus.TERMINATED"
+
+              @click="handleChangeStatus(MemberStatus.ACTIVE)"
+            ></Button>
+
+
+        
           </div>
         </div>
 
         <div class="mt-3">
-          <TabView scrollable>
+          <TabView
+            v-model:active-index="activeIndex"
+            scrollable
+          >
             <TabPanel header="Member Information">
-              <div class="p-3">
-                <div class="grid mt-2">
-                  <div class="col-12 p-0">
-                    <h6>Member Information</h6>
+              <template v-if="activeIndex === 0">
+                <div class="p-3">
+                  <div class="grid mt-2">
+                    <div class="col-12 p-0">
+                      <h6>Member Information</h6>
+                    </div>
+
+                    <div class="col-12 p-0 md:col-6 lg:col-4">
+                      <Information
+                        :loading="loadings.member_fetch"
+                        :info="basic_information"
+                      />
+                    </div>
+                    <div class="col-12 p-0 md:col-6 lg:col-4">
+                      <Information
+                        :loading="loadings.member_fetch"
+                        :info="employment_information"
+                      />
+                    </div>
                   </div>
 
-                  <div class="col-12 p-0 md:col-6 lg:col-4">
-                    <Information
-                      :loading="loadings.member_fetch"
-                      :info="basic_information"
-                    />
+                  <div class="grid mt-4">
+                    <div class="col-12 p-0">
+                      <h6>Addresses</h6>
+                    </div>
+                    <div class="col-12 p-0">
+                      <Information
+                        :loading="loadings.member_fetch"
+                        :info="address_info"
+                        table-class="w-7"
+                      />
+                    </div>
                   </div>
-                  <div class="col-12 p-0 md:col-6 lg:col-4">
-                    <Information
-                      :loading="loadings.member_fetch"
-                      :info="employment_information"
-                    />
-                  </div>
-                </div>
 
-                <div class="grid mt-4">
-                  <div class="col-12 p-0">
-                    <h6>Addresses</h6>
+                  <div class="grid mt-4">
+                    <div class="col-12 p-0">
+                      <h6>Spouse</h6>
+                    </div>
+                    <div class="col-12 p-0">
+                      <Information
+                        :loading="loadings.member_fetch"
+                        :info="spouse_information"
+                        table-class="w-4"
+                      />
+                    </div>
                   </div>
-                  <div class="col-12 p-0">
-                    <Information
-                      :loading="loadings.member_fetch"
-                      :info="address_info"
-                      table-class="w-7"
-                    />
-                  </div>
-                </div>
 
-                <div class="grid mt-4">
-                  <div class="col-12 p-0">
-                    <h6>Spouse</h6>
+                  <div class="grid mt-4">
+                    <div class="col-12 p-0">
+                      <h6>Parents Information</h6>
+                    </div>
+                    <div class="col-12 p-0 md:col-6 lg:col-4">
+                      <Information
+                        :loading="loadings.member_fetch"
+                        :info="father_information"
+                      />
+                    </div>
+                    <div class="col-12 p-0 md:col-6 lg:col-4">
+                      <Information
+                        :loading="loadings.member_fetch"
+                        :info="mother_information"
+                      />
+                    </div>
                   </div>
-                  <div class="col-12 p-0">
-                    <Information
-                      :loading="loadings.member_fetch"
-                      :info="spouse_information"
-                      table-class="w-4"
-                    />
-                  </div>
-                </div>
 
-                <div class="grid mt-4">
-                  <div class="col-12 p-0">
-                    <h6>Parents Information</h6>
-                  </div>
-                  <div class="col-12 p-0 md:col-6 lg:col-4">
-                    <Information
-                      :loading="loadings.member_fetch"
-                      :info="father_information"
-                    />
-                  </div>
-                  <div class="col-12 p-0 md:col-6 lg:col-4">
-                    <Information
-                      :loading="loadings.member_fetch"
-                      :info="mother_information"
-                    />
-                  </div>
-                </div>
-
-                <div class="grid mt-4">
-                  <div class="col-12 p-0">
-                    <h6>Beneficiaries</h6>
-                  </div>
-                  <div class="col-12 p-0 md:col-6 lg:col-4">
-                    <div class="p-datatable-wrapper">
-                      <table class="p-datatable-table">
-                        <thead class="p-datatable-thead">
-                          <tr>
-                            <th>Name</th>
-                            <th>Birthdate</th>
-                            <th>Relationship</th>
-                          </tr>
-                        </thead>
-                        <tbody class="p-datatable-tbody">
-                          <tr v-for="value in member?.beneficiaries ?? []">
-                            <td>{{ value.name }}</td>
-                            <td>{{ value.birthdate }}</td>
-                            <td>{{ value.relationship }}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                  <div class="grid mt-4">
+                    <div class="col-12 p-0">
+                      <h6>Beneficiaries</h6>
+                    </div>
+                    <div class="col-12 p-0 md:col-6 lg:col-4">
+                      <div class="p-datatable-wrapper">
+                        <table class="p-datatable-table">
+                          <thead class="p-datatable-thead">
+                            <tr>
+                              <th>Name</th>
+                              <th>Birthdate</th>
+                              <th>Relationship</th>
+                            </tr>
+                          </thead>
+                          <tbody class="p-datatable-tbody">
+                            <tr v-for="value in member?.beneficiaries ?? []">
+                              <td>{{ value.name }}</td>
+                              <td>{{ value.birthdate }}</td>
+                              <td>{{ value.relationship }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </template>
             </TabPanel>
             <TabPanel header="Share Capital">
-              <MembersShareCapital :member="member" />
+              <MembersShareCapital
+                v-if="activeIndex == 1"
+                :member="member"
+              />
             </TabPanel>
             <TabPanel header="Savings">
-              <MembersSavings :member="member" />
+              <MembersSavings
+                v-if="activeIndex == 2"
+                :member="member"
+              />
             </TabPanel>
             <TabPanel header="Loans">
-              <MembersLoans :member="member" />
+              <MembersLoans
+                v-if="activeIndex == 3"
+                :member="member"
+              />
             </TabPanel>
             <TabPanel header="Accounts">
-              <MembersAccounts :member="member" />
+              <MembersAccounts
+                v-if="activeIndex == 4"
+                :member="member"
+              />
             </TabPanel>
 
             <TabPanel
@@ -287,6 +330,7 @@ import InlineMessage from 'primevue/inlinemessage';
 import LoanSave from '@/components/LoanSave.vue';
 import Image from 'primevue/image';
 import MembersIncome from './components/MembersIncome.vue';
+import { MemberStatus } from '@/constants/ui/members';
 
 interface ModalsVisibility {
   apply_form: boolean;
@@ -297,12 +341,13 @@ interface ModalsVisibility {
 const loadings = ref({
   member_fetch: false,
   oriented: false,
+  update_status: false,
 });
 
 const confirm = useConfirm();
 const route = useRoute();
 const { showApiError, showSuccess } = useAlert();
-
+const activeIndex = ref(0);
 const member_number = computed(() => (route.params.id ?? '').toString());
 const member = ref<Member>();
 const modalsVisibility = ref<ModalsVisibility>({
@@ -391,16 +436,7 @@ onMounted(() => {
   showMember();
 });
 
-const handleTerminateClick = () => {
-  confirm.require({
-    message: 'Are you sure you want to proceed?',
-    header: 'Account Termination',
-    icon: 'pi pi-exclamation-triangle',
-    acceptClass: 'p-button-danger',
-    accept: () => {},
-    reject: () => {},
-  });
-};
+
 
 const showMember = async () => {
   loadings.value.member_fetch = true;
@@ -412,6 +448,29 @@ const showMember = async () => {
     showApiError(error as AxiosError);
   }
   loadings.value.member_fetch = false;
+};
+
+
+const handleChangeStatus = (status: MemberStatus) => {
+  confirm.require({
+    message: 'Are you sure you want to proceed?',
+    header: `Account ${status === MemberStatus.TERMINATED ? 'Termination' : 'Activate'}`,
+    icon: 'pi pi-exclamation-triangle',
+    acceptClass: 'p-button-danger',
+    accept: async () => {
+      loadings.value.update_status = true;
+      try {
+       
+        await MembersService.updateStatus(member.value?.id?.toString() ?? '', status);
+        showSuccess("Member status updated successfully.");
+        member.value!.status = status;
+        showMember();
+      } catch (error) {
+        showApiError(error as AxiosError);
+      }
+      loadings.value.update_status = false;
+    },
+  });
 };
 
 const handleDoneOrientation = () => {

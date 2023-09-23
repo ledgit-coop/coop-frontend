@@ -73,3 +73,16 @@ export const REPAYMENT_CYCLE_DROPDOWN: DropdownOption[] = [
   { label: 'Yearly', value: RepaymentCycle.YEARLY },
   { label: 'Lump-Sum', value: RepaymentCycle.LUMP_SUM },
 ];
+
+export enum LoanPenaltyMethod {
+  PERCENTAGE = 'percentage',
+  FIX_AMOUNT = 'fix-amount',
+}
+
+export enum LoanPenaltyFrequency {
+  EVERY_DAY = 'every-day',
+  EVERY_WEEK = 'every-week',
+  EVERY_MONTH = 'every-month',
+  EVERY_YEAR = 'every-year',
+  EVERY_AMORTIZATION = 'every-amortization',
+}

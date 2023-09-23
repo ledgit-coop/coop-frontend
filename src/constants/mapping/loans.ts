@@ -29,16 +29,22 @@ export function mapLoanFormToPayload(loanForm: LoanForm): LoanApplicationPayload
   } = loanForm;
 
   const loanTerm: LoanTermForm = {
-    disbursed_channel: loan_term?.disbursed_channel || null,
-    interest_method: loan_term?.interest_method || null,
-    interest_type: loan_term?.interest_type || null,
-    loan_interest: loan_term?.loan_interest || null,
-    loan_interest_period: loan_term?.loan_interest_period || null,
-    loan_duration: loan_term?.loan_duration || null,
-    loan_duration_type: loan_term?.loan_duration_type || null,
-    repayment_cycle: loan_term?.repayment_cycle || null,
-    number_of_repayments: loan_term?.number_of_repayments || null,
-    repayment_mode: loan_term?.repayment_mode || null,
+    disbursed_channel: loan_term?.disbursed_channel,
+    interest_method: loan_term?.interest_method,
+    interest_type: loan_term?.interest_type,
+    loan_interest: loan_term?.loan_interest,
+    loan_interest_period: loan_term?.loan_interest_period,
+    loan_duration: loan_term?.loan_duration,
+    loan_duration_type: loan_term?.loan_duration_type,
+    repayment_cycle: loan_term?.repayment_cycle,
+    number_of_repayments: loan_term?.number_of_repayments,
+    repayment_mode: loan_term?.repayment_mode,
+    penalty: loan_term?.penalty,
+    penalty_grace_period: loan_term?.penalty_grace_period,
+    penalty_method: loan_term?.penalty_method,
+    penalty_duration: loan_term?.penalty_duration,
+    pre_termination_panalty: loan_term?.pre_termination_panalty,
+    pre_termination_panalty_method: loan_term?.pre_termination_panalty_method,
   };
 
   return {
@@ -107,6 +113,14 @@ export function mapLoanToLoanForm(loan: Loan): LoanForm {
     loan_fees,
     loan_interest_period,
     released_date,
+
+    penalty,
+    penalty_grace_period,
+    penalty_method,
+    penalty_duration,
+
+    pre_termination_panalty,
+    pre_termination_panalty_method,
   } = loan;
   const loanTerm: LoanTermForm = {
     loan_duration,
@@ -119,6 +133,12 @@ export function mapLoanToLoanForm(loan: Loan): LoanForm {
     disbursed_channel,
     loan_interest,
     loan_interest_period,
+    penalty,
+    penalty_grace_period,
+    penalty_method,
+    penalty_duration,
+    pre_termination_panalty,
+    pre_termination_panalty_method,
   };
 
   return {

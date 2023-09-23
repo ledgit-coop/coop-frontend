@@ -7,7 +7,15 @@
   );
 }
 .loan-paid {
-  background: linear-gradient(-225deg, #ac32e4 0%, #7918f2 48%, #4801ff 100%);
+  background: linear-gradient(-225deg, #ac32e4 0%, #7918f2 48%, #4801ff 100%) !important;
+}
+
+.loan-request-pre-termination {
+  background: linear-gradient(-225deg, #e43261 0%, #f21873 48%, #cc01ff 100%) !important;
+}
+
+.loan-pre-terminated {
+  background: rgba(255, 0, 0, 0.879) !important;
 }
 
 .p-dropdown .p-dropdown-clear-icon {

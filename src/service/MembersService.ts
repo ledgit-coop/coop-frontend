@@ -1,3 +1,4 @@
+import type { MemberStatus } from '@/constants/ui/members';
 import apiClient from '@/http-common';
 import type {
   GetAccountTransactionsParams,
@@ -33,6 +34,10 @@ class MembersService {
 
   postAddAccount(member_number: string, account_id: string, account_holder: string): AxiosPromise {
     return apiClient.post(`${PATH}/accounts/add/${member_number}/${account_id}`, { account_holder });
+  }
+
+  updateStatus(member_id: string, status: MemberStatus): AxiosPromise {
+    return apiClient.post(`${PATH}/accounts/status/${member_id}`, { status });
   }
 
   getAccounts(member_id: number, params?: Record<string, any>): AxiosPromise<MemberAccount[]> {

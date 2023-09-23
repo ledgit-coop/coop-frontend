@@ -2,10 +2,10 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <PageContentHeader title="Loan Guarantors">
+        <PageContentHeader title="Loan Accounts">
           <Button
             icon="pi pi-plus"
-            label="Add Guarantor"
+            label="Add Account"
             @click="modalsVisibility.create = true"
           ></Button>
         </PageContentHeader>
@@ -17,7 +17,7 @@
           :paginator="true"
           :row-hover="true"
           :value="members"
-          export-filename="guarantors"
+          export-filename="accounts"
           class="p-datatable-gridlines"
           data-key="id"
           filter-display="menu"
@@ -70,21 +70,21 @@
             header="ID"
           ></Column>
           <Column
-            field="first_name"
-            header="First Name"
+            field="name"
+            header="Name"
           ></Column>
           <Column
-            field="middle_name"
-            header="Middle Name"
+            field="type"
+            header="Type"
           ></Column>
 
           <Column
-            field="last_name"
-            header="Last Name"
+            field="earn_interest_per_anum"
+            header="Earn %/Per Anum"
           ></Column>
           <Column
-            field="contact"
-            header="Contact"
+            field="maintaining_balance"
+            header="Maintaining Balance"
           ></Column>
           <Column
             field="created_at"
@@ -132,10 +132,10 @@
           </Column>
         </DataTable>
 
-        <LoanGuarantorsSave
+        <AccountsSave
           @updated="loadTable"
           @hide="handleHide"
-          :guarantor-id="selected_guarantor?.id"
+          :account-id="selected_account?.id"
           v-model:visible="modalsVisibility.create"
         />
       </div>
@@ -147,15 +147,15 @@
 import { ref, onMounted } from 'vue';
 import Button from 'primevue/button';
 import PageContentHeader from '@/components/PageContentHeader.vue';
-import LoanGuarantorsService from '@/service/LoanGuarantorsService';
 import useTableParameters from '@/composables/useTableParameters';
 import useAlert from '@/composables/useAlert';
 import { dateFormat } from '@/helpers';
 import { DATE_TIME_FORMAT } from '@/constants';
-import LoanGuarantorsSave from './LoanGuarantorsSave.vue';
-import type { LoanGuarantorsTable } from '@/types/ui/loan-guarantors';
 import { useConfirm } from 'primevue/useconfirm';
 import type { AxiosError } from 'axios';
+import type { Account } from '@/types/ui/accounts';
+import AccountsService from '@/service/AccountsService';
+import AccountsSave from './AccountsSave.vue';
 
 interface ModalsVisibility {
   create: boolean;
@@ -173,8 +173,8 @@ const filters = ref({
 const { rows, onSort, paginate, totalRecords, onPageChange, params } = useTableParameters(filters);
 const { showApiError, showSuccess } = useAlert();
 const confirm = useConfirm();
-const members = ref<LoanGuarantorsTable[]>();
-const selected_guarantor = ref<LoanGuarantorsTable | undefined>();
+const members = ref<Account[]>();
+const selected_account = ref<Account | undefined>();
 const loadings = ref({
   table: false,
 });
@@ -187,7 +187,7 @@ const loadTable = (params?: Record<string, any>) => {
   if (!loadings.value.table) {
     loadings.value.table = true;
 
-    LoanGuarantorsService.list(params)
+    AccountsService.list(params)
       .then((res) => {
         members.value = res.data.data;
         paginate(res.data);
@@ -201,8 +201,8 @@ const loadTable = (params?: Record<string, any>) => {
   }
 };
 
-const handleEditClick = (data: LoanGuarantorsTable) => {
-  selected_guarantor.value = data;
+const handleEditClick = (data: Account) => {
+  selected_account.value = data;
   modalsVisibility.value.create = true;
 };
 
@@ -214,16 +214,16 @@ const clearFilters = () => {
   loadTable();
 };
 
-const handleDeleteClick = (data: LoanGuarantorsTable) => {
+const handleDeleteClick = (data: Account) => {
   confirm.require({
     message: 'Are you sure you want to proceed?',
-    header: 'Delete Guarantor',
+    header: 'Delete Account',
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
     accept: async () => {
       try {
-        await LoanGuarantorsService.destroy(data.id);
-        showSuccess('Guarantor successfully deleted.');
+        await AccountsService.destroy(data.id);
+        showSuccess('Account successfully deleted.');
         loadTable(params.value);
       } catch (error) {
         showApiError(error as AxiosError);
@@ -233,6 +233,6 @@ const handleDeleteClick = (data: LoanGuarantorsTable) => {
 };
 
 const handleHide = () => {
-  selected_guarantor.value = undefined;
+  selected_account.value = undefined;
 };
 </script>
