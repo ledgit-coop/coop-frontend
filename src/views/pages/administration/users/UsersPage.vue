@@ -111,6 +111,7 @@
           @updated="loadTable"
           :user-id="selected_member?.id"
           v-model:visible="modalsVisibility.create"
+          @hide="handleHide"
         />
       </div>
     </div>
@@ -189,4 +190,8 @@ const clearFilters = () => {
   };
   loadTable();
 };
+
+const handleHide = () => {
+  selected_member.value = undefined;
+}
 </script>

@@ -2,8 +2,9 @@
   <Dialog
     v-model:visible="showModal"
     modal
-    header="Add User"
+    :header="isEditing ? 'Edit User' : 'Add User'"
     :style="{ width: '30vw' }"
+    @hide="handleHideSave"
   >
     <div class="grid p-fluid formgrid">
       <div class="field col-12">
@@ -116,9 +117,10 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits(['update:visible', 'updated']);
+const emit = defineEmits(['update:visible', 'updated', 'hide']);
 const showModal = ref(false);
 const { showApiError, showError, showSuccess } = useAlert();
+const isEditing = computed(()=>!(!props.userId));
 const data = reactive<{ form: UserSaveForm }>({
   form: {},
 });
@@ -183,9 +185,16 @@ const handleSave = async () => {
   }
   loadings.value.save = true;
   try {
+   
+    if(isEditing.value)
+    await UsersService.update(Number(props.userId ?? 0),{
+      ...(data.form ?? {}),
+    });
+    else
     await UsersService.store({
       ...(data.form ?? {}),
     });
+
     emit('updated');
     showModal.value = false;
     showSuccess('User successfully saved.');
@@ -194,4 +203,10 @@ const handleSave = async () => {
   }
   loadings.value.save = false;
 };
+
+const handleHideSave = () => {
+  data.form = {};
+  validation.value?.$reset();
+  emit('hide');
+}
 </script>
