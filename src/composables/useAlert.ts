@@ -31,10 +31,10 @@ export default function useAlert() {
     });
   };
 
-  const showApiError = (error?: AxiosError) => {
+  const showApiError = (error?: AxiosError, summary: string = 'Contact administrator') => {
     const data: any = error?.response?.data;
     toast.add({
-      summary: 'Contact administrator',
+      summary,
       detail: (data ? data.message : error) ?? `Something went wrong.`,
       severity: 'error',
       life: 3000,

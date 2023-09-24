@@ -1,5 +1,10 @@
 import { PUBLIC_ROUTES, ROUTE_PATH_LOGIN } from '@/constants';
-import { API_ROUTE_LOGIN, API_ROUTE_LOGOUT } from '@/constants/api-routes';
+import {
+  API_ROUTE_LOGIN,
+  API_ROUTE_LOGOUT,
+  API_ROUTE_PASSWORD_RESET,
+  API_ROUTE_PASSWORD_RESET_REQUEST,
+} from '@/constants/api-routes';
 import apiClient from '@/http-common';
 import TokenService from '@/service/TokenService';
 import type { AxiosPromise } from 'axios';
@@ -51,16 +56,20 @@ class AuthService {
     return apiClient.get(link.replace(' ', '+'));
   }
 
-  requestPasswordReset(payload: Record<string, string>): AxiosPromise {
-    return apiClient.post('/auth/request-password-reset', payload);
-  }
-
   validatePasswordResetLink(link: string): AxiosPromise {
     return apiClient.get(link.replace(' ', '+'));
   }
 
-  resetPassword(link: string, payload: Record<string, any>): AxiosPromise {
-    return apiClient.post(link.replace(' ', '+'), payload);
+  requestPasswordReset(payload?: Record<string, any>): AxiosPromise {
+    return apiClient.post(API_ROUTE_PASSWORD_RESET_REQUEST, {
+      ...payload,
+    });
+  }
+
+  resetPassword(payload?: Record<string, any>): AxiosPromise {
+    return apiClient.post(API_ROUTE_PASSWORD_RESET, {
+      ...payload,
+    });
   }
 
   setCookie = (cvalue: string) => {

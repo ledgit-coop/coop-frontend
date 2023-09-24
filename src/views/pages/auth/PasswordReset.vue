@@ -38,9 +38,8 @@
               autocomplete="off"
               placeholder="Email address"
               class="w-full md:w-30rem"
+              disabled
               style="padding: 1rem"
-              @keydown.enter="handleLoginClick"
-
             />
 
             <div class="mb-5">
@@ -60,9 +59,9 @@
               id="password"
               v-model="password"
               placeholder="Password"
+              :toggle-mask="true"
               class="w-full mb-3"
               input-class="w-full"
-              @keydown.enter="handleLoginClick"
               :input-style="{ padding: '1rem' }"
             ></Password>
 
@@ -74,25 +73,31 @@
               />
             </div>
 
-            <div class="flex align-items-center justify-content-between mb-5 gap-5">
-              <div class="flex align-items-center">
-                <Checkbox
-                  id="rememberme1"
-                  v-model="rememberMe"
-                  binary
-                  class="mr-2"
-                ></Checkbox>
-                <label for="rememberme1">Remember me</label>
-              </div>
-              <a
-                class="font-medium no-underline ml-2 text-right cursor-pointer"
-                style="color: var(--primary-color)"
-                @click="handleForgotPasswordClick"
-                >Forgot password?</a
-              >
+            <Label
+              for="password1"
+              class="block text-900 font-medium text-xl mb-2"
+              >Confirm Password</Label
+            >
+            <Password
+              id="password"
+              v-model="password_confirmation"
+              placeholder="Password Confirm"
+              :toggle-mask="true"
+              class="w-full mb-3"
+              input-class="w-full"
+              :input-style="{ padding: '1rem' }"
+            ></Password>
+
+            <div class="mb-5">
+              <FieldErrorMessage
+                :validation="validation"
+                class="block mt-2"
+                field="password_confirmation"
+              />
             </div>
+
             <Button
-              label="Sign In"
+              label="Reset Password"
               class="w-full p-3 text-xl"
               :loading="isSumitted"
               @click="handleLoginClick"
@@ -107,43 +112,40 @@
 
 <script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import AppConfig from '@/layout/AppConfig.vue';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 import AuthService from '@/service/AuthService';
-import TokenService from '@/service/TokenService';
-import { useRouter } from 'vue-router';
-import { ROUTE_NAME_FORGOT_PASSWORD } from '@/constants';
+import Label from '@/components/Label.vue';
+import FieldErrorMessage from '@/components/FieldErrorMessage.vue';
 import useValidation from '@/composables/useValidation';
 import { required } from '@vuelidate/validators';
 import useAlert from '@/composables/useAlert';
-import FieldErrorMessage from '@/components/FieldErrorMessage.vue';
-import Label from '@/components/Label.vue';
+import router from '@/router';
+import { ROUTE_NAME_LOGIN } from '@/constants';
 
 const { layoutConfig } = useLayout();
-const router = useRouter();
-const { showApiError } = useAlert();
 
-const email = ref('');
 const password = ref('');
-const rememberMe = ref(false);
+const email = ref<any>();
+const password_confirmation = ref('');
 const errorMsg = ref('');
 const isSumitted = ref(false);
-
-const logoUrl = computed(() => {
-  return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
-});
+const token = ref<any>();
 
 const form = computed(() => ({
-  email: email.value,
   password: password.value,
+  password_confirmation: password_confirmation.value,
+  token: token.value,
+  email: email.value,
 }));
 
-const { validation, mapExternalErrorsApi } = useValidation({
+const { validation, mapExternalErrorsApi, resetExternalErrorsApi } = useValidation({
   rules: {
-    email: { required },
     password: { required },
+    password_confirmation: { required },
+    email: { required },
   },
   model: form,
   globalConfig: {
@@ -151,30 +153,34 @@ const { validation, mapExternalErrorsApi } = useValidation({
   },
 });
 
+onMounted(() => {
+  const { token: t, email: e } = router.currentRoute.value.query;
+  token.value = t;
+  email.value = e;
+});
+
+const { showApiError, showSuccess } = useAlert();
+
+const logoUrl = computed(() => {
+  return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+});
 
 const handleLoginClick = async () => {
-  validation.value?.$reset();
+  resetExternalErrorsApi();
   await validation.value?.$validate();
-  if(validation.value?.$invalid) return;
+  if (validation.value?.$invalid) return;
+
   if (!isSumitted.value) {
     isSumitted.value = true;
-    const payload = {
-      email: email.value,
-      password: password.value,
-    };
-    AuthService.login(payload)
-      .then(({ data }) => {
-        if (rememberMe.value) {
-          AuthService.setCookie(email.value);
-        }
-        TokenService.setAuthToken(data.token);
-        TokenService.setAuthUser(data.user);
-
-        // Redirect to dashboard
-        router.push({ name: 'dashboard' });
+    AuthService.resetPassword({ ...form.value })
+      .then(() => {
+        showSuccess("Password has been successfully updated and you will be redirected to login page.");
+        setTimeout(() => {
+          router.push({ name: ROUTE_NAME_LOGIN })
+        }, 1500);
       })
       .catch((error: any) => {
-        showApiError(error, 'Failed to login');
+        showApiError(error, 'Failed to reset password');
         mapExternalErrorsApi(error);
       })
       .finally(() => {
@@ -182,10 +188,6 @@ const handleLoginClick = async () => {
       });
   }
 };
-
-const handleForgotPasswordClick = () => {
-  router.push({ name: ROUTE_NAME_FORGOT_PASSWORD })
-}
 </script>
 
 <style scoped>

@@ -193,5 +193,5 @@ const clearFilters = () => {
 
 const handleHide = () => {
   selected_member.value = undefined;
-}
+};
 </script>

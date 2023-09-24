@@ -5,6 +5,7 @@ import {
   PUBLIC_ROUTES,
   ROUTE_LOAN_CALCULATOR,
   ROUTE_NAME_ACCOUNTS,
+  ROUTE_NAME_FORGOT_PASSWORD,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOAN_FEES,
   ROUTE_NAME_LOAN_PRODUCTS,
@@ -13,6 +14,7 @@ import {
   ROUTE_NAME_MEMBERS_EDIT,
   ROUTE_NAME_MEMBERS_VIEW,
   ROUTE_NAME_REPAYMENTS,
+  ROUTE_NAME_RESET_PASSWORD,
   ROUTE_NAME_USERS,
 } from '@/constants/routes';
 
@@ -30,7 +32,16 @@ const router = createRouter({
       name: 'login',
       component: () => import('@/views/pages/auth/Login.vue'),
     },
-
+    {
+      path: '/forgot-password',
+      name: ROUTE_NAME_FORGOT_PASSWORD,
+      component: () => import('@/views/pages/auth/ForgotPassword.vue'),
+    },
+    {
+      path: '/reset-password',
+      name: ROUTE_NAME_RESET_PASSWORD,
+      component: () => import('@/views/pages/auth/PasswordReset.vue'),
+    },
     {
       path: '/auth/access',
       name: 'accessDenied',

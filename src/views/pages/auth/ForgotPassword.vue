@@ -39,8 +39,6 @@
               placeholder="Email address"
               class="w-full md:w-30rem"
               style="padding: 1rem"
-              @keydown.enter="handleLoginClick"
-
             />
 
             <div class="mb-5">
@@ -51,52 +49,28 @@
               />
             </div>
 
-            <Label
-              for="password1"
-              class="block text-900 font-medium text-xl mb-2"
-              >Password</Label
-            >
-            <Password
-              id="password"
-              v-model="password"
-              placeholder="Password"
-              class="w-full mb-3"
-              input-class="w-full"
-              @keydown.enter="handleLoginClick"
-              :input-style="{ padding: '1rem' }"
-            ></Password>
 
-            <div class="mb-5">
-              <FieldErrorMessage
-                :validation="validation"
-                class="block mt-2"
-                field="password"
-              />
-            </div>
-
-            <div class="flex align-items-center justify-content-between mb-5 gap-5">
-              <div class="flex align-items-center">
-                <Checkbox
-                  id="rememberme1"
-                  v-model="rememberMe"
-                  binary
-                  class="mr-2"
-                ></Checkbox>
-                <label for="rememberme1">Remember me</label>
-              </div>
-              <a
-                class="font-medium no-underline ml-2 text-right cursor-pointer"
-                style="color: var(--primary-color)"
-                @click="handleForgotPasswordClick"
-                >Forgot password?</a
-              >
-            </div>
             <Button
-              label="Sign In"
+              label="Request Password Reset"
               class="w-full p-3 text-xl"
               :loading="isSumitted"
               @click="handleLoginClick"
             />
+
+
+
+
+            <div class="flex mt-5">
+              
+              <a
+                class="font-medium no-underline ml-2 text-right cursor-pointer ml-auto"
+                style="color: var(--primary-color)"
+                @click="handleLogin"
+                >Back to login</a
+              >
+            </div>
+
+           
           </div>
         </div>
       </div>
@@ -112,38 +86,28 @@ import AppConfig from '@/layout/AppConfig.vue';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 import AuthService from '@/service/AuthService';
-import TokenService from '@/service/TokenService';
 import { useRouter } from 'vue-router';
-import { ROUTE_NAME_FORGOT_PASSWORD } from '@/constants';
+import Label from '@/components/Label.vue';
+import FieldErrorMessage from '@/components/FieldErrorMessage.vue';
 import useValidation from '@/composables/useValidation';
 import { required } from '@vuelidate/validators';
 import useAlert from '@/composables/useAlert';
-import FieldErrorMessage from '@/components/FieldErrorMessage.vue';
-import Label from '@/components/Label.vue';
+import { ROUTE_NAME_LOGIN } from '@/constants';
 
 const { layoutConfig } = useLayout();
 const router = useRouter();
-const { showApiError } = useAlert();
 
 const email = ref('');
-const password = ref('');
-const rememberMe = ref(false);
 const errorMsg = ref('');
 const isSumitted = ref(false);
 
-const logoUrl = computed(() => {
-  return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
-});
-
 const form = computed(() => ({
   email: email.value,
-  password: password.value,
 }));
 
 const { validation, mapExternalErrorsApi } = useValidation({
   rules: {
     email: { required },
-    password: { required },
   },
   model: form,
   globalConfig: {
@@ -151,30 +115,27 @@ const { validation, mapExternalErrorsApi } = useValidation({
   },
 });
 
+const { showApiError, showSuccess } = useAlert();
+
+const logoUrl = computed(() => {
+  return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+});
 
 const handleLoginClick = async () => {
   validation.value?.$reset();
   await validation.value?.$validate();
-  if(validation.value?.$invalid) return;
+  if (validation.value?.$invalid) return;
   if (!isSumitted.value) {
     isSumitted.value = true;
     const payload = {
       email: email.value,
-      password: password.value,
     };
-    AuthService.login(payload)
-      .then(({ data }) => {
-        if (rememberMe.value) {
-          AuthService.setCookie(email.value);
-        }
-        TokenService.setAuthToken(data.token);
-        TokenService.setAuthUser(data.user);
-
-        // Redirect to dashboard
-        router.push({ name: 'dashboard' });
+    AuthService.requestPasswordReset(payload)
+      .then(() => {
+        showSuccess("Password reset successfully sent to your email.");
       })
       .catch((error: any) => {
-        showApiError(error, 'Failed to login');
+        showApiError(error, 'Failed to request');
         mapExternalErrorsApi(error);
       })
       .finally(() => {
@@ -183,8 +144,8 @@ const handleLoginClick = async () => {
   }
 };
 
-const handleForgotPasswordClick = () => {
-  router.push({ name: ROUTE_NAME_FORGOT_PASSWORD })
+const handleLogin = () => {
+  router.push({ name: ROUTE_NAME_LOGIN })
 }
 </script>
 

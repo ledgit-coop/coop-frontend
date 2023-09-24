@@ -120,7 +120,7 @@ const props = defineProps<Props>();
 const emit = defineEmits(['update:visible', 'updated', 'hide']);
 const showModal = ref(false);
 const { showApiError, showError, showSuccess } = useAlert();
-const isEditing = computed(()=>!(!props.userId));
+const isEditing = computed(() => !!props.userId);
 const data = reactive<{ form: UserSaveForm }>({
   form: {},
 });
@@ -185,15 +185,14 @@ const handleSave = async () => {
   }
   loadings.value.save = true;
   try {
-   
-    if(isEditing.value)
-    await UsersService.update(Number(props.userId ?? 0),{
-      ...(data.form ?? {}),
-    });
+    if (isEditing.value)
+      await UsersService.update(Number(props.userId ?? 0), {
+        ...(data.form ?? {}),
+      });
     else
-    await UsersService.store({
-      ...(data.form ?? {}),
-    });
+      await UsersService.store({
+        ...(data.form ?? {}),
+      });
 
     emit('updated');
     showModal.value = false;
@@ -208,5 +207,5 @@ const handleHideSave = () => {
   data.form = {};
   validation.value?.$reset();
   emit('hide');
-}
+};
 </script>
