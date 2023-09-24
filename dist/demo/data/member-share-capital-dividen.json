@@ -1,0 +1,31 @@
+{
+    "data": [
+		{
+		"id": 1,
+		"reference_number": "0000545635",
+		"amount": "500.00",
+		"percentage": "4.5%",
+		"recorded_share_capital": "5,250.00",
+		"year": "2021",
+		"released_date": "25-Dec-2021"
+	  },
+	  {
+		"id": 1,
+		"reference_number": "0000545635",
+		"amount": "300.00",
+		"percentage": "4.5%",
+		"year": "2022",
+		"recorded_share_capital": "7,250.00",
+		"released_date": "25-Dec-2022"
+	  },
+	  {
+		"id": 1,
+		"reference_number": "0000545635",
+		"amount": "300.00",
+		"percentage": "4.5%",
+		"recorded_share_capital": "10,000.00",
+		"year": "2023",
+		"released_date": "25-Dec-2023"
+	  }
+	]	  
+}
