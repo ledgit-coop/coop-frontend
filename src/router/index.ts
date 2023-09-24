@@ -5,9 +5,7 @@ import {
   PUBLIC_ROUTES,
   ROUTE_LOAN_CALCULATOR,
   ROUTE_NAME_ACCOUNTS,
-  ROUTE_NAME_COLLECTIONS,
   ROUTE_NAME_LOANS,
-  ROUTE_NAME_LOANS_CREATE,
   ROUTE_NAME_LOAN_FEES,
   ROUTE_NAME_LOAN_PRODUCTS,
   ROUTE_NAME_MEMBERS,
@@ -107,11 +105,6 @@ const router = createRouter({
                 title: 'Loans',
               },
             },
-            {
-              path: 'create',
-              name: ROUTE_NAME_LOANS_CREATE,
-              component: () => import('@/views/pages/loans/LoansCreate.vue'),
-            },
           ],
         },
 
@@ -123,16 +116,6 @@ const router = createRouter({
             title: 'Repayments',
           },
         },
-
-        {
-          path: '/collections',
-          name: ROUTE_NAME_COLLECTIONS,
-          component: () => import('@/views/pages/collections/CollectionsPage.vue'),
-          meta: {
-            title: 'Collections',
-          },
-        },
-
         {
           path: '/loan-calculator',
           name: ROUTE_LOAN_CALCULATOR,

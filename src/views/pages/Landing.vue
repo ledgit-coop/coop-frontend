@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts"> 
 import { useLayout } from '@/layout/composables/layout';
 import { computed } from 'vue';
 import AppConfig from '@/layout/AppConfig.vue';
 
 const { layoutConfig } = useLayout();
 
-const smoothScroll = (id) => {
+const smoothScroll = (id: any) => {
   document.querySelector(id).scrollIntoView({
     behavior: 'smooth',
   });

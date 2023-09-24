@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import RadioButton from 'primevue/radiobutton';
 import Button from 'primevue/button';
 import InputSwitch from 'primevue/inputswitch';
@@ -21,9 +21,9 @@ const { changeThemeSettings, setScale, layoutConfig } = useLayout();
 const onConfigButtonClick = () => {
   visible.value = !visible.value;
 };
-const onChangeTheme = (theme, mode) => {
+const onChangeTheme = (theme :any, mode : any) => {
   const elementId = 'theme-css';
-  const linkElement = document.getElementById(elementId);
+  const linkElement :any = document.getElementById(elementId);
   const cloneLinkElement = linkElement.cloneNode(true);
   const newThemeUrl = linkElement.getAttribute('href').replace(layoutConfig.theme.value, theme);
   cloneLinkElement.setAttribute('id', elementId + '-clone');

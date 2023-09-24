@@ -5,7 +5,7 @@
     :loading="loading"
     table-style="min-width: 50rem"
   >
-    <!-- Inheret template -->
+    <!-- @vue-skip -->
     <template
       v-for="(_, name) in $slots"
       #[name]="slotData"

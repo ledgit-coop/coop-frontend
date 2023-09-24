@@ -17,7 +17,7 @@ const setup = (store: Store<any>) => {
       if (config.headers && isLoggedIn) {
         config.headers['Authorization'] = `Bearer ${token}`;
       }
-      return config;
+      return config as any;
     },
     (error) => {
       return Promise.reject(error);

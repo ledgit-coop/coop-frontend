@@ -5,7 +5,7 @@
     table-style="min-width: 50rem"
     :row-class="({ status }) => (status === MemberLoanStatus.OVERDUE ? 'text-red-500' : undefined)"
   >
-    <!-- Inheret template -->
+    <!-- @vue-skip -->
     <template
       v-for="(_, name) in $slots"
       #[name]="slotData"

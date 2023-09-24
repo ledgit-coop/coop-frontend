@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { computed, watch, ref } from 'vue';
 import AppTopbar from './AppTopbar.vue';
 import AppFooter from './AppFooter.vue';
@@ -9,7 +9,7 @@ import { useLayout } from '@/layout/composables/layout';
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
-const outsideClickListener = ref(null);
+const outsideClickListener = ref<any>(null);
 
 watch(isSidebarActive, (newVal) => {
   if (newVal) {
@@ -34,7 +34,7 @@ const containerClass = computed(() => {
 });
 const bindOutsideClickListener = () => {
   if (!outsideClickListener.value) {
-    outsideClickListener.value = (event) => {
+    outsideClickListener.value = (event : any) => {
       if (isOutsideClicked(event)) {
         layoutState.overlayMenuActive.value = false;
         layoutState.staticMenuMobileActive.value = false;
@@ -50,9 +50,9 @@ const unbindOutsideClickListener = () => {
     outsideClickListener.value = null;
   }
 };
-const isOutsideClicked = (event) => {
-  const sidebarEl = document.querySelector('.layout-sidebar');
-  const topbarEl = document.querySelector('.layout-menu-button');
+const isOutsideClicked = (event : any) => {
+  const sidebarEl : any = document.querySelector('.layout-sidebar');
+  const topbarEl : any= document.querySelector('.layout-menu-button');
 
   return !(
     sidebarEl.isSameNode(event.target) ||

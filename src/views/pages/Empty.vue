@@ -4,3 +4,5 @@
     <p>Use this page to start from scratch and place your custom content.</p>
   </div>
 </template>
+<script setup lang="ts">
+</script>

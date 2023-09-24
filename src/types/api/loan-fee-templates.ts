@@ -1,12 +1,12 @@
 import type { Pagination } from '../ui';
-import type { LoanFee } from '../ui/loan-fee-templates';
+import type { LoanFeeTemplate } from '../ui/loan-fee-templates';
 
 export interface LoanFeeListPayload {
   filters: any;
 }
 
 export interface LoanFeeListResponse extends Pagination {
-  data: LoanFee[];
+  data: LoanFeeTemplate[];
 }
 
 export interface LoanFeeSavePayload {

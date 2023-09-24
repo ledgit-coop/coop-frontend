@@ -33,14 +33,14 @@ const items = ref([
   { label: 'Add New', icon: 'pi pi-fw pi-plus' },
   { label: 'Remove', icon: 'pi pi-fw pi-minus' },
 ]);
-const lineOptions = ref(null);
+const lineOptions = ref<any>(null);
 const productService = new ProductService();
 
 onMounted(() => {
-  productService.getProductsSmall().then((data) => (products.value = data));
+  productService.getProductsSmall().then((data : any) => (products.value = data));
 });
 
-const formatCurrency = (value) => {
+const formatCurrency = (value: any) => {
   return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 };
 const applyLightTheme = () => {
@@ -246,7 +246,7 @@ watch(
             <Button
               icon="pi pi-ellipsis-v"
               class="p-button-text p-button-plain p-button-rounded"
-              @click="$refs.menu2.toggle($event)"
+              @click="($refs as any).menu2.toggle($event)"
             ></Button>
             <Menu
               ref="menu2"
@@ -383,7 +383,7 @@ watch(
             <Button
               icon="pi pi-ellipsis-v"
               class="p-button-text p-button-plain p-button-rounded"
-              @click="$refs.menu1.toggle($event)"
+              @click="($refs as any).menu1.toggle($event)"
             ></Button>
             <Menu
               ref="menu1"

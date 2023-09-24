@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
-import { useRouter } from 'vue-router';
 import Menu from 'primevue/menu';
 import AuthService from '@/service/AuthService';
 
@@ -9,7 +8,6 @@ const { layoutConfig, onMenuToggle } = useLayout();
 
 const outsideClickListener = ref<any>();
 const topbarMenuActive = ref(false);
-const router = useRouter();
 const menu = ref();
 
 const items = ref([
@@ -52,10 +50,7 @@ const logoUrl = computed(() => {
 const onTopBarMenuButton = () => {
   topbarMenuActive.value = !topbarMenuActive.value;
 };
-const onSettingsClick = () => {
-  topbarMenuActive.value = false;
-  router.push('/documentation');
-};
+
 const topbarMenuClasses = computed(() => {
   return {
     'layout-topbar-menu-mobile-active': topbarMenuActive.value,
@@ -74,6 +69,7 @@ const bindOutsideClickListener = () => {
 };
 const unbindOutsideClickListener = () => {
   if (outsideClickListener.value) {
+    //@ts-ignore
     document.removeEventListener('click', outsideClickListener);
     outsideClickListener.value = null;
   }
@@ -81,8 +77,8 @@ const unbindOutsideClickListener = () => {
 const isOutsideClicked = (event: any) => {
   if (!topbarMenuActive.value) return;
 
-  const sidebarEl = document.querySelector('.layout-topbar-menu');
-  const topbarEl = document.querySelector('.layout-topbar-menu-button');
+  const sidebarEl :any= document.querySelector('.layout-topbar-menu');
+  const topbarEl : any = document.querySelector('.layout-topbar-menu-button');
 
   return !(
     sidebarEl.isSameNode(event.target) ||

@@ -47,7 +47,7 @@
                   label="Export"
                   class="p-button-outlined mb-2"
                   size="small"
-                  @click="$refs.table.exportCSV()"
+                  @click="($refs as any).table.exportCSV()"
                 />
               </div>
 

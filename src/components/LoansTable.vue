@@ -17,16 +17,14 @@
       export-filename="loans"
       :row-class="({ status }) => (status === MemberLoanStatus.OVERDUE ? 'text-red-500' : undefined)"
     >
-      <!-- Inheret template -->
-      <template
-        v-for="(_, name) in $slots"
-        #[name]="slotData"
-      >
+      <!-- @vue-skip -->
+      <template  v-for="(_, name) in $slots" #[name]="slotData">
         <slot
           :name="name"
           v-bind="slotData"
         />
       </template>
+ 
 
       <template #empty> No records found. </template>
 

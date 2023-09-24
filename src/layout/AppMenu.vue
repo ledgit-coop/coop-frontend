@@ -29,7 +29,7 @@ const model = ref<any>([
       {
         label: 'Share Capitals',
         icon: 'pi pi-fw pi-globe',
-        to: '/uikit/invalidstate',
+        to: { name: ROUTE_NAME_REPAYMENTS },
         class: 'line-through pointer-events-none',
       },
       {

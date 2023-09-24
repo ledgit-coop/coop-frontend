@@ -21,7 +21,7 @@
           label="Export"
           class="p-button-outlined mb-2"
           size="small"
-          @click="$refs?.accountsTable?.exportCSV()"
+          @click="($refs as any)?.accountsTable?.exportCSV()"
         />
 
         <div class="grid gap-1 m-0 align-items-start ml-auto">

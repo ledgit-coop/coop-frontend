@@ -83,6 +83,7 @@ import FileUpload from 'primevue/fileupload';
 import TabPanel from 'primevue/tabpanel';
 import TabView from 'primevue/tabview';
 import { ref, watch } from 'vue';
+// @ts-ignore
 import { WebCamUI } from 'vue-camera-lib';
 import VuePictureCropper, { cropper } from 'vue-picture-cropper';
 

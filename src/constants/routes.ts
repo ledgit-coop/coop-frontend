@@ -27,8 +27,6 @@ export const ROUTE_NAME_USERS = 'users';
 export const ROUTE_NAME_LOAN_FEES = 'loan-fees';
 export const ROUTE_NAME_ACCOUNTS = 'accounts';
 
-export const ROUTE_NAME_COLLECTIONS = 'collections';
-
 export const ROUTE_LOAN_CALCULATOR = 'loan-calculator';
 
 export const PUBLIC_ROUTES: Array<string> = [

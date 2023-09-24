@@ -14,7 +14,7 @@
           label="Export"
           class="p-button-outlined mb-2"
           size="small"
-          @click="$refs?.table?.exportCSV()"
+          @click="($refs as any)?.table?.exportCSV()"
         />
       </div>
     </template>
@@ -98,7 +98,6 @@ import { AccountTransactionType } from '@/constants/ui/accounts';
 import { formatCurrency } from '@/helpers';
 import type { AccountTransaction } from '@/types/ui/accounts';
 import Button from 'primevue/button';
-import Calendar from 'primevue/calendar';
 import DataTable from 'primevue/datatable';
 
 interface Props {
