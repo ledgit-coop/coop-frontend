@@ -29,6 +29,7 @@
       option-label="label"
       placeholder="Select a Year"
       @change="loadTransactions"
+      v-model="filters.year"
       :options="yearOptions"
     >
     </Dropdown>

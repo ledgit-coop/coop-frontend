@@ -58,6 +58,7 @@
               mask="true"
               id="applied-date"
               v-model="data.released_date"
+              showButtonBar
             />
           </div>
 

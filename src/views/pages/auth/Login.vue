@@ -32,15 +32,13 @@
             >
 
             <InputText
-              id="email"
               v-model="email"
               type="text"
-              autocomplete="off"
+              autocomplete="null"
               placeholder="Email address"
               class="w-full md:w-30rem"
               style="padding: 1rem"
               @keydown.enter="handleLoginClick"
-
             />
 
             <div class="mb-5">
@@ -151,11 +149,10 @@ const { validation, mapExternalErrorsApi } = useValidation({
   },
 });
 
-
 const handleLoginClick = async () => {
   validation.value?.$reset();
   await validation.value?.$validate();
-  if(validation.value?.$invalid) return;
+  if (validation.value?.$invalid) return;
   if (!isSumitted.value) {
     isSumitted.value = true;
     const payload = {
@@ -184,8 +181,8 @@ const handleLoginClick = async () => {
 };
 
 const handleForgotPasswordClick = () => {
-  router.push({ name: ROUTE_NAME_FORGOT_PASSWORD })
-}
+  router.push({ name: ROUTE_NAME_FORGOT_PASSWORD });
+};
 </script>
 
 <style scoped>

@@ -56,11 +56,10 @@
             >Age</Label
           >
           <InputNumber
-            :minFractionDigits="2"
-            :maxFractionDigits="3"
             id="age"
             v-model="data.form.age"
             validate="age"
+            :use-grouping="false"
             v-validation="validation"
           />
           <FieldErrorMessage
@@ -551,6 +550,7 @@
         v-model="data.form.applied_date"
         validate="applied_date"
         v-validation="validation"
+        showButtonBar
       />
       <FieldErrorMessage
         :validation="validation"
@@ -571,6 +571,7 @@
         v-model="data.form.released_date"
         validate="released_date"
         v-validation="validation"
+        showButtonBar
       />
       <FieldErrorMessage
         :validation="validation"
@@ -613,6 +614,7 @@ import FieldErrorMessage from './FieldErrorMessage.vue';
 import Label from './Label.vue';
 import { required } from '@vuelidate/validators';
 import LoanFeeForm from './LoanFeeForm.vue';
+import { AccountType } from '@/constants/ui/accounts';
 
 interface Props {
   modelValue?: LoanForm;
@@ -773,7 +775,9 @@ const handleTypeLoanClick = (id: any) => {
 const getMemberAccount = async (member_id: string) => {
   try {
     loadings.value.accounts = true;
-    const { data: dropdown } = await UtilityService.getmemberAcountDropdown(member_id);
+    const { data: dropdown } = await UtilityService.getmemberAcountDropdown(member_id, {
+      type: AccountType.REGULAR,
+    });
     accounts.value = dropdown;
   } catch (error) {
     showApiError(error as AxiosError);

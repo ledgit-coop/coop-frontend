@@ -20,6 +20,10 @@ class MembersService {
     return apiClient.get(`${PATH}/${id}`);
   }
 
+  destroy(id: string): AxiosPromise<Member> {
+    return apiClient.delete(`${PATH}/${id}`);
+  }
+
   postMembers(params?: PostMemberPayload): AxiosPromise<Member> {
     return apiClient.post('/api/members', params);
   }

@@ -2,7 +2,7 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <PageContentHeader title="Loan Accounts">
+        <PageContentHeader title="Accounts">
           <Button
             icon="pi pi-plus"
             label="Add Account"

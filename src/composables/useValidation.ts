@@ -19,7 +19,7 @@ export default function useValidation(params?: Params) {
   const mapExternalErrorsApi = (errors: any) => {
     const { data } = errors.response;
     if (data.errors) {
-      console.log(data)
+      console.log(data);
       externalErrors.value = { ...data.errors };
     }
   };

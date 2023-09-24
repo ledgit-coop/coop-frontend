@@ -14,6 +14,8 @@
         v-model="data.form.house_block_lot"
         validate="house_block_lot"
         v-validation="validation"
+        :disabled="disabled"
+        @blur="emit('blur')"
       />
       <FieldErrorMessage
         :validation="validation"
@@ -31,6 +33,8 @@
         type="text"
         v-model="data.form.street"
         validate="street"
+        :disabled="disabled"
+        @blur="emit('blur')"
         v-validation="validation"
       />
       <FieldErrorMessage
@@ -51,6 +55,8 @@
         v-model="data.form.subdivision_village"
         validate="subdivision_village"
         v-validation="validation"
+        :disabled="disabled"
+        @blur="emit('blur')"
       />
       <FieldErrorMessage
         :validation="validation"
@@ -69,6 +75,8 @@
         v-model="data.form.barangay"
         type="text"
         validate="barangay"
+        :disabled="disabled"
+        @blur="emit('blur')"
         v-validation="validation"
       />
       <FieldErrorMessage
@@ -88,6 +96,8 @@
         v-model="data.form.city_municipality"
         validate="city_municipality"
         v-validation="validation"
+        :disabled="disabled"
+        @blur="emit('blur')"
         type="text"
       />
       <FieldErrorMessage
@@ -107,6 +117,8 @@
         v-model="data.form.province"
         validate="province"
         v-validation="validation"
+        :disabled="disabled"
+        @blur="emit('blur')"
         type="text"
       />
       <FieldErrorMessage
@@ -122,11 +134,12 @@
         >Zip Code</Label
       >
       <InputNumber
-        :minFractionDigits="2"
-        :maxFractionDigits="3"
+        :use-grouping="false"
         id="zip-code"
         v-model="data.form.zip_code"
         validate="zip_code"
+        :disabled="disabled"
+        @blur="emit('blur')"
         v-validation="validation"
       />
       <FieldErrorMessage
@@ -198,13 +211,14 @@ import InputNumber from 'primevue/inputnumber';
 interface Props {
   type: MemberType;
   modelValue?: MemberAddress;
+  disabled?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   type: MemberType.PRESENT,
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'blur']);
 
 const data = reactive<{ form: MemberAddress }>({
   form: {},

@@ -157,6 +157,7 @@
 
         <LoanFeeSave
           @updated="loadTable(params)"
+          @hide="selectedFee = undefined"
           :id="selectedFee?.id"
           v-model:visible="modalsVisibility.save_fee"
         />

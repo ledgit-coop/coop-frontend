@@ -4,6 +4,7 @@
     modal
     :header="isEditing ? 'Edit Loan Fee' : 'Add Loan Fee'"
     :style="{ width: '50vw' }"
+    @hide="handleHide"
   >
     <template v-if="loadings.fetch">
       <Skeleton class="mb-2 full-width"></Skeleton>
@@ -63,7 +64,7 @@ interface Props {
 
 const { showApiError, showSuccess } = useAlert();
 const props = defineProps<Props>();
-const emit = defineEmits(['update:visible', 'updated']);
+const emit = defineEmits(['update:visible', 'updated', 'hide']);
 const model = ref<{ form: LoanFeeForm }>({ form: {} });
 const showModal = ref(false);
 const loadings = ref({
@@ -113,5 +114,10 @@ const loadFee = async () => {
     showApiError(error as AxiosError);
   }
   loadings.value.fetch = false;
+};
+
+const handleHide = () => {
+  model.value.form = {};
+  emit('hide');
 };
 </script>

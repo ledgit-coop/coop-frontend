@@ -16,7 +16,7 @@ const { showWarning } = useAlert();
 onMounted(() => {
   new Idle()
     .whenNotInteractive()
-    .within(5)
+    .within(10)
     .do(() => {
       if (AuthService.isAuthenticated()) {
         showWarning('You will be logged out in 3 seconds due to inactivity.');

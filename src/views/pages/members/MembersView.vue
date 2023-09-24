@@ -121,16 +121,27 @@
               @click="handleChangeStatus(MemberStatus.TERMINATED)"
             ></Button>
 
-            <Button
-              icon="pi pi-check"
-              label="Activate"
-              rounded
-              outlined
-              severity="success"
-              :loading="loadings.update_status"
-              v-else-if="member.status === MemberStatus.TERMINATED"
-              @click="handleChangeStatus(MemberStatus.ACTIVE)"
-            ></Button>
+            <template v-else-if="member.status === MemberStatus.TERMINATED">
+              <Button
+                icon="pi pi-trash"
+                label="Delete"
+                rounded
+                outlined
+                severity="danger"
+                :loading="loadings.delete"
+                @click="handleMemberDelete()"
+              ></Button>
+
+              <Button
+                icon="pi pi-check"
+                label="Activate"
+                rounded
+                outlined
+                severity="success"
+                :loading="loadings.update_status"
+                @click="handleChangeStatus(MemberStatus.ACTIVE)"
+              ></Button>
+            </template>
           </div>
         </div>
 
@@ -331,6 +342,7 @@ const loadings = ref({
   member_fetch: false,
   oriented: false,
   update_status: false,
+  delete: false,
 });
 
 const confirm = useConfirm();
@@ -382,14 +394,14 @@ const spouse_information = computed<InformationItem[]>(() => [
   {
     label: 'Name of Spouse',
     value: [
-      member.value?.spouse.first_name ?? '',
-      member.value?.spouse.middle_name ?? '',
-      member.value?.spouse.surname ?? '',
+      member.value?.spouse?.first_name ?? '',
+      member.value?.spouse?.middle_name ?? '',
+      member.value?.spouse?.surname ?? '',
     ],
   },
-  { label: 'Date of Birth', value: member.value?.spouse.date_of_birth ?? '' },
-  { label: 'Occupation', value: member.value?.spouse.occupation ?? '' },
-  { label: 'Contact Number', value: member.value?.spouse.contact_number ?? '' },
+  { label: 'Date of Birth', value: member.value?.spouse?.date_of_birth ?? '' },
+  { label: 'Occupation', value: member.value?.spouse?.occupation ?? '' },
+  { label: 'Contact Number', value: member.value?.spouse?.contact_number ?? '' },
 ]);
 
 const father_information = computed<InformationItem[]>(() => [
@@ -397,28 +409,28 @@ const father_information = computed<InformationItem[]>(() => [
     label: 'Name of Father',
 
     value: [
-      member.value?.father.first_name ?? '',
-      member.value?.father.middle_name ?? '',
-      member.value?.father.surname ?? '',
+      member.value?.father?.first_name ?? '',
+      member.value?.father?.middle_name ?? '',
+      member.value?.father?.surname ?? '',
     ],
   },
-  { label: 'Date of Birth', value: member.value?.father.date_of_birth ?? '' },
-  { label: 'Occupation', value: member.value?.father.occupation ?? '' },
-  { label: 'Contact Number', value: member.value?.father.contact_number ?? '' },
+  { label: 'Date of Birth', value: member.value?.father?.date_of_birth ?? '' },
+  { label: 'Occupation', value: member.value?.father?.occupation ?? '' },
+  { label: 'Contact Number', value: member.value?.father?.contact_number ?? '' },
 ]);
 
 const mother_information = computed<InformationItem[]>(() => [
   {
     label: 'Name of Mother',
     value: [
-      member.value?.mother.first_name ?? '',
-      member.value?.mother.middle_name ?? '',
-      member.value?.mother.surname ?? '',
+      member.value?.mother?.first_name ?? '',
+      member.value?.mother?.middle_name ?? '',
+      member.value?.mother?.surname ?? '',
     ],
   },
-  { label: 'Date of Birth', value: member.value?.mother.date_of_birth ?? '' },
-  { label: 'Occupation', value: member.value?.mother.occupation ?? '' },
-  { label: 'Contact Number', value: member.value?.mother.contact_number ?? '' },
+  { label: 'Date of Birth', value: member.value?.mother?.date_of_birth ?? '' },
+  { label: 'Occupation', value: member.value?.mother?.occupation ?? '' },
+  { label: 'Contact Number', value: member.value?.mother?.contact_number ?? '' },
 ]);
 
 onMounted(() => {
@@ -491,5 +503,28 @@ const handleApplyLoanClick = () => {
       },
     });
   else modalsVisibility.value.apply_form = true;
+};
+
+const handleMemberDelete = () => {
+  confirm.require({
+    message:
+      'Please note that proceeding with this action will result in the complete removal of the record from the system. Are you certain you wish to continue?',
+    header: 'Delete Member',
+    acceptClass: 'p-button-danger',
+    icon: 'pi pi-exclamation-triangle',
+    accept: async () => {
+      loadings.value.delete = true;
+      try {
+        await MembersService.destroy(member_number.value);
+        showSuccess('Member has been deleted successfully.');
+        setTimeout(() => {
+          router.push({ name: ROUTE_NAME_MEMBERS });
+        }, 1500);
+      } catch (error) {
+        showApiError(error as AxiosError);
+      }
+      loadings.value.delete = false;
+    },
+  });
 };
 </script>

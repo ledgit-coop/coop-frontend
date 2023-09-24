@@ -49,7 +49,6 @@
               />
             </div>
 
-
             <Button
               label="Request Password Reset"
               class="w-full p-3 text-xl"
@@ -57,11 +56,7 @@
               @click="handleLoginClick"
             />
 
-
-
-
             <div class="flex mt-5">
-              
               <a
                 class="font-medium no-underline ml-2 text-right cursor-pointer ml-auto"
                 style="color: var(--primary-color)"
@@ -69,8 +64,6 @@
                 >Back to login</a
               >
             </div>
-
-           
           </div>
         </div>
       </div>
@@ -132,7 +125,7 @@ const handleLoginClick = async () => {
     };
     AuthService.requestPasswordReset(payload)
       .then(() => {
-        showSuccess("Password reset successfully sent to your email.");
+        showSuccess('Password reset successfully sent to your email.');
       })
       .catch((error: any) => {
         showApiError(error, 'Failed to request');
@@ -145,8 +138,8 @@ const handleLoginClick = async () => {
 };
 
 const handleLogin = () => {
-  router.push({ name: ROUTE_NAME_LOGIN })
-}
+  router.push({ name: ROUTE_NAME_LOGIN });
+};
 </script>
 
 <style scoped>

@@ -174,9 +174,9 @@ const handleLoginClick = async () => {
     isSumitted.value = true;
     AuthService.resetPassword({ ...form.value })
       .then(() => {
-        showSuccess("Password has been successfully updated and you will be redirected to login page.");
+        showSuccess('Password has been successfully updated and you will be redirected to login page.');
         setTimeout(() => {
-          router.push({ name: ROUTE_NAME_LOGIN })
+          router.push({ name: ROUTE_NAME_LOGIN });
         }, 1500);
       })
       .catch((error: any) => {

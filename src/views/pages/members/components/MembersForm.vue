@@ -227,13 +227,31 @@
     </div>
 
     <MemberAddress
+      @blur="handleSamePresentAddressChange"
       v-model="data.form.present_address"
       :type="MemberType.PRESENT"
     />
+
     <MemberAddress
+      @blur="handleSamePresentAddressChange"
       v-model="data.form.permanent_address"
+      :disabled="samePresentAddress"
       :type="MemberType.PERMANENT"
     />
+    <div class="flex align-items-center pb-5">
+      <Checkbox
+        inputId="oriented"
+        name="oriented"
+        binary
+        v-model="samePresentAddress"
+        @change="handleSamePresentAddressChange"
+      />
+      <label
+        for="ingredient1"
+        class="ml-2"
+        >The same with present address</label
+      >
+    </div>
 
     <div class="p-fluid formgrid grid">
       <div class="field col-12 md:col-4">
@@ -546,7 +564,7 @@ interface Props {
 const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue', 'update:validated']);
 const { showError } = useAlert();
-
+const samePresentAddress = ref(false);
 const rules = computed(() => ({
   surname: { required },
   member_at: { required },
@@ -613,5 +631,14 @@ const handleRemoveBeneficiary = (index: number) => {
 
 const handleImageTaken = (value: any) => {
   data.form.profile_picture_url = value.image_data_url;
+};
+
+const handleSamePresentAddressChange = () => {
+  setTimeout(() => {
+    if (samePresentAddress.value)
+      data.form.permanent_address = {
+        ...data.form.present_address,
+      };
+  }, 1000);
 };
 </script>
