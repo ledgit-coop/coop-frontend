@@ -14,13 +14,13 @@
           id="amount"
           validate="amount"
           v-model="data.form.amount"
-            v-validation="validation"
+          v-validation="validation"
         />
 
         <FieldErrorMessage
-            :validation="validation"
-            field="amount"
-          />
+          :validation="validation"
+          field="amount"
+        />
       </div>
 
       <div class="field col-12 md:col-6">
@@ -34,19 +34,19 @@
           validate="transaction_date"
           showButtonBar
           v-validation="validation"
-
         />
 
         <FieldErrorMessage
-            :validation="validation"
-            field="transaction_date"
-          />
+          :validation="validation"
+          field="transaction_date"
+        />
       </div>
     </div>
 
     <div class="p-2"></div>
     <InlineMessage severity="warn"
-      >Make sure the borowwer already paid the termination fee before proceeding the request for termination.</InlineMessage
+      >Make sure the borowwer already paid the termination fee before proceeding the request for
+      termination.</InlineMessage
     >
 
     <template #footer>
@@ -103,7 +103,6 @@ const data = reactive<{
   form: {},
 });
 
-
 const form = computed(() => data.form);
 const { validation } = useValidation({
   rules: {
@@ -148,7 +147,7 @@ watch(
 
 const handleClickRequestPeTermination = async () => {
   await validation.value?.$validate();
-  if(validation.value?.$invalid) return;
+  if (validation.value?.$invalid) return;
   if (loadings.value.saving) return;
   try {
     confirm.require({
@@ -160,12 +159,10 @@ const handleClickRequestPeTermination = async () => {
         loadings.value.saving = true;
 
         try {
-          await LoanService.updateStatus(props.loan?.id.toString() ?? '', MemberLoanStatus.REQUEST_PRE_TERMINATION,
-          {
+          await LoanService.updateStatus(props.loan?.id.toString() ?? '', MemberLoanStatus.REQUEST_PRE_TERMINATION, {
             pre_termination_fee: data.form.amount,
             pre_termination_date: dateFormat(data.form.transaction_date, DATE_FORMAT_DB),
-          }
-          );
+          });
           showSuccess('Loan successfully added.');
           emit('updated');
         } catch (error) {

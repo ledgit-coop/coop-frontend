@@ -77,8 +77,8 @@ const unbindOutsideClickListener = () => {
 const isOutsideClicked = (event: any) => {
   if (!topbarMenuActive.value) return;
 
-  const sidebarEl :any= document.querySelector('.layout-topbar-menu');
-  const topbarEl : any = document.querySelector('.layout-topbar-menu-button');
+  const sidebarEl: any = document.querySelector('.layout-topbar-menu');
+  const topbarEl: any = document.querySelector('.layout-topbar-menu-button');
 
   return !(
     sidebarEl.isSameNode(event.target) ||

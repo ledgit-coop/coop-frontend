@@ -73,6 +73,7 @@ export interface PostAddMemberAccountTransactionPayload {
   amount?: number;
   particular?: string;
   transaction_date?: string;
+  member_account_id?: string;
 }
 
 export interface GetAccountTransactionsParams {

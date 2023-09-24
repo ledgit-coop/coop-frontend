@@ -63,7 +63,6 @@ const model = ref<any>([
         icon: 'pi pi-fw pi-book',
         to: { name: ROUTE_NAME_ACCOUNTS },
       },
-    
     ],
   },
 ]);

@@ -1,7 +1,5 @@
 <template>
   <div class="grid p-fluid formgrid">
-
-
     <div class="field col-12">
       <Label
         for="accounts"
@@ -16,19 +14,23 @@
         option-value="value"
         option-label="label"
         placeholder="Select Account"
+        option-disabled="disabled"
         v-model="data.form.transaction_type"
         v-validation="validation"
-        validate="member_account_id"
+        validate="transaction_type"
         class="w-full"
       >
       </Dropdown>
       <FieldErrorMessage
         :validation="validation"
-        field="member_account_id"
+        field="transaction_type"
       />
     </div>
 
-    <div v-if="data.form.transaction_type === ActionTransactionType.DepositSavings" class="field col-12">
+    <div
+      v-if="isSavingsTransaction"
+      class="field col-12"
+    >
       <Label
         for="accounts"
         required
@@ -54,9 +56,7 @@
       />
     </div>
 
- 
-
-    <div class="field col-12 md:col-6">
+    <div class="field col-12">
       <Label
         required
         for="amount"
@@ -78,7 +78,10 @@
       />
     </div>
 
-    <div class="field col-12 md:col-6">
+    <div
+      v-if="isSavingsTransaction"
+      class="field col-12"
+    >
       <Label
         required
         for="particular"
@@ -97,7 +100,7 @@
       />
     </div>
 
-    <div class="field col-12 md:col-6">
+    <div class="field col-12">
       <Label
         required
         for="transaction-date"
@@ -129,11 +132,12 @@ import type { DropdownOption } from '@/types/ui';
 import UtilityService from '@/service/UtilityService';
 import useAlert from '@/composables/useAlert';
 import type { AxiosError } from 'axios';
-import { required } from '@vuelidate/validators';
+import { required, requiredIf } from '@vuelidate/validators';
 import useValidation from '@/composables/useValidation';
 import FieldErrorMessage from './FieldErrorMessage.vue';
 import Label from './Label.vue';
-import {ActionTransactionType} from '@/constants/ui/transactions';
+import { ActionTransactionType } from '@/constants/ui/transactions';
+import { AccountType } from '@/constants/ui/accounts';
 
 interface Props {
   memberId?: string | number;
@@ -143,27 +147,18 @@ const loadings = ref({
   fetch_accounts: false,
 });
 
-const rules = computed(() => ({
-  member_account_id: { required },
-  transaction_type: { required },
-  amount: { required },
-  particular: { required },
-}));
-
 const form = computed(() => data.form);
-const typeOfTransactions = computed<DropdownOption[]>(()=>([
-{label: "Deposit Share Capital", value:ActionTransactionType.DepositShareCapital},
-{label: "Withdraw Share Capital", value:ActionTransactionType.WithdrawShareCapital},
+const typeOfTransactions = computed<DropdownOption[]>(() => [
+  { label: 'Deposit Share Capital', value: ActionTransactionType.DepositShareCapital },
+  { label: 'Withdraw Share Capital', value: ActionTransactionType.WithdrawShareCapital },
 
-{label: "Deposit Savings", value:ActionTransactionType.DepositSavings},
-{label: "Withdraw Savings", value:ActionTransactionType.WithdrawSavings},
+  { label: 'Deposit Savings', value: ActionTransactionType.DepositSavings },
+  { label: 'Withdraw Savings', value: ActionTransactionType.WithdrawSavings },
 
-{label: "Pay Amortization", value:ActionTransactionType.PayAmortization},
-{label: "Pay Membership", value:ActionTransactionType.PayMembership},
-
-{label: "Pay Loan Pre-Termination Fee", value:ActionTransactionType.PayLoanPreTerminationFee},
-
-]));
+  { label: 'Pay Amortization', value: ActionTransactionType.PayAmortization, disabled: true },
+  { label: 'Pay Membership', value: ActionTransactionType.PayMembership, disabled: true },
+  { label: 'Pay Loan Pre-Termination Fee', value: ActionTransactionType.PayLoanPreTerminationFee, disabled: true },
+]);
 const accounts = ref<DropdownOption[]>([]);
 const data = reactive<{ form: MemberAccountTransactionForm }>({
   form: {
@@ -173,6 +168,23 @@ const data = reactive<{ form: MemberAccountTransactionForm }>({
     particular: undefined,
   },
 });
+
+const isSavingsTransaction = computed(() =>
+  [ActionTransactionType.DepositSavings, ActionTransactionType.WithdrawSavings].includes(
+    data.form.transaction_type as ActionTransactionType
+  )
+);
+
+const rules = computed(() => ({
+  transaction_type: { required },
+  amount: { required },
+  member_account_id: {
+    requiredIf: requiredIf(isSavingsTransaction.value),
+  },
+  particular: {
+    requiredIf: requiredIf(isSavingsTransaction.value),
+  },
+}));
 
 const { validation } = useValidation({
   rules,
@@ -191,7 +203,9 @@ onMounted(() => {
 const fetchAccounts = async () => {
   loadings.value.fetch_accounts = true;
   try {
-    const { data: acc } = await UtilityService.getmemberAcountDropdown(props.memberId?.toString() ?? '');
+    const { data: acc } = await UtilityService.getmemberAcountDropdown(props.memberId?.toString() ?? '', {
+      type: AccountType.SAVINGS,
+    });
     accounts.value = acc;
   } catch (error) {
     showApiError(error as AxiosError);

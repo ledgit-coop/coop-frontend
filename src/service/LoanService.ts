@@ -24,7 +24,7 @@ class LoanService {
   }
 
   updateStatus(id: string, status: MemberLoanStatus, params?: Record<string, any>): AxiosPromise<Loan> {
-    return apiClient.post(`${PATH}/status/${id}`, { status, ...params ?? {}});
+    return apiClient.post(`${PATH}/status/${id}`, { status, ...(params ?? {}) });
   }
 
   activeLoans(member_id?: string): AxiosPromise<Loan[]> {
@@ -40,7 +40,7 @@ class LoanService {
   }
 
   downloadLink(id: number, params: Record<string, any>): AxiosPromise<MemberLoanSchedule[]> {
-    return apiClient.get(`${PATH}/download/${id}`,{params});
+    return apiClient.get(`${PATH}/download/${id}`, { params });
   }
 }
 

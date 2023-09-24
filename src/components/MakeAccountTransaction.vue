@@ -3,7 +3,7 @@
     v-model:visible="showModal"
     modal
     header="Add Transaction"
-    :style="{ width: '40vw' }"
+    :style="{ width: '30vw' }"
     @hide="handleHide"
   >
     <AccountTransactionForm
@@ -92,7 +92,8 @@ const handleMakeTransaction = async () => {
         loadings.value.saving = true;
 
         try {
-          await MembersService.postAddAccountTransaction(model.form?.member_account_id ?? '', {
+          await MembersService.postAddAccountTransaction(props.memberId?.toString() ?? '', {
+            member_account_id: model.form?.member_account_id,
             transaction_type: model.form?.transaction_type,
             amount: model.form?.amount,
             particular: model.form?.particular,

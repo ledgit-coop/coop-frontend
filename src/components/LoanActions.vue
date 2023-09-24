@@ -29,7 +29,7 @@ import LoanPreTerminate from './LoanPreTerminate.vue';
       icon="pi pi-times"
       v-tooltip="'Pre Terminate'"
       severity="danger"
-      v-if="loan?.released && (loan?.status !== MemberLoanStatus.REQUEST_PRE_TERMINATION) "
+      v-if="loan?.released && loan?.status !== MemberLoanStatus.REQUEST_PRE_TERMINATION"
       text
       raised
       rounded
@@ -74,7 +74,7 @@ import LoanPreTerminate from './LoanPreTerminate.vue';
       class="mr-2 mb-2"
       size="small"
       severity="danger"
-      @click="handleViewLoanClick()"
+      @click="handleChangeStatus(MemberLoanStatus.REJECTED)"
     />
 
     <Button
@@ -217,7 +217,7 @@ const handleChangeStatus = (status: MemberLoanStatus) => {
       break;
 
     case MemberLoanStatus.REJECTED:
-      message = 'Do you want to reject?';
+      message = 'Are you sure you want to reject the loan?';
       break;
     case MemberLoanStatus.APPROVED:
       message = 'Do you want to approve the loan?';

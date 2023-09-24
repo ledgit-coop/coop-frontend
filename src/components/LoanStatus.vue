@@ -14,7 +14,6 @@
     class="white-space-nowrap"
   ></Tag>
 
-
   <Tag
     v-else-if="status == MemberLoanStatus.PRE_TERMINATED"
     severity="info"

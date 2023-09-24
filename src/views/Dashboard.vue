@@ -37,7 +37,7 @@ const lineOptions = ref<any>(null);
 const productService = new ProductService();
 
 onMounted(() => {
-  productService.getProductsSmall().then((data : any) => (products.value = data));
+  productService.getProductsSmall().then((data: any) => (products.value = data));
 });
 
 const formatCurrency = (value: any) => {

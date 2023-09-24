@@ -49,75 +49,68 @@
             v-if="member"
             class="ml-auto mt-5 md:mt-0 lg:mt-0 grid gap-2"
           >
+            <template v-if="member.status == MemberStatus.ACTIVE">
+              <Button
+                icon="pi pi-arrow-left"
+                label="Back"
+                rounded
+                outlined
+                @click="router.push({ name: ROUTE_NAME_MEMBERS })"
+              ></Button>
 
-        
-            
+              <Button
+                icon="pi pi-print"
+                label="Print"
+                rounded
+                outlined
+                disabled
+              ></Button>
 
-          <template v-if="member.status == MemberStatus.ACTIVE">
+              <Button
+                icon="pi pi-pencil"
+                label="Edit"
+                severity="warning"
+                rounded
+                outlined
+                @click="router.push({ name: ROUTE_NAME_MEMBERS_EDIT, params: { id: member.member_number } })"
+              ></Button>
+
+              <Button
+                icon="pi pi-print"
+                label="Apply Loan"
+                rounded
+                outlined
+                @click="handleApplyLoanClick"
+              ></Button>
+
+              <Button
+                icon="pi pi-check"
+                label="Done PMES"
+                rounded
+                :loading="loadings.oriented"
+                outlined
+                v-if="!member.oriented"
+                @click="handleDoneOrientation"
+              ></Button>
+
+              <Button
+                icon="pi pi-plus"
+                label="Add Account"
+                rounded
+                outlined
+                @click="modalsVisibility.add_account = true"
+              ></Button>
+
+              <Button
+                icon="pi pi-plus"
+                label="Add Transaction"
+                @click="modalsVisibility.make_transaction = true"
+                rounded
+                outlined
+              ></Button>
+            </template>
 
             <Button
-              icon="pi pi-arrow-left"
-              label="Back"
-              rounded
-              outlined
-              @click="router.push({ name: ROUTE_NAME_MEMBERS })"
-            ></Button>
-
-            <Button
-              icon="pi pi-print"
-              label="Print"
-              rounded
-              outlined
-              disabled
-            ></Button>
-
-            <Button
-              icon="pi pi-pencil"
-              label="Edit"
-              severity="warning"
-              rounded
-              outlined
-              @click="router.push({ name: ROUTE_NAME_MEMBERS_EDIT, params: { id: member.member_number } })"
-            ></Button>
-
-            <Button
-              icon="pi pi-print"
-              label="Apply Loan"
-              rounded
-              outlined
-              @click="handleApplyLoanClick"
-            ></Button>
-
-            <Button
-              icon="pi pi-check"
-              label="Done PMES"
-              rounded
-              :loading="loadings.oriented"
-              outlined
-              v-if="!member.oriented"
-              @click="handleDoneOrientation"
-            ></Button>
-
-            <Button
-              icon="pi pi-plus"
-              label="Add Account"
-              rounded
-              outlined
-              @click="modalsVisibility.add_account = true"
-            ></Button>
-
-            <Button
-              icon="pi pi-plus"
-              label="Add Transaction"
-              @click="modalsVisibility.make_transaction = true"
-              rounded
-              outlined
-            ></Button>
-
-          </template>
-           
-            
-          <Button
               icon="pi pi-print"
               label="Terminate"
               rounded
@@ -136,12 +129,8 @@
               severity="success"
               :loading="loadings.update_status"
               v-else-if="member.status === MemberStatus.TERMINATED"
-
               @click="handleChangeStatus(MemberStatus.ACTIVE)"
             ></Button>
-
-
-        
           </div>
         </div>
 
@@ -436,8 +425,6 @@ onMounted(() => {
   showMember();
 });
 
-
-
 const showMember = async () => {
   loadings.value.member_fetch = true;
   try {
@@ -450,7 +437,6 @@ const showMember = async () => {
   loadings.value.member_fetch = false;
 };
 
-
 const handleChangeStatus = (status: MemberStatus) => {
   confirm.require({
     message: 'Are you sure you want to proceed?',
@@ -460,9 +446,8 @@ const handleChangeStatus = (status: MemberStatus) => {
     accept: async () => {
       loadings.value.update_status = true;
       try {
-       
         await MembersService.updateStatus(member.value?.id?.toString() ?? '', status);
-        showSuccess("Member status updated successfully.");
+        showSuccess('Member status updated successfully.');
         member.value!.status = status;
         showMember();
       } catch (error) {

@@ -25,4 +25,3 @@ export enum AccountMaintainingBalancePenaltyMethod {
   FIXED = 'fixed',
   PERCENTAGE = 'percentage',
 }
-
