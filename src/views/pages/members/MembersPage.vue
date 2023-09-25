@@ -232,7 +232,8 @@ const loadTable = (params?: Record<string, any>) => {
 };
 
 const handleNavigateView = (event: any) => {
-  router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: event.data.member_number } });
+  console.log(event);
+  router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: event.data.id } });
 };
 
 const clearFilters = () => {

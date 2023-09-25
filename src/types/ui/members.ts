@@ -93,6 +93,7 @@ export interface MemberSavingsAccountWidgetItem {
 }
 
 export interface MembersTable {
+  id?: string;
   member_number: string;
   full_name: string;
   email: string;

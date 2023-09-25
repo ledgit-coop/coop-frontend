@@ -91,7 +91,7 @@
                 @click="
                   router.push({
                     name: ROUTE_NAME_MEMBERS_VIEW,
-                    params: { id: slotProps.data.loan.member.member_number },
+                    params: { id: slotProps.data.loan.member.id },
                   })
                 "
                 link

@@ -29,7 +29,7 @@
           class="white-space-nowrap"
           :label="slotProps.data.member"
           link
-          @click="router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: slotProps.data.member_number } })"
+          @click="router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: slotProps.data.id } })"
         />
       </template>
     </Column>

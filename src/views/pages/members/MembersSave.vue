@@ -114,7 +114,7 @@ const handleSubmit = async () => {
       else showSuccess('Member successfully added.');
 
       setTimeout(() => {
-        router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: data.member_number } });
+        router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: data.id } });
       }, 2000);
     } catch (error) {
       showApiError(error as AxiosError);
@@ -140,7 +140,7 @@ const loadInformation = async () => {
 };
 
 const handleBackClick = () => {
-  if (isEditing.value) router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: member.value?.member_number } });
+  if (isEditing.value) router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: member.value?.id } });
   else router.push({ name: ROUTE_NAME_MEMBERS });
 };
 </script>

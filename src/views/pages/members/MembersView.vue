@@ -72,7 +72,7 @@
                 severity="warning"
                 rounded
                 outlined
-                @click="router.push({ name: ROUTE_NAME_MEMBERS_EDIT, params: { id: member.member_number } })"
+                @click="router.push({ name: ROUTE_NAME_MEMBERS_EDIT, params: { id: member.id } })"
               ></Button>
 
               <Button
@@ -276,11 +276,11 @@
               <MembersIncome />
             </TabPanel>
 
-            <TabPanel
-              :disabled="true"
-              header="Logs"
-            >
-              <MembersLogs />
+            <TabPanel header="Logs">
+              <MembersLogs
+                :member="member"
+                v-if="activeIndex == 6"
+              />
             </TabPanel>
           </TabView>
           <LoanSave
@@ -349,7 +349,7 @@ const confirm = useConfirm();
 const route = useRoute();
 const { showApiError, showSuccess } = useAlert();
 const activeIndex = ref(0);
-const member_number = computed(() => (route.params.id ?? '').toString());
+const member_id = computed(() => (route.params.id ?? '').toString());
 const member = ref<Member>();
 const modalsVisibility = ref<ModalsVisibility>({
   apply_form: false,
@@ -440,7 +440,7 @@ onMounted(() => {
 const showMember = async () => {
   loadings.value.member_fetch = true;
   try {
-    const { data } = await MembersService.show(member_number.value);
+    const { data } = await MembersService.show(member_id.value);
     member.value = data;
     document.title = `DSPACC - ${member.value.full_name}`;
   } catch (error) {
@@ -479,7 +479,7 @@ const handleDoneOrientation = () => {
       loadings.value.oriented = true;
 
       try {
-        await MembersService.postAttendedOrientation(member.value?.member_number ?? '');
+        await MembersService.postAttendedOrientation(member.value?.id ?? '');
         showSuccess('Orientation attendance updated.');
         member.value!.oriented = true;
       } catch (error) {
@@ -515,7 +515,7 @@ const handleMemberDelete = () => {
     accept: async () => {
       loadings.value.delete = true;
       try {
-        await MembersService.destroy(member_number.value);
+        await MembersService.destroy(member_id.value);
         showSuccess('Member has been deleted successfully.');
         setTimeout(() => {
           router.push({ name: ROUTE_NAME_MEMBERS });

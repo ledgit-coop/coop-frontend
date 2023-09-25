@@ -200,15 +200,22 @@
         </DataTable>
         <div class="p-2"></div>
       </TabPanel>
-      <TabPanel
-        :disabled="true"
-        header="Logs"
-      >
+      <TabPanel header="Logs">
         <PageContentHeader
           title="Comments"
           size="h6"
         />
-        <Chatter />
+        <Skeleton
+          v-if="loadings.fetching"
+          class="w-full"
+        ></Skeleton>
+        <Chatter
+          v-else
+          :module-id="loan?.id"
+          :module="LogModules.LOAN"
+          :parent-module-id="loan?.member_id"
+          :parent-module="LogModules.MEMBER"
+        />
       </TabPanel>
     </TabView>
 
@@ -241,6 +248,7 @@ import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import LoanSummary from './LoanSummary.vue';
 import { type LoanSummaryTable } from '@/types/ui/loans';
+import { LogModules } from '@/constants/ui/logs';
 
 interface Props {
   visible: boolean;
