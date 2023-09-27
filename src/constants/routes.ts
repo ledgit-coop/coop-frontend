@@ -29,6 +29,8 @@ export const ROUTE_NAME_ACCOUNTS = 'accounts';
 
 export const ROUTE_LOAN_CALCULATOR = 'loan-calculator';
 
+export const ROUTE_NAME_EXPENSES = 'expenses';
+
 export const PUBLIC_ROUTES: Array<string> = [
   ROUTE_NAME_LOGIN,
   ROUTE_NAME_REGISTER,

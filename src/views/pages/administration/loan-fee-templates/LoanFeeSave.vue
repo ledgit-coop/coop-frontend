@@ -85,6 +85,9 @@ watch(
   () => props.visible,
   (value) => {
     showModal.value = value ?? false;
+    if (value) {
+      model.value.form = {};
+    }
 
     if (props.id) loadFee();
   }
@@ -117,7 +120,6 @@ const loadFee = async () => {
 };
 
 const handleHide = () => {
-  model.value.form = {};
   emit('hide');
 };
 </script>

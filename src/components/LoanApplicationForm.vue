@@ -19,7 +19,7 @@
             placeholder="Select a Member"
             class="w-full"
             :loading="loadings.members"
-            @change="handleChangeMember"
+            @change="handleChangeMember($event as any)"
             validate="member_id"
             v-validation="validation"
           >
@@ -787,5 +787,6 @@ const getMemberAccount = async (member_id: string) => {
 
 const handleChangeMember = (value: DropdownOption) => {
   data.form.member_id = value.value;
+  getMemberAccount(value.value);
 };
 </script>

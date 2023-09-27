@@ -33,6 +33,7 @@ export interface LoanApplicationPayload {
   work_industry?: string;
   applied_date?: string;
   released_date?: string;
+  next_payroll_date?: string | null;
   loan_fees?: LoanProductFee[];
 
   penalty?: number | null;
@@ -63,6 +64,8 @@ export interface LoanCalculatorRequest {
   loan_duration_type?: string | null;
   loan_interest_period?: string | null;
   released_date?: string | null;
+  next_payroll_date?: string | null;
+
   fees: {
     loan_fee_template_id?: number;
     fee?: number;

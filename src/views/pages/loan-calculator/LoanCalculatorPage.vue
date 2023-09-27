@@ -171,6 +171,9 @@ const computeLoan = async () => {
       loan_duration_type: data.form?.loan_duration_type,
       loan_interest_period: data.form?.loan_interest_period,
       released_date: moment(data.released_date).format(DATE_FORMAT_DB),
+      next_payroll_date: data.form?.next_payroll_date
+        ? moment(data.form?.next_payroll_date).format(DATE_FORMAT_DB)
+        : null,
       fees:
         data.fees?.map((r) => ({
           loan_fee_template_id: r.loan_fee_template_id,

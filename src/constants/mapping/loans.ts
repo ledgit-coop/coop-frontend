@@ -45,6 +45,9 @@ export function mapLoanFormToPayload(loanForm: LoanForm): LoanApplicationPayload
     penalty_duration: loan_term?.penalty_duration,
     pre_termination_panalty: loan_term?.pre_termination_panalty,
     pre_termination_panalty_method: loan_term?.pre_termination_panalty_method,
+    next_payroll_date: loan_term?.next_payroll_date
+      ? moment(loan_term?.next_payroll_date).format(DATE_FORMAT_DB)
+      : null,
   };
 
   return {
@@ -121,6 +124,7 @@ export function mapLoanToLoanForm(loan: Loan): LoanForm {
 
     pre_termination_panalty,
     pre_termination_panalty_method,
+    next_payroll_date,
   } = loan;
   const loanTerm: LoanTermForm = {
     loan_duration,
@@ -139,6 +143,7 @@ export function mapLoanToLoanForm(loan: Loan): LoanForm {
     penalty_duration,
     pre_termination_panalty,
     pre_termination_panalty_method,
+    next_payroll_date,
   };
 
   return {

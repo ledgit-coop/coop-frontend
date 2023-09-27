@@ -199,6 +199,30 @@
     />
   </div>
 
+  <div
+    v-if="
+      [RepaymentCycle.BIWEEKLY.toString(), RepaymentCycle.MONTHLY.toString()].includes(data.form.repayment_cycle ?? '')
+    "
+    class="field col-12 lg:col-4"
+  >
+    <label for="number-repayments">Next Payroll Date <span class="font-italic">(Optional)</span></label>
+
+    <Calendar
+      pattern="dd-MM-yyyy"
+      id="date-hired"
+      v-model="data.form.next_payroll_date"
+      mask="true"
+      validate="next_payroll_date"
+      v-validation="validation"
+      showButtonBar
+    />
+
+    <FieldErrorMessage
+      :validation="validation"
+      field="next_payroll_date"
+    />
+  </div>
+
   <template v-if="!hideRepaymentMode">
     <div class="col-12">
       <PageContentHeader

@@ -5,6 +5,7 @@ import {
   PUBLIC_ROUTES,
   ROUTE_LOAN_CALCULATOR,
   ROUTE_NAME_ACCOUNTS,
+  ROUTE_NAME_EXPENSES,
   ROUTE_NAME_FORGOT_PASSWORD,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOAN_FEES,
@@ -133,6 +134,15 @@ const router = createRouter({
           component: () => import('@/views/pages/loan-calculator/LoanCalculatorPage.vue'),
           meta: {
             title: 'Loan Calculator',
+          },
+        },
+
+        {
+          path: '/expenses',
+          name: ROUTE_NAME_EXPENSES,
+          component: () => import('@/views/pages/expenses/ExpensesPage.vue'),
+          meta: {
+            title: 'Expenses',
           },
         },
 

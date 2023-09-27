@@ -134,6 +134,9 @@ watch(
   () => props.modelValue,
   (value) => {
     data.form = value ?? {};
+  },
+  {
+    deep: true,
   }
 );
 </script>

@@ -5,6 +5,7 @@ import AppMenuItem from '@/layout/AppMenuItem.vue';
 import {
   ROUTE_LOAN_CALCULATOR,
   ROUTE_NAME_ACCOUNTS,
+  ROUTE_NAME_EXPENSES,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOAN_FEES,
   ROUTE_NAME_LOAN_PRODUCTS,
@@ -35,8 +36,7 @@ const model = ref<any>([
       {
         label: 'Expenses',
         icon: 'pi pi-fw pi-history',
-        to: { name: ROUTE_NAME_LOANS },
-        class: 'line-through pointer-events-none',
+        to: { name: ROUTE_NAME_EXPENSES },
       },
       {
         label: 'Reports',

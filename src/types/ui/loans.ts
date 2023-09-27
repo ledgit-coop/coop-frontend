@@ -45,6 +45,7 @@ export interface Loan {
   created_at: string;
   updated_at: string;
   released_date: string | null;
+  next_payroll_date: string | null;
   applied_date?: string;
   guarantor_first_id?: string;
   guarantor_second_id?: string;
@@ -124,6 +125,8 @@ export interface LoanTermForm {
 
   pre_termination_panalty?: number | null;
   pre_termination_panalty_method?: string | null;
+
+  next_payroll_date?: string | null;
 }
 
 export interface LoanFee extends LoanFeeTemplateForm {

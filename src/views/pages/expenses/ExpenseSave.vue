@@ -2,11 +2,11 @@
   <Dialog
     v-model:visible="showModal"
     modal
-    :header="!isEditing ? 'Create Loan' : 'Edit Loan'"
-    :style="{ width: '50vw' }"
+    :header="isEditing ? 'Edit Expense' : 'Add Expense'"
+    :style="{ width: '30vw' }"
     @hide="handleHide"
   >
-    <template v-if="loadings.fetching">
+    <template v-if="loadings.fetch">
       <Skeleton class="mb-2 full-width"></Skeleton>
       <Skeleton class="mb-2 full-width"></Skeleton> <Skeleton class="mb-2 full-width"></Skeleton>
       <Skeleton class="mb-2 full-width"></Skeleton> <Skeleton class="mb-2 full-width"></Skeleton>
@@ -25,10 +25,9 @@
         class="mb-2 full-width"
       ></Skeleton>
     </template>
-    <LoanApplicationForm
+    <ExpenseSaveForm
       v-else
       v-model="model.form"
-      :disable-member="disableMember"
     />
 
     <template #footer>
@@ -39,10 +38,10 @@
         @click="showModal = false"
       />
       <Button
-        label="Submit"
+        label="Save"
         icon="pi pi-save"
-        :loading="loadings.save"
         @click="handleSaveClick"
+        :loading="loadings.save || loadings.fetch"
         autofocus
       />
     </template>
@@ -50,43 +49,36 @@
 </template>
 <script setup lang="ts">
 import Dialog from 'primevue/dialog';
-import { computed, onMounted, reactive, ref, watch } from 'vue';
-import LoanApplicationForm from './LoanApplicationForm.vue';
-import type { Member } from '@/types/ui/members';
+import { computed, onMounted, ref, watch } from 'vue';
 import Button from 'primevue/button';
-import type { LoanForm } from '@/types/ui/loans';
-import { mapLoanFormToPayload, mapLoanToLoanForm } from '@/constants/mapping/loans';
-import LoanService from '@/service/LoanService';
 import useAlert from '@/composables/useAlert';
 import type { AxiosError } from 'axios';
-import Skeleton from 'primevue/skeleton';
+import type { TransactionForm } from '@/types/ui/transactions';
+import ExpenseSaveForm from './components/ExpenseSaveForm.vue';
+import ExpensesService from '@/service/ExpensesService';
+import { dateFormat } from '@/helpers';
+import { DATE_FORMAT_DB } from '@/constants';
 import useValidation from '@/composables/useValidation';
 
 interface Props {
   visible: boolean;
-  member?: Member;
-  disableMember?: boolean;
-  loanIdForEdit?: number;
+  id?: number;
 }
 
-const props = defineProps<Props>();
-const emit = defineEmits(['update:visible', 'saved']);
 const { showApiError, showSuccess, showError } = useAlert();
-
-const { validation } = useValidation();
-const model = reactive<{ form?: LoanForm }>({
-  form: {},
-});
-
-const isEditing = computed(() => !!props.loanIdForEdit);
+const props = defineProps<Props>();
+const emit = defineEmits(['update:visible', 'updated', 'hide']);
+const model = ref<{ form: TransactionForm }>({ form: {} });
 const showModal = ref(false);
 const loadings = ref({
   save: false,
-  fetching: false,
+  fetch: false,
 });
+const isEditing = computed(() => !!props.id);
+
+const { validation } = useValidation();
 
 onMounted(() => {
-  setMember();
   showModal.value = props.visible ?? false;
 });
 
@@ -98,61 +90,56 @@ watch(
   () => props.visible,
   (value) => {
     showModal.value = value ?? false;
+
+    if (value) {
+      model.value.form = {};
+      validation.value?.$reset();
+    }
+    if (props.id) loadExpense();
   }
 );
-
-watch(
-  () => props.member,
-  (value) => {
-    if (value) setMember();
-  },
-  {
-    deep: true,
-  }
-);
-
-watch(showModal, (value) => {
-  if (value && isEditing.value) loadLoan();
-});
-
-const setMember = () => {
-  model.form!.member_id = props.member?.id?.toString();
-  model.form!.email = props.member?.email_address?.toString();
-};
 
 const handleSaveClick = async () => {
-  await validation.value?.$validate();
+  validation.value?.$validate();
   if (validation.value?.$invalid) {
     showError('Please complete the required fields.');
     return;
   }
-
+  loadings.value.save = true;
   try {
-    loadings.value.save = true;
-    if (isEditing.value) await LoanService.update(props.loanIdForEdit ?? 0, mapLoanFormToPayload(model.form!));
-    else await LoanService.postLoan(mapLoanFormToPayload(model.form!));
-    showSuccess('Loan application saved successfully.');
+    const payload = {
+      particular: model.value.form.particular?.toString() ?? '',
+      amount: model.value.form.amount,
+      date: dateFormat(model.value.form.transaction_date, DATE_FORMAT_DB),
+    };
+    if (!isEditing.value) await ExpensesService.store(payload);
+    else await ExpensesService.update(props.id ?? 0, payload);
+
+    showSuccess('Expense successfully saved.');
     showModal.value = false;
-    emit('saved');
+    emit('updated');
   } catch (error) {
     showApiError(error as AxiosError);
   }
   loadings.value.save = false;
 };
 
-const loadLoan = async () => {
-  loadings.value.fetching = true;
+const loadExpense = async () => {
+  loadings.value.fetch = true;
   try {
-    const { data } = await LoanService.show(props.loanIdForEdit ?? 0);
-    model.form = mapLoanToLoanForm(data);
+    const { data } = await ExpensesService.show(props.id ?? 0);
+    model.value.form = {
+      particular: data.particular ?? '',
+      transaction_date: data.transaction_date,
+      amount: data.amount ?? 0,
+    };
   } catch (error) {
     showApiError(error as AxiosError);
   }
-  loadings.value.fetching = false;
+  loadings.value.fetch = false;
 };
 
 const handleHide = () => {
-  model.form = {};
-  validation.value?.$reset();
+  emit('hide');
 };
 </script>
