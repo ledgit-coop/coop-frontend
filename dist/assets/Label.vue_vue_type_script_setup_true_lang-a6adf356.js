@@ -1,1 +1,0 @@
-import{d as a,o,b as t,am as r,g as s,p as n}from"./index-a4268330.js";const l={key:0,class:"text-red-500"},m=a({__name:"Label",props:{required:{type:Boolean}},setup(p){return(e,c)=>(o(),t("label",null,[r(e.$slots,"default"),s(" "),e.required?(o(),t("span",l,"*")):n("",!0)]))}});export{m as _};
