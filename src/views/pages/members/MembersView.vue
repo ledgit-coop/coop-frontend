@@ -312,7 +312,7 @@ import TabPanel from 'primevue/tabpanel';
 import router from '@/router';
 import MembersShareCapital from './components/MembersShareCapital.vue';
 import MembersLoans from './components/MembersLoans.vue';
-import { ROUTE_NAME_MEMBERS, ROUTE_NAME_MEMBERS_EDIT } from '@/constants';
+import { DATE_FORMAT, ROUTE_NAME_MEMBERS, ROUTE_NAME_MEMBERS_EDIT } from '@/constants';
 import MembersSavings from './components/MembersSavings.vue';
 import MembersAccounts from './components/MembersAccounts.vue';
 import MakeAccountTransaction from '@components/MakeAccountTransaction.vue';
@@ -331,6 +331,7 @@ import LoanSave from '@/components/LoanSave.vue';
 import Image from 'primevue/image';
 import MembersIncome from './components/MembersIncome.vue';
 import { MemberStatus } from '@/constants/ui/members';
+import { dateFormat } from '@/helpers';
 
 interface ModalsVisibility {
   apply_form: boolean;
@@ -368,7 +369,7 @@ const basic_information = computed<InformationItem[]>(() => [
 ]);
 
 const employment_information = computed<InformationItem[]>(() => [
-  { label: 'Date Hired', value: member.value?.date_hired ?? '' },
+  { label: 'Date Hired', value: dateFormat(member.value?.date_hired, DATE_FORMAT) },
   { label: 'Department', value: member.value?.department ?? '' },
   { label: 'Position', value: member.value?.position ?? '' },
   { label: 'Employee No.', value: member.value?.employee_no ?? '' },
@@ -399,7 +400,7 @@ const spouse_information = computed<InformationItem[]>(() => [
       member.value?.spouse?.surname ?? '',
     ],
   },
-  { label: 'Date of Birth', value: member.value?.spouse?.date_of_birth ?? '' },
+  { label: 'Date of Birth', value: dateFormat(member.value?.spouse?.date_of_birth, DATE_FORMAT)  },
   { label: 'Occupation', value: member.value?.spouse?.occupation ?? '' },
   { label: 'Contact Number', value: member.value?.spouse?.contact_number ?? '' },
 ]);
@@ -414,7 +415,7 @@ const father_information = computed<InformationItem[]>(() => [
       member.value?.father?.surname ?? '',
     ],
   },
-  { label: 'Date of Birth', value: member.value?.father?.date_of_birth ?? '' },
+  { label: 'Date of Birth', value: dateFormat(member.value?.father?.date_of_birth, DATE_FORMAT) },
   { label: 'Occupation', value: member.value?.father?.occupation ?? '' },
   { label: 'Contact Number', value: member.value?.father?.contact_number ?? '' },
 ]);
@@ -428,7 +429,7 @@ const mother_information = computed<InformationItem[]>(() => [
       member.value?.mother?.surname ?? '',
     ],
   },
-  { label: 'Date of Birth', value: member.value?.mother?.date_of_birth ?? '' },
+  { label: 'Date of Birth', value: dateFormat(member.value?.mother?.date_of_birth, DATE_FORMAT)},
   { label: 'Occupation', value: member.value?.mother?.occupation ?? '' },
   { label: 'Contact Number', value: member.value?.mother?.contact_number ?? '' },
 ]);

@@ -56,7 +56,7 @@
           <Column
             field="id"
             header="ID"
-            style="min-width: 12rem"
+            style="min-width: 5rem"
             sortable
           >
           </Column>
@@ -90,15 +90,14 @@
             sortable
           >
           </Column>
-
           <Column
-            field="posted"
-            header="Posted"
+            field="transaction_date"
+            header="Date"
             style="min-width: 12rem"
             sortable
           >
             <template #body="slotProps">
-              <span v-if="slotProps.data.posted">Posted</span>
+              {{ dateFormat(slotProps.data.transaction_date, DATE_FORMAT) }}
             </template>
           </Column>
 
@@ -182,7 +181,7 @@ import type { Transaction } from '@/types/ui/transactions';
 import ExpensesService from '@/service/ExpensesService';
 import type { ExpensesListPayload } from '@/types/api/expenses';
 import { dateFormat, formatNumber } from '@/helpers';
-import { DATE_TIME_FORMAT } from '@/constants';
+import { DATE_TIME_FORMAT, DATE_FORMAT } from '@/constants';
 
 interface ModalsVisibility {
   save_transaction: boolean;

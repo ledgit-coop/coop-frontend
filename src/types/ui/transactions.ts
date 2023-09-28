@@ -13,6 +13,6 @@ export interface Transaction {
 
 export interface TransactionForm {
   particular?: string;
-  transaction_date?: string;
+  transaction_date?: string | Date;
   amount?: number;
 }

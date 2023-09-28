@@ -28,7 +28,7 @@ export function mapLoanFormToPayload(loanForm: LoanForm): LoanApplicationPayload
     ...rest // Extract other properties
   } = loanForm;
 
-  const loanTerm: LoanTermForm = {
+  const loanTerm = {
     disbursed_channel: loan_term?.disbursed_channel,
     interest_method: loan_term?.interest_method,
     interest_type: loan_term?.interest_type,
@@ -47,7 +47,7 @@ export function mapLoanFormToPayload(loanForm: LoanForm): LoanApplicationPayload
     pre_termination_panalty_method: loan_term?.pre_termination_panalty_method,
     next_payroll_date: loan_term?.next_payroll_date
       ? moment(loan_term?.next_payroll_date).format(DATE_FORMAT_DB)
-      : null,
+      : undefined,
   };
 
   return {
@@ -143,7 +143,7 @@ export function mapLoanToLoanForm(loan: Loan): LoanForm {
     penalty_duration,
     pre_termination_panalty,
     pre_termination_panalty_method,
-    next_payroll_date,
+    next_payroll_date: next_payroll_date ? moment(next_payroll_date).toDate() : undefined,
   };
 
   return {
@@ -155,7 +155,7 @@ export function mapLoanToLoanForm(loan: Loan): LoanForm {
     home_address,
     valid_id,
     tin_number,
-    released_date: released_date ?? '',
+    released_date: released_date ? moment(released_date).toDate() : undefined,
     number_of_children,
     application_type,
     email,
@@ -172,7 +172,7 @@ export function mapLoanToLoanForm(loan: Loan): LoanForm {
     member_account_id,
     loan_product_id,
     status,
-    applied_date,
+    applied_date: applied_date ? moment(applied_date).toDate() : undefined,
     principal_amount,
     loan_term: loanTerm,
   };

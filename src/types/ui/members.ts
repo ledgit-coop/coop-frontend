@@ -6,9 +6,9 @@ export interface MemberForm {
   first_name?: string;
   middle_name?: string | null;
   name_extension?: string | null;
-  date_of_birth?: string | null;
+  date_of_birth?: string | Date;
   place_of_birth?: string | null;
-  date_hired?: string | null;
+  date_hired?: string | Date;
   department?: string | null;
   position?: string | null;
   employee_no?: string | null;
@@ -64,7 +64,7 @@ export interface MemberRelatedPerson {
   first_name?: string;
   middle_name?: string;
   name_extension?: string;
-  date_of_birth?: string;
+  date_of_birth?: string | Date;
   occupation?: string;
   contact_number?: string;
   type?: string;
@@ -72,7 +72,7 @@ export interface MemberRelatedPerson {
 
 export interface MemberFormBeneficiary {
   name?: string;
-  birthdate?: string;
+  birthdate?: string | Date;
   relationship?: string;
 }
 

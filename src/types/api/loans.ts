@@ -33,7 +33,7 @@ export interface LoanApplicationPayload {
   work_industry?: string;
   applied_date?: string;
   released_date?: string;
-  next_payroll_date?: string | null;
+  next_payroll_date?: string;
   loan_fees?: LoanProductFee[];
 
   penalty?: number | null;

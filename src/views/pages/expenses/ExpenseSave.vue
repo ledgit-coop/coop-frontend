@@ -59,6 +59,7 @@ import ExpensesService from '@/service/ExpensesService';
 import { dateFormat } from '@/helpers';
 import { DATE_FORMAT_DB } from '@/constants';
 import useValidation from '@/composables/useValidation';
+import moment from 'moment';
 
 interface Props {
   visible: boolean;
@@ -130,7 +131,7 @@ const loadExpense = async () => {
     const { data } = await ExpensesService.show(props.id ?? 0);
     model.value.form = {
       particular: data.particular ?? '',
-      transaction_date: data.transaction_date,
+      transaction_date: moment(data.transaction_date).toDate(),
       amount: data.amount ?? 0,
     };
   } catch (error) {

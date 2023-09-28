@@ -544,7 +544,7 @@
         >Applied Date</Label
       >
       <Calendar
-        pattern="dd-MM-yyyy"
+        date-format="yyyy-MM-dd"
         mask="true"
         id="applied-date"
         v-model="data.form.applied_date"
@@ -565,7 +565,7 @@
         >Released Date</Label
       >
       <Calendar
-        pattern="dd-MM-yyyy"
+        date-format="yyyy-MM-dd"
         mask="true"
         id="applied-date"
         v-model="data.form.released_date"

@@ -1,5 +1,5 @@
 import type { PostMemberPayload, PostMemberPerson } from '@/types/api/member';
-import type { MemberAddress, MemberForm, MemberRelatedPerson } from '@/types/ui/members';
+import type { Member, MemberAddress, MemberForm, MemberRelatedPerson } from '@/types/ui/members';
 import moment from 'moment';
 import { DATE_FORMAT_DB } from '..';
 
@@ -84,4 +84,45 @@ function mapMemberRelatedPerson(memberRelatedPerson: MemberRelatedPerson): PostM
     contact_number: memberRelatedPerson.contact_number ?? '',
     type: memberRelatedPerson.type ?? '',
   };
+}
+
+export function mapMemberToMemberForm(member: Member): MemberForm {
+  // Copy the common properties
+  const memberForm: MemberForm = {
+    surname: member.surname,
+    first_name: member.first_name,
+    middle_name: member.middle_name,
+    name_extension: member.name_extension,
+    date_of_birth: member.date_of_birth ? moment(member.date_of_birth).toDate() : undefined, // Cast date using Moment.js
+    place_of_birth: member.place_of_birth,
+    date_hired: member.date_hired ? moment(member.date_hired).toDate() : undefined, // Cast date using Moment.js
+    department: member.department,
+    position: member.position,
+    employee_no: member.employee_no,
+    tin_no: member.tin_no,
+    email_address: member.email_address,
+    member_at: member.member_at,
+    oriented: member.oriented,
+    gender: member.gender,
+    telephone_number: member.telephone_number,
+    mobile_number: member.mobile_number,
+    beneficiaries: member.beneficiaries,
+    present_address: member.present_address,
+    permanent_address: member.permanent_address,
+    father: {
+      ...member.father,
+      date_of_birth: member.father.date_of_birth ? moment(member.father.date_of_birth).toDate() : undefined,
+    },
+    mother: {
+      ...member.mother,
+      date_of_birth: member.mother.date_of_birth ? moment(member.mother.date_of_birth).toDate() : undefined,
+    },
+    spouse: {
+      ...member.spouse,
+      date_of_birth: member.spouse.date_of_birth ? moment(member.spouse.date_of_birth).toDate() : undefined,
+    },
+    profile_picture_url: member.profile_picture_url,
+  };
+
+  return memberForm;
 }

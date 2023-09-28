@@ -27,7 +27,7 @@
         <Label for="transaction-date">Requested Date</Label>
 
         <Calendar
-          pattern="dd-MM-yyyy"
+          date-format="yyyy-MM-dd"
           id="date-hired"
           v-model="data.form.transaction_date"
           mask="true"

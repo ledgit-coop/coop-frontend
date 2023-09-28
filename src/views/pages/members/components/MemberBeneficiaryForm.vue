@@ -14,7 +14,7 @@
         showButtonBar
         id="birthdate"
         v-model="model.form.birthdate"
-        pattern="dd-MM-yyyy"
+        date-format="yyyy-MM-dd"
         mask="true"
       />
     </div>

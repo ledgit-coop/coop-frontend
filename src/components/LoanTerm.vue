@@ -208,7 +208,7 @@
     <label for="number-repayments">Next Payroll Date <span class="font-italic">(Optional)</span></label>
 
     <Calendar
-      pattern="dd-MM-yyyy"
+      date-format="yyyy-MM-dd"
       id="date-hired"
       v-model="data.form.next_payroll_date"
       mask="true"

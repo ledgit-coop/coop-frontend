@@ -50,7 +50,7 @@
       >
 
       <Calendar
-        pattern="dd-MM-yyyy"
+        date-format="yy-mm-dd"
         id="date-hired"
         v-model="data.form.transaction_date"
         mask="true"

@@ -92,7 +92,7 @@
             >
             <Calendar
               showButtonBar
-              pattern="dd-MM-yyyy"
+              date-format="yyyy-MM-dd"
               mask="true"
               id="date-of-birth"
               v-model="data.form.date_of_birth"
@@ -166,7 +166,7 @@
             <label for="firstname2">Date Hired</label>
             <Calendar
               showButtonBar
-              pattern="dd-MM-yyyy"
+              date-format="yyyy-MM-dd"
               id="date-hired"
               v-model="data.form.date_hired"
               mask="true"
@@ -316,7 +316,7 @@
           showButtonBar
           id="spouses-date-of-birth"
           v-model="data.form.spouse.date_of_birth"
-          pattern="dd-MM-yyyy"
+          date-format="yyyy-MM-dd"
           mask="true"
         />
       </div>
@@ -383,7 +383,7 @@
           showButtonBar
           id="fathers-date-of-birth"
           v-model="data.form.father.date_of_birth"
-          pattern="dd-MM-yyyy"
+          date-format="yyyy-MM-dd"
           mask="true"
         />
       </div>
@@ -450,7 +450,7 @@
           showButtonBar
           id="mothers-date-of-birth"
           v-model="data.form.mother.date_of_birth"
-          pattern="dd-MM-yyyy"
+          date-format="yyyy-MM-dd"
           mask="true"
         />
       </div>
@@ -503,7 +503,7 @@
         <Calendar
           showButtonBar
           id="member-at"
-          pattern="dd-MM-yyyy"
+          date-format="yyyy-MM-dd"
           mask="true"
           v-model="data.form.member_at"
           validate="member_at"

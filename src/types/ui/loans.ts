@@ -98,8 +98,8 @@ export interface LoanForm {
   status?: string;
   applied_amount?: number | null;
   principal_amount?: number | null;
-  applied_date?: string;
-  released_date?: string;
+  applied_date?: string | Date;
+  released_date?: string | Date;
   guarantor_first_id?: string;
   guarantor_second_id?: string;
   loan_term?: LoanTermForm;
@@ -126,7 +126,7 @@ export interface LoanTermForm {
   pre_termination_panalty?: number | null;
   pre_termination_panalty_method?: string | null;
 
-  next_payroll_date?: string | null;
+  next_payroll_date?: string | Date;
 }
 
 export interface LoanFee extends LoanFeeTemplateForm {
