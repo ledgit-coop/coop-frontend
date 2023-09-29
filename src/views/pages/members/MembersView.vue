@@ -359,6 +359,7 @@ const modalsVisibility = ref<ModalsVisibility>({
 });
 
 const basic_information = computed<InformationItem[]>(() => [
+  { label: 'Member No.', value: member.value?.member_number ?? '' },
   { label: 'Surname', value: member.value?.surname ?? '' },
   { label: 'First Name', value: member.value?.first_name ?? '' },
   { label: 'Middle Name', value: member.value?.middle_name ?? '' },
@@ -400,7 +401,7 @@ const spouse_information = computed<InformationItem[]>(() => [
       member.value?.spouse?.surname ?? '',
     ],
   },
-  { label: 'Date of Birth', value: dateFormat(member.value?.spouse?.date_of_birth, DATE_FORMAT)  },
+  { label: 'Date of Birth', value: dateFormat(member.value?.spouse?.date_of_birth, DATE_FORMAT) },
   { label: 'Occupation', value: member.value?.spouse?.occupation ?? '' },
   { label: 'Contact Number', value: member.value?.spouse?.contact_number ?? '' },
 ]);
@@ -429,7 +430,7 @@ const mother_information = computed<InformationItem[]>(() => [
       member.value?.mother?.surname ?? '',
     ],
   },
-  { label: 'Date of Birth', value: dateFormat(member.value?.mother?.date_of_birth, DATE_FORMAT)},
+  { label: 'Date of Birth', value: dateFormat(member.value?.mother?.date_of_birth, DATE_FORMAT) },
   { label: 'Occupation', value: member.value?.mother?.occupation ?? '' },
   { label: 'Contact Number', value: member.value?.mother?.contact_number ?? '' },
 ]);

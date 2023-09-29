@@ -74,13 +74,21 @@
             for="civil_status"
             >Civil Status</Label
           >
-          <InputText
-            id="civil-status"
+
+          <Dropdown
+            showClear
             v-model="data.form.civil_status"
-            type="text"
+            :options="civilStatuses"
+            filter
+            option-value="value"
+            option-label="label"
+            placeholder="Select Civil Status"
             validate="civil_status"
             v-validation="validation"
-          />
+            class="w-full"
+          >
+          </Dropdown>
+
           <FieldErrorMessage
             :validation="validation"
             field="civil_status"
@@ -181,14 +189,8 @@
         </div>
 
         <div class="field col-12">
-          <Label
-            required
-            for="number_of_children"
-            >Number of Children</Label
-          >
+          <Label for="number_of_children">Number of Children</Label>
           <InputNumber
-            :minFractionDigits="2"
-            :maxFractionDigits="3"
             id="number_of_children"
             v-model="data.form.number_of_children"
             type="text"
@@ -512,6 +514,7 @@
       <GuarantorsDropdown
         id="guarantor-first-id"
         v-model="data.form.guarantor_first_id"
+        :member-id="data.form.member_id"
         name="guarantor_first_id"
       />
       <FieldErrorMessage
@@ -529,6 +532,7 @@
       <GuarantorsDropdown
         id="guarantor-second-id"
         v-model="data.form.guarantor_second_id"
+        :member-id="data.form.member_id"
         name="guarantor_second_id"
       />
       <FieldErrorMessage
@@ -544,7 +548,7 @@
         >Applied Date</Label
       >
       <Calendar
-        date-format="yyyy-MM-dd"
+        date-format="yy-mm-dd"
         mask="true"
         id="applied-date"
         v-model="data.form.applied_date"
@@ -565,7 +569,7 @@
         >Released Date</Label
       >
       <Calendar
-        date-format="yyyy-MM-dd"
+        date-format="yy-mm-dd"
         mask="true"
         id="applied-date"
         v-model="data.form.released_date"
@@ -615,6 +619,7 @@ import Label from './Label.vue';
 import { required } from '@vuelidate/validators';
 import LoanFeeForm from './LoanFeeForm.vue';
 import { AccountType } from '@/constants/ui/accounts';
+import { CivilStatusDropdown } from '@/constants';
 
 interface Props {
   modelValue?: LoanForm;
@@ -635,6 +640,7 @@ const netIncomeList = computed<CheckBoxOption[]>(() => {
     value: salary.toString(),
   }));
 });
+const civilStatuses = computed(() => CivilStatusDropdown);
 const selectedLoanProduct = ref<LoanProduct | undefined>();
 const accounts = ref<DropdownOption[]>([]);
 const members = ref<DropdownOption[]>([]);
@@ -656,7 +662,6 @@ const { validation } = useValidation({
     valid_id: { required },
     work_industry: { required },
     email: { required },
-    number_of_children: { required },
     employer_name: { required },
     occupation: { required },
     work_address: { required },

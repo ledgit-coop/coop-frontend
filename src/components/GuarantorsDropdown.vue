@@ -23,6 +23,7 @@ import { onMounted, ref, watch } from 'vue';
 
 interface Props {
   modelValue?: number | string;
+  memberId?: string;
 }
 
 const props = defineProps<Props>();
@@ -48,15 +49,21 @@ watch(
   }
 );
 
+watch(
+  () => props.memberId,
+  () => {
+    loadGuarantors();
+  }
+);
+
 onMounted(() => {
   guarantor.value = props.modelValue ?? undefined;
-  loadGuarantors();
 });
 
 const loadGuarantors = async () => {
   loading.value = true;
   try {
-    var { data: list } = await UtilityService.getGuarantors();
+    var { data: list } = await UtilityService.getGuarantors({ member_id: props.memberId });
     guarantors.value = list;
   } catch (error) {
     showApiError(error as AxiosError);

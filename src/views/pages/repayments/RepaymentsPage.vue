@@ -43,7 +43,7 @@
 
               <div class="grid gap-1 m-0 align-items-start ml-auto">
                 <Calendar
-                  date-format="yyyy-MM-dd"
+                  date-format="yy-mm-dd"
                   id="date-hired"
                   mask="true"
                   v-model="filters.due_date"

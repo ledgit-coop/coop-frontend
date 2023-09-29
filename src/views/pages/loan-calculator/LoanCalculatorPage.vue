@@ -54,7 +54,7 @@
           <div class="field col-12 md:col-4">
             <label for="name">Released Date</label>
             <Calendar
-              date-format="yyyy-MM-dd"
+              date-format="yy-mm-dd"
               mask="true"
               id="applied-date"
               v-model="data.released_date"

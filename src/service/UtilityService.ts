@@ -7,8 +7,8 @@ import type { LoanFeeTemplate } from '@/types/ui/loan-fee-templates';
 
 const PATH = '/api/utility';
 class UtilityService {
-  getGuarantors(): AxiosPromise<GuarantorDropdown[]> {
-    return apiClient.get(`${PATH}/guarantors/dropdown`);
+  getGuarantors(params: Record<string, any>): AxiosPromise<GuarantorDropdown[]> {
+    return apiClient.get(`${PATH}/guarantors/dropdown`, { params });
   }
 
   getMemembersDropdown(): AxiosPromise<DropdownOption[]> {
