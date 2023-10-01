@@ -18,6 +18,26 @@
         <span class="text-500">since last week</span>
       </div>
     </div>
+
+    <div class="col-12 lg:col-6 xl:col-3">
+      <div class="card mb-0">
+        <div class="flex justify-content-between mb-3">
+          <div>
+            <span class="block text-500 font-medium mb-3">Share Capital</span>
+            <div class="text-900 font-medium text-xl">{{ counts.shared_capital_total }}</div>
+          </div>
+          <div
+            class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+            style="width: 2.5rem; height: 2.5rem"
+          >
+            <i class="pi pi-inbox text-cyan-500 text-xl"></i>
+          </div>
+        </div>
+        <span class="text-green-500 font-medium">{{ counts.shared_capital_current_month }} shares </span>
+        <span class="text-500">this month</span>
+      </div>
+    </div>
+
     <div class="col-12 lg:col-6 xl:col-3">
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">
@@ -32,28 +52,11 @@
             <i class="pi pi-money-bill text-red-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">%52+ </span>
-        <span class="text-500">since last week</span>
+        <span class="text-red-500 font-medium">{{ counts.overdue_loans_current_month }} overdue(s) </span>
+        <span class="text-500">this month</span>
       </div>
     </div>
-    <div class="col-12 lg:col-6 xl:col-3">
-      <div class="card mb-0">
-        <div class="flex justify-content-between mb-3">
-          <div>
-            <span class="block text-500 font-medium mb-3">For Released Loans</span>
-            <div class="text-900 font-medium text-xl">{{ counts.for_release_loan_count }}</div>
-          </div>
-          <div
-            class="flex align-items-center justify-content-center bg-cyan-100 border-round"
-            style="width: 2.5rem; height: 2.5rem"
-          >
-            <i class="pi pi-inbox text-cyan-500 text-xl"></i>
-          </div>
-        </div>
-        <span class="text-green-500 font-medium">520 </span>
-        <span class="text-500">released since last week</span>
-      </div>
-    </div>
+
     <div class="col-12 lg:col-6 xl:col-3">
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">
@@ -68,8 +71,8 @@
             <i class="pi pi-comment text-purple-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">85 released </span>
-        <span class="text-500">since last week</span>
+        <span class="text-green-500 font-medium">{{ counts.loan_released_current_month }} released </span>
+        <span class="text-500">this month</span>
       </div>
     </div>
 
@@ -77,49 +80,67 @@
       <div class="card">
         <h5>Recent Loans</h5>
         <DataTable
-          :value="products"
+          :value="recentLoans"
           :rows="5"
           :paginator="true"
           responsive-layout="scroll"
+          :loading="loadings.recent_loans"
         >
-          <Column style="width: 15%">
-            <template #header> Image </template>
+          <Column
+            field="member.full_name"
+            header="Member"
+            sortable
+          >
             <template #body="slotProps">
-              <img
-                :src="'demo/images/product/' + slotProps.data.image"
-                :alt="slotProps.data.image"
-                width="50"
-                class="shadow-2"
+              <Button
+                class="white-space-nowrap"
+                :label="slotProps.data.member?.full_name"
+                link
+                @click="router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: slotProps.data.member_id } })"
               />
             </template>
           </Column>
+
           <Column
-            field="name"
-            header="Name"
-            :sortable="true"
-            style="width: 35%"
+            field="loan_product.name"
+            header="Type"
+            class="white-space-nowrap"
+            sortable
           ></Column>
+
           <Column
-            field="price"
-            header="Price"
-            :sortable="true"
-            style="width: 35%"
+            field="applied_amount"
+            header="Loan Amount"
           >
             <template #body="slotProps">
-              {{ formatCurrency(slotProps.data.price) }}
+              {{ formatCurrency(slotProps.data.applied_amount ?? 0) }}
             </template>
           </Column>
+
           <Column style="width: 15%">
             <template #header> View </template>
-            <template #body>
+            <template #body="slotProps">
               <Button
-                icon="pi pi-search"
-                type="button"
-                class="p-button-text"
-              ></Button>
+                icon="pi pi-eye"
+                v-tooltip="'View'"
+                text
+                raised
+                rounded
+                class="mr-2 mb-2"
+                size="small"
+                @click="handleSelectedLoan(slotProps.data)"
+              />
             </template>
           </Column>
         </DataTable>
+
+        <LoanView
+          v-model:visible="modalsVisibility.view_loan"
+          :loan-id="selectedLoan?.id"
+          @hide="selectedLoan = undefined"
+        />
+
+        <small class="text-500">Loans created for the last 10 days</small>
       </div>
       <div class="card">
         <div class="flex justify-content-between align-items-center mb-5">
@@ -251,8 +272,26 @@
     </div>
     <div class="col-12 xl:col-6">
       <div class="card">
-        <h5>Cash Flow</h5>
+        <div class="flex align-items-center mb-5">
+          <h5 class="m-0">Cash Flow (Year {{ currentYear.toString() }})</h5>
+          <Dropdown
+            filter
+            :options="years"
+            v-model="filters.cash_flow.year"
+            option-value="value"
+            option-label="label"
+            placeholder="Select a Year"
+            class="ml-auto"
+            @change="loadCashflow"
+          >
+          </Dropdown>
+        </div>
+        <Skeleton
+          v-if="loadings.cash_flow"
+          style="height: 100px"
+        />
         <Chart
+          v-else
           type="line"
           :data="lineData"
           :options="lineOptions"
@@ -353,63 +392,145 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import ProductService from '@/service/ProductService';
 import { useLayout } from '@/layout/composables/layout';
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
 import DashboardService from '@/service/DashboardService';
-import type { DashboardCount } from '@/types/api/dashboard';
+import type { DashboardCount, DashboardCashFlow } from '@/types/api/dashboard';
+import moment from 'moment';
+import { formatCurrency, generateYearListDropdown } from '@/helpers';
+import type { AxiosError } from 'axios';
+import useAlert from '@/composables/useAlert';
+import type { Loan } from '@/types/ui/loans';
+import { ROUTE_NAME_MEMBERS_VIEW } from '@/constants';
+import router from '@/router';
+import LoanView from '@/components/LoanView.vue';
 
+const currentYear = computed(() => moment().get('year'));
 const { isDarkTheme } = useLayout();
+
+const modalsVisibility = ref({
+  view_loan: false,
+});
+
+const filters = ref({
+  cash_flow: {
+    year: currentYear.value.toString(),
+  },
+});
+
+const loadings = ref({
+  cash_flow: false,
+  recent_loans: false,
+  counts: false,
+});
+
+const years = computed(() => generateYearListDropdown());
 const counts = ref<DashboardCount>({
-  for_release_loan_count: 0,
+  shared_capital_total: 0,
   loan_released_count: 0,
   member_count: 0,
   overdue_loan_count: 0,
+  shared_capital_current_month: 0,
+  overdue_loans_current_month: 0,
+  loan_released_current_month: 0,
 });
+const cashflow = ref<DashboardCashFlow[]>([
+  {
+    year: 0,
+    month: '',
+    flow: {
+      expenses: 0,
+      share_capital: 0,
+      revenue: 0,
+    },
+  },
+]);
+
+const recentLoans = ref<Loan[]>([]);
+const selectedLoan = ref<Loan | undefined>();
 const products = ref(null);
-const lineData = reactive({
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+const lineData = computed(() => ({
+  labels: [...cashflow.value.map((r) => r.month)],
   datasets: [
     {
-      label: 'First Dataset',
-      data: [65, 59, 80, 81, 56, 55, 40],
+      label: 'Share Capital',
+      data: [...cashflow.value.map((r) => r.flow.share_capital)],
       fill: false,
-      backgroundColor: '#2f4860',
-      borderColor: '#2f4860',
+      backgroundColor: '#42c5f5',
+      borderColor: '#42c5f5',
       tension: 0.4,
     },
     {
-      label: 'Second Dataset',
-      data: [28, 48, 40, 19, 86, 27, 90],
+      label: 'Revenue',
+      data: [...cashflow.value.map((r) => r.flow.revenue)],
       fill: false,
-      backgroundColor: '#00bb7e',
-      borderColor: '#00bb7e',
+      backgroundColor: '#42f569',
+      borderColor: '#42f569',
+      tension: 0.4,
+    },
+    {
+      label: 'Expenses',
+      data: [...cashflow.value.map((r) => r.flow.expenses)],
+      fill: false,
+      backgroundColor: '#f54542',
+      borderColor: '#f54542',
       tension: 0.4,
     },
   ],
-});
+}));
 const items = ref([
   { label: 'Add New', icon: 'pi pi-fw pi-plus' },
   { label: 'Remove', icon: 'pi pi-fw pi-minus' },
 ]);
+
+const { showApiError } = useAlert();
+
 const lineOptions = ref<any>(null);
 const productService = new ProductService();
 
 onMounted(() => {
   productService.getProductsSmall().then((data: any) => (products.value = data));
   loadCounts();
+  loadCashflow();
+  loadRecentLoans();
 });
 
-const loadCounts = async () => {
-  const { data } = await DashboardService.count();
-  counts.value = data;
+const loadRecentLoans = async () => {
+  loadings.value.recent_loans = true;
+  try {
+    const { data } = await DashboardService.recentLoans();
+    recentLoans.value = data;
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.recent_loans = false;
 };
 
-const formatCurrency = (value: any) => {
-  return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+const loadCounts = async () => {
+  loadings.value.counts = true;
+  try {
+    const { data } = await DashboardService.count();
+    counts.value = data;
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.counts = false;
 };
+
+const loadCashflow = async () => {
+  loadings.value.cash_flow = true;
+  try {
+    const { data } = await DashboardService.cashFlow({ year: filters.value.cash_flow.year });
+    cashflow.value = data;
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.cash_flow = false;
+};
+
 const applyLightTheme = () => {
   lineOptions.value = {
     plugins: {
@@ -438,6 +559,11 @@ const applyLightTheme = () => {
       },
     },
   };
+};
+
+const handleSelectedLoan = (loan: Loan) => {
+  selectedLoan.value = loan;
+  modalsVisibility.value.view_loan = true;
 };
 
 const applyDarkTheme = () => {

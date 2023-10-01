@@ -5,6 +5,7 @@
     modal
     :style="{ width: '100vw' }"
     header="Emergency Loan - 1000023"
+    @hide="emit('hide')"
   >
     <LoanStatus :status="loan?.status" />
 
@@ -257,7 +258,7 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits(['update:visible']);
+const emit = defineEmits(['update:visible', 'hide']);
 const showModal = ref(false);
 const loan = ref<Loan>();
 const schedules = ref<MemberLoanSchedule[]>([]);
