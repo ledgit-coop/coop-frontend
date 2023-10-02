@@ -3,6 +3,7 @@ import type { Pagination } from '@/types/ui';
 import type { MembersTable } from '@/types/ui/members';
 
 export interface PostMemberPayload {
+  member_number?: string;
   surname: string;
   first_name: string;
   middle_name?: string;

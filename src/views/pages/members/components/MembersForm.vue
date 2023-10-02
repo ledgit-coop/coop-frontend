@@ -19,6 +19,18 @@
       </div>
       <div class="col-12 md:col-12 lg:col-10">
         <div class="p-fluid formgrid grid">
+          <div v-if="showMemberNumber" class="field col-12">
+            <Label
+              for="surname"
+              :required="true"
+              >ID Number</Label
+            >
+            <InputMask id="member_number" v-model="data.form.member_number" mask="99-99999999" placeholder="23-00000001"  validate="member_number"/>
+            <FieldErrorMessage
+              :validation="validation"
+              field="surname"
+            />
+          </div>
           <div class="field col-12 md:col-4">
             <Label
               for="surname"
@@ -559,6 +571,7 @@ import Image from 'primevue/image';
 
 interface Props {
   modelValue?: MemberForm;
+  showMemberNumber?: boolean;
 }
 
 const props = defineProps<Props>();

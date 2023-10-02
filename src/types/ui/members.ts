@@ -2,6 +2,7 @@ import type { Account, AccountTransaction } from './accounts';
 import type { Loan } from './loans';
 
 export interface MemberForm {
+  member_number?: string;
   surname?: string;
   first_name?: string;
   middle_name?: string | null;

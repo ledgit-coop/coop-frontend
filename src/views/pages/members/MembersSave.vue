@@ -12,6 +12,7 @@
 
         <MembersForm
           v-if="!loadings.fetching"
+          :show-member-number="isEditing"
           v-model="model.form"
         />
         <template v-else>

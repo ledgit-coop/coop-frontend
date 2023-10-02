@@ -5,6 +5,7 @@ import { DATE_FORMAT_DB } from '..';
 
 export function mapMemberFormToPostMemberPayload(memberForm: MemberForm): PostMemberPayload {
   const postMemberPayload: PostMemberPayload = {
+    member_number: memberForm.member_number ?? '',
     surname: memberForm.surname ?? '',
     first_name: memberForm.first_name ?? '',
     middle_name: memberForm.middle_name ?? '',
