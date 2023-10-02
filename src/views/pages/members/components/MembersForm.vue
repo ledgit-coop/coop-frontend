@@ -19,13 +19,22 @@
       </div>
       <div class="col-12 md:col-12 lg:col-10">
         <div class="p-fluid formgrid grid">
-          <div v-if="showMemberNumber" class="field col-12">
+          <div
+            v-if="showMemberNumber"
+            class="field col-12"
+          >
             <Label
               for="surname"
               :required="true"
               >ID Number</Label
             >
-            <InputMask id="member_number" v-model="data.form.member_number" mask="99-99999999" placeholder="23-00000001"  validate="member_number"/>
+            <InputMask
+              id="member_number"
+              v-model="data.form.member_number"
+              mask="99-99999999"
+              placeholder="23-00000001"
+              validate="member_number"
+            />
             <FieldErrorMessage
               :validation="validation"
               field="surname"
@@ -68,21 +77,11 @@
             />
           </div>
           <div class="field col-12 md:col-2">
-            <Label
-              required
-              for="middle-name"
-              >Middle Name</Label
-            >
+            <Label for="middle-name">Middle Name</Label>
             <InputText
               id="middle-name"
               v-model="data.form.middle_name"
-              validate="middle_name"
-              v-validation="validation"
               type="text"
-            />
-            <FieldErrorMessage
-              :validation="validation"
-              field="middle_name"
             />
           </div>
           <div class="field col-12 md:col-2">
@@ -116,7 +115,7 @@
               field="date_of_birth"
             />
           </div>
-          <div class="field col-12 md:col-6">
+          <div class="field col-12 md:col-4">
             <Label
               for="place-of-birth"
               required
@@ -132,6 +131,34 @@
               field="place_of_birth"
             />
           </div>
+
+          <div class="field col-12 md:col-2">
+            <Label
+              required
+              for="civil_status"
+              >Civil Status</Label
+            >
+
+            <Dropdown
+              showClear
+              v-model="data.form.civil_status"
+              :options="civilStatuses"
+              filter
+              option-value="value"
+              option-label="label"
+              placeholder="Select Civil Status"
+              validate="civil_status"
+              v-validation="validation"
+              class="w-full"
+            >
+            </Dropdown>
+
+            <FieldErrorMessage
+              :validation="validation"
+              field="civil_status"
+            />
+          </div>
+
           <div class="field col-12 md:col-2">
             <Label
               required
@@ -505,6 +532,35 @@
       />
     </template>
 
+    <h5>In Case of Emergency</h5>
+
+    <div class="p-fluid formgrid grid">
+      <div class="field col-12 md:col-4">
+        <label for="in-case-emergency-person">Name</label>
+        <InputText
+          id="in-case-emergency-person"
+          v-model="data.form.in_case_emergency_person"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="in-case-emergency-address">Address</label>
+        <InputText
+          id="in-case-emergency-address"
+          v-model="data.form.in_case_emergency_address"
+          type="text"
+        />
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="in-case-emergency-contact">Contact</label>
+        <InputText
+          id="in-case-emergency-contact"
+          v-model="data.form.in_case_emergency_contact"
+          type="text"
+        />
+      </div>
+    </div>
+
     <div class="p-fluid mt-5 formgrid grid">
       <div class="field col-12 md:col-4">
         <Label
@@ -568,6 +624,7 @@ import MemberBeneficiaryForm from '@/views/pages/members/components/MemberBenefi
 import Checkbox from 'primevue/checkbox';
 import CameraPlugin from '@/components/CameraPlugin.vue';
 import Image from 'primevue/image';
+import { CivilStatusDropdown } from '@/constants';
 
 interface Props {
   modelValue?: MemberForm;
@@ -582,7 +639,6 @@ const rules = computed(() => ({
   surname: { required },
   member_at: { required },
   first_name: { required },
-  middle_name: { required },
   gender: { required },
   date_of_birth: { required },
   place_of_birth: { required },
@@ -598,6 +654,7 @@ const data = reactive<{ form: MemberForm }>({
     beneficiaries: [{}],
   },
 });
+const civilStatuses = computed(() => CivilStatusDropdown);
 
 const form = computed(() => data.form);
 

@@ -118,6 +118,12 @@ watch(showModal, (value) => {
 const setMember = () => {
   model.form!.member_id = props.member?.id?.toString();
   model.form!.email = props.member?.email_address?.toString();
+  model.form!.contact_number = props.member?.mobile_number?.toString();
+  model.form!.tin_number = props.member?.tin_no?.toString();
+  model.form!.civil_status = props.member?.civil_status?.toString();
+  model.form!.home_address = props.member?.full_permanent_address?.toString();
+  model.form!.present_address = props.member?.full_present_address?.toString();
+  model.form!.age = props.member?.age;
 };
 
 const handleSaveClick = async () => {

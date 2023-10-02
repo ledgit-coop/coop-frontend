@@ -23,6 +23,12 @@ export interface MemberForm {
   beneficiaries?: MemberFormBeneficiary[];
   present_address?: MemberAddress;
   permanent_address?: MemberAddress;
+
+  in_case_emergency_person?: string;
+  in_case_emergency_address?: string;
+  in_case_emergency_contact?: string;
+  civil_status?: string;
+
   father: MemberRelatedPerson;
   mother: MemberRelatedPerson;
   spouse: MemberRelatedPerson;

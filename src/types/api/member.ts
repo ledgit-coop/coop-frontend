@@ -22,6 +22,12 @@ export interface PostMemberPayload {
   mobile_number?: string;
   telephone_number?: string;
   profile_picture_url?: string;
+
+  in_case_emergency_person?: string;
+  in_case_emergency_address?: string;
+  in_case_emergency_contact?: string;
+  civil_status?: string;
+
   permanent_address?: {
     house_block_lot?: string;
     street?: string;

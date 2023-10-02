@@ -524,20 +524,11 @@
     </div>
 
     <div class="field col-12 md:col-6">
-      <Label
-        required
-        for="payment_method"
-        >Guarantor (2)</Label
-      >
+      <Label for="guarantor-second-id">Guarantor (2)</Label>
       <GuarantorsDropdown
         id="guarantor-second-id"
         v-model="data.form.guarantor_second_id"
         :member-id="data.form.member_id"
-        name="guarantor_second_id"
-      />
-      <FieldErrorMessage
-        :validation="validation"
-        field="guarantor_second_id"
       />
     </div>
 
@@ -673,7 +664,6 @@ const { validation } = useValidation({
     loan_purpose: { required },
     member_account_id: { required },
     guarantor_first_id: { required },
-    guarantor_second_id: { required },
     applied_date: { required },
     released_date: { required },
   },

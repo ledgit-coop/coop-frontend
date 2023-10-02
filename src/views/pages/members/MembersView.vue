@@ -220,25 +220,53 @@
                     <div class="col-12 p-0">
                       <h6>Beneficiaries</h6>
                     </div>
-                    <div class="col-12 p-0 md:col-6 lg:col-4">
-                      <div class="p-datatable-wrapper">
-                        <table class="p-datatable-table">
-                          <thead class="p-datatable-thead">
-                            <tr>
-                              <th>Name</th>
-                              <th>Birthdate</th>
-                              <th>Relationship</th>
-                            </tr>
-                          </thead>
-                          <tbody class="p-datatable-tbody">
-                            <tr v-for="value in member?.beneficiaries ?? []">
-                              <td>{{ value.name }}</td>
-                              <td>{{ value.birthdate }}</td>
-                              <td>{{ value.relationship }}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                    <div class="col-12 p-0 md:col-6">
+                      <DataTable
+                        :loading="loadings.member_fetch"
+                        :value="member?.beneficiaries ?? []"
+                      >
+                        <template #empty> No records found. </template>
+
+                        <Column
+                          field="name"
+                          header="Name"
+                        >
+                          <template #body="slotProps">
+                            {{ slotProps.data.name ?? '--' }}
+                          </template>
+                        </Column>
+
+                        <Column
+                          field="birthdate"
+                          header="Birthdate"
+                        >
+                          <template #body="slotProps">
+                            {{ slotProps.data.birthdate ?? '--' }}
+                          </template>
+                        </Column>
+
+                        <Column
+                          field="relationship"
+                          header="Relationship"
+                        >
+                          <template #body="slotProps">
+                            {{ slotProps.data.relationship ?? '--' }}
+                          </template>
+                        </Column>
+                      </DataTable>
+                    </div>
+                  </div>
+
+                  <div class="grid mt-4">
+                    <div class="col-12 p-0">
+                      <h6>In Case of Emergency</h6>
+                    </div>
+                    <div class="col-12 p-0">
+                      <Information
+                        :loading="loadings.member_fetch"
+                        :info="incase_emergency_information"
+                        table-class="w-4"
+                      />
                     </div>
                   </div>
                 </div>
@@ -332,6 +360,7 @@ import Image from 'primevue/image';
 import MembersIncome from './components/MembersIncome.vue';
 import { MemberStatus } from '@/constants/ui/members';
 import { dateFormat } from '@/helpers';
+import DataTable from 'primevue/datatable';
 
 interface ModalsVisibility {
   apply_form: boolean;
@@ -366,6 +395,7 @@ const basic_information = computed<InformationItem[]>(() => [
   { label: 'Suffix (Jr. Sr.)', value: member.value?.name_extension ?? '' },
   { label: 'Date of Birth', value: member.value?.date_of_birth?.toString() ?? '' },
   { label: 'Place of Birth', value: member.value?.place_of_birth ?? '' },
+  { label: 'Civil Status', value: member.value?.civil_status ?? '' },
   { label: 'Gender', value: member.value?.gender ?? '' },
 ]);
 
@@ -404,6 +434,15 @@ const spouse_information = computed<InformationItem[]>(() => [
   { label: 'Date of Birth', value: dateFormat(member.value?.spouse?.date_of_birth, DATE_FORMAT) },
   { label: 'Occupation', value: member.value?.spouse?.occupation ?? '' },
   { label: 'Contact Number', value: member.value?.spouse?.contact_number ?? '' },
+]);
+
+const incase_emergency_information = computed<InformationItem[]>(() => [
+  {
+    label: 'Name',
+    value: member.value?.in_case_emergency_contact ?? '',
+  },
+  { label: 'Address', value: member.value?.in_case_emergency_address ?? '' },
+  { label: 'Contact', value: member.value?.in_case_emergency_contact ?? '' },
 ]);
 
 const father_information = computed<InformationItem[]>(() => [
