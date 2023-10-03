@@ -27,7 +27,7 @@
       header="Released Date"
     >
       <template #body="slotProps">
-        {{ dateFormat(slotProps.data.date, DATE_FORMAT_DATE) }}
+        {{ dateFormat(slotProps.data.released_date, DATE_FORMAT_DATE) }}
       </template>
     </Column>
 
