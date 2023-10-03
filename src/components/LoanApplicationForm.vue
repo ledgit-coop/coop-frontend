@@ -652,7 +652,6 @@ const { validation } = useValidation({
     home_address: { required },
     valid_id: { required },
     work_industry: { required },
-    email: { required },
     employer_name: { required },
     occupation: { required },
     work_address: { required },
