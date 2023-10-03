@@ -168,7 +168,7 @@ export function mapLoanToLoanForm(loan: Loan): LoanForm {
     guarantor_second_id,
     loan_purpose,
     salary_range,
-    applied_amount: applied_amount ? parseFloat(applied_amount) : null,
+    applied_amount: applied_amount ? parseFloat(applied_amount?.toString()) : null,
     member_account_id,
     loan_product_id,
     status,
