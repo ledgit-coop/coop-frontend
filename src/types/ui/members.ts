@@ -101,6 +101,7 @@ export interface MemberSavingsAccountWidgetItem {
 
 export interface MembersTable {
   id?: string;
+  profile_picture_url?: string;
   member_number: string;
   full_name: string;
   email: string;

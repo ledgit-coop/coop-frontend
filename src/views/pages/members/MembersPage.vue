@@ -83,6 +83,26 @@
             style="min-width: 12rem"
             sortable
           >
+            <template #body="slotProps">
+              <div class="flex gap-2 align-items-center">
+                <Image
+                  alt="Image"
+                  height="30"
+                  class="align-self-center"
+                  preview
+                  image-class="border-circle"
+                  v-if="slotProps.data?.profile_picture_url"
+                  :src="slotProps.data?.profile_picture_url"
+                />
+                <Avatar
+                  v-else
+                  label="P"
+                  size="normal"
+                  shape="circle"
+                ></Avatar>
+                <span>{{ slotProps.data.member_number }}</span>
+              </div>
+            </template>
           </Column>
 
           <Column
@@ -183,6 +203,8 @@ import useAlert from '@/composables/useAlert';
 import useTableParameters from '@/composables/useTableParameters';
 import { DATE_FORMAT } from '@/constants';
 import { dateFormat } from '@/helpers';
+import Avatar from 'primevue/avatar';
+import Image from 'primevue/image';
 
 interface PageLoadings {
   table: boolean;
