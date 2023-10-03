@@ -442,7 +442,11 @@
     </div>
 
     <div class="field col-12 md:col-6">
-      <label for="principal-amount">Approved Amount</label>
+      <Label
+        for="principal-amount"
+        help-text="Please take note that this is just a pre-approval amount and this will be changed later during final approval process."
+        >Pre-Approved Amount</Label
+      >
       <InputNumber
         :minFractionDigits="2"
         :maxFractionDigits="3"
@@ -478,7 +482,11 @@
     </div>
 
     <div class="field col-12 md:col-6">
-      <label for="name">Account</label>
+      <Label
+        help-text="Please match the account based on the loan type and if the account did not exists please an account first."
+        for="name"
+        >Account (Passbook)</Label
+      >
       <Dropdown
         showClear
         v-model="data.form.member_account_id"
@@ -493,11 +501,6 @@
         class="w-full"
       >
       </Dropdown>
-      <small
-        class="flex align-items-center pt-1"
-        id="username-help"
-        ><i class="pi pi-info-circle pr-2"></i> Create account if not exists.</small
-      >
 
       <FieldErrorMessage
         :validation="validation"

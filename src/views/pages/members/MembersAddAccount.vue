@@ -20,7 +20,15 @@
           class="w-full"
           validate="account_holder"
           v-validation="validation"
+          @filter="handleFilter"
         >
+          <template #emptyfilter>
+            <Button
+              @click="handleAddHolder"
+              link
+              :label="`Add '${filterHolder}' to the list`"
+            />
+          </template>
         </Dropdown>
         <FieldErrorMessage
           :validation="validation"
@@ -42,6 +50,7 @@
           class="w-full"
           validate="account_id"
           v-validation="validation"
+          option-disabled="disabled"
         >
         </Dropdown>
         <FieldErrorMessage
@@ -50,7 +59,6 @@
         />
       </div>
     </div>
-
     <template #footer>
       <Button
         label="Cancel"
@@ -98,6 +106,7 @@ const model = reactive<LoanForm>({});
 const showModal = ref(false);
 const accountId = ref();
 const accounHolder = ref();
+const filterHolder = ref('');
 const { showError, showApiError, showSuccess } = useAlert();
 
 onMounted(() => {
@@ -170,7 +179,7 @@ const handleSaveAccount = async () => {
 const loadAccounts = async () => {
   loadings.value.fetch_accounts = true;
   try {
-    const { data } = await UtilityService.getAccountDropdown();
+    const { data } = await UtilityService.getAccountDropdown({ restrict_member_id: props.memberId?.toString() });
     accounts.value = data;
   } catch (error) {
     showApiError(error as AxiosError);
@@ -190,5 +199,17 @@ const loadHolders = async () => {
 };
 const setMemberId = () => {
   model.member_id = props.memberId?.toString();
+};
+
+const handleFilter = (event: any) => {
+  filterHolder.value = event.value;
+};
+
+const handleAddHolder = () => {
+  accountHolders.value?.push({
+    value: filterHolder.value,
+    label: filterHolder.value,
+  });
+  accounHolder.value = filterHolder.value;
 };
 </script>

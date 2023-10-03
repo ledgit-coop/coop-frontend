@@ -30,7 +30,7 @@ export interface Loan {
   work_industry: string;
   loan_purpose: string;
   salary_range: string;
-  applied_amount: string;
+  applied_amount: number;
   principal_amount: number | null;
   disbursed_channel: string;
   interest_method: string;

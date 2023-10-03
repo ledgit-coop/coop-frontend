@@ -55,7 +55,7 @@ import LoanPreTerminate from './LoanPreTerminate.vue';
       icon="pi pi-pencil"
       v-tooltip="'Edit'"
       severity="warning"
-      v-if="loan?.status !== MemberLoanStatus.APPROVED && !loan?.released"
+      v-if="!loan?.released"
       text
       raised
       rounded
@@ -110,7 +110,7 @@ import LoanPreTerminate from './LoanPreTerminate.vue';
       rounded
       class="mr-2 mb-2"
       size="small"
-      @click="handleChangeStatus(MemberLoanStatus.APPROVED)"
+      @click="modalsVisibility.approve = true"
     />
 
     <Button
@@ -143,6 +143,12 @@ import LoanPreTerminate from './LoanPreTerminate.vue';
     @updated="emit('updated')"
   />
 
+  <ApproveLoan
+    v-model:visible="modalsVisibility.approve"
+    :loan="loan"
+    @updated="emit('updated')"
+  />
+
   <LoanPreTerminate
     v-model:visible="modalsVisibility.request_pre_terminate"
     :loan="loan"
@@ -162,6 +168,7 @@ import type { AxiosError } from 'axios';
 import LoanService from '@/service/LoanService';
 import ReleaseLoan from './ReleaseLoan.vue';
 import LoanPreTerminate from './LoanPreTerminate.vue';
+import ApproveLoan from './ApproveLoan.vue';
 
 interface Props {
   loan?: Loan;
@@ -172,6 +179,7 @@ const modalsVisibility = ref({
   edit_loan: false,
   release: false,
   request_pre_terminate: false,
+  approve: false,
 });
 const confirm = useConfirm();
 

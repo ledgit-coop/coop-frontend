@@ -121,5 +121,6 @@ const loadFee = async () => {
 
 const handleHide = () => {
   emit('hide');
+  model.value.form = {};
 };
 </script>

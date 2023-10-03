@@ -2,12 +2,30 @@
   <Dialog
     v-model:visible="showModal"
     modal
-    header="Release Loan"
+    header="Approve Loan"
     :style="{ width: '30vw' }"
   >
     <Information :info="basic_information" />
+    <h4>Applied Amount: {{ formatNumber(loan?.applied_amount ?? 0, '--') }}</h4>
+    <div class="grid p-fluid formgrid">
+      <div class="field col-12">
+        <Label for="approved-amount">Approved Amount</Label>
+        <InputNumber
+          :minFractionDigits="2"
+          :maxFractionDigits="3"
+          show-buttons
+          id="approved-amount"
+          validate="approved_amount"
+          v-model="approvedAmount"
+          v-validation="validation"
+        />
 
-    <InlineMessage severity="warn">Please check the loan details before releasing.</InlineMessage>
+        <FieldErrorMessage
+          :validation="validation"
+          field="approved_amount"
+        />
+      </div>
+    </div>
 
     <template #footer>
       <Button
@@ -16,15 +34,11 @@
         text
         @click="showModal = false"
       />
+
       <Button
-        label="Print Receipt"
-        icon="pi pi-print"
-        autofocus
-      />
-      <Button
-        label="Release"
-        icon="pi pi-send"
-        @click="handleClickRelease"
+        label="Approve"
+        icon="pi pi-thumbs-up-fill"
+        @click="handleClickApprove"
         :loading="loadings.saving"
         autofocus
       />
@@ -41,9 +55,14 @@ import { useConfirm } from 'primevue/useconfirm';
 import type { Loan } from '@/types/ui/loans';
 import type { InformationItem } from '@/types/ui';
 import Information from './Information.vue';
-import { formatNumber } from '@/helpers';
+import { dateFormat, formatNumber } from '@/helpers';
 import LoanService from '@/service/LoanService';
 import { MemberLoanStatus } from '@/constants/ui/members';
+import Label from './Label.vue';
+import { DATE_FORMAT_DATE } from '@/constants';
+import useValidation from '@/composables/useValidation';
+import { required } from '@vuelidate/validators';
+import FieldErrorMessage from './FieldErrorMessage.vue';
 
 interface Props {
   visible: boolean;
@@ -54,26 +73,29 @@ const props = defineProps<Props>();
 const emit = defineEmits(['update:visible', 'updated']);
 const showModal = ref(false);
 const confirm = useConfirm();
-
+const approvedAmount = ref();
 const basic_information = computed<InformationItem[]>(() => [
-  { label: 'Applied Date', value: props?.loan?.applied_date ?? '' },
-  { label: 'Released Date', value: props?.loan?.released_date ?? '' },
+  { label: 'Applied Date', value: dateFormat(props?.loan?.applied_date, DATE_FORMAT_DATE) ?? '' },
+  { label: 'Expected Releasing Date', value: dateFormat(props?.loan?.released_date, DATE_FORMAT_DATE) ?? '' },
   { label: 'Interest Method', value: props?.loan?.interest_method ?? '' },
   { label: 'Interest Period', value: props?.loan?.loan_interest_period ?? '' },
   { label: 'Interest', value: (props?.loan?.loan_interest.toString() ?? '') + '%' },
   { label: 'Disbursement Channels', value: props?.loan?.disbursed_channel ?? '' },
-  { label: 'Loan Amount', value: formatNumber(Number(props?.loan?.applied_amount ?? 0)) },
-  { label: 'Approved Amount', value: formatNumber(Number(props?.loan?.principal_amount ?? 0)) },
-  {
-    label: 'Total Deductions (Fees)',
-    value: formatNumber(props.loan?.loan_fees?.reduce((n, p) => n + (p?.amount ?? 0), 0) ?? 0),
-  },
-  { label: 'Released Amount', value: formatNumber(Number(props?.loan?.released_amount ?? 0)) },
-
   { label: 'Loan Purpose', value: props?.loan?.loan_purpose ?? '' },
 ]);
 
-const { showApiError, showSuccess } = useAlert();
+const form = computed(() => ({
+  approved_amount: approvedAmount.value,
+}));
+
+const { validation } = useValidation({
+  rules: {
+    approved_amount: { required },
+  },
+  model: form,
+});
+
+const { showApiError, showSuccess, showError } = useAlert();
 
 const loadings = ref({
   saving: false,
@@ -94,19 +116,26 @@ watch(
   }
 );
 
-const handleClickRelease = async () => {
+const handleClickApprove = async () => {
+  await validation.value?.$validate();
+  if (validation.value?.$invalid) {
+    showError('Please complete the required fields.');
+    return;
+  }
   if (loadings.value.saving) return;
   try {
     confirm.require({
       message: 'Do you sure you want to proceed?',
-      header: 'Release Loan',
+      header: 'Approve Loan',
       icon: 'pi pi-exclamation-triangle',
       acceptClass: 'p-button-primary',
       accept: async () => {
         loadings.value.saving = true;
 
         try {
-          await LoanService.updateStatus(props.loan?.id.toString() ?? '', MemberLoanStatus.RELEASED);
+          await LoanService.updateStatus(props.loan?.id.toString() ?? '', MemberLoanStatus.APPROVED, {
+            approved_amount: approvedAmount.value,
+          });
           showSuccess('Loan successfully added.');
           emit('updated');
         } catch (error) {

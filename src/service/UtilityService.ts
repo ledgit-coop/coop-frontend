@@ -15,8 +15,8 @@ class UtilityService {
     return apiClient.get(`${PATH}/members/dropdown`);
   }
 
-  getAccountDropdown(): AxiosPromise<DropdownOption[]> {
-    return apiClient.get(`${PATH}/accounts/dropdown`);
+  getAccountDropdown(params?: { restrict_member_id?: string }): AxiosPromise<DropdownOption[]> {
+    return apiClient.get(`${PATH}/accounts/dropdown`, { params });
   }
 
   getWorkIndustriesDropdown(): AxiosPromise<DropdownOption[]> {

@@ -205,7 +205,7 @@
     "
     class="field col-12 lg:col-4"
   >
-    <label for="number-repayments">Next Payroll Date <span class="font-italic">(Optional)</span></label>
+    <label for="number-repayments">Next Payroll or Income Date <span class="font-italic">(Optional)</span></label>
 
     <Calendar
       date-format="yy-mm-dd"

@@ -12,14 +12,14 @@ export enum RepaymentCycle {
 }
 
 export enum SalaryRange {
-  '10K-below' = '10K-below',
+  '10K-Below' = '10K-Below',
   '11K-15K' = '11K-15K',
   '16K-22K' = '16K-22K',
   '23K-30K' = '23K-30K',
   '31K-40K' = '31K-40K',
   '41K-50K' = '41K-50K',
-  '71K-80K' = '71K-80K',
-  '81K-100K' = '81K-100K',
+  '51K-60K' = '51K-60K',
+  '60K-Above' = '60K-Above',
 }
 
 export enum LoanDisbursementChannel {
@@ -66,9 +66,9 @@ export enum LoanInterestPeriod {
 export const REPAYMENT_CYCLE_DROPDOWN: DropdownOption[] = [
   { label: 'Daily', value: RepaymentCycle.DAILY },
   { label: 'Weekly', value: RepaymentCycle.WEEKLY },
-  { label: 'Biweekly', value: RepaymentCycle.BIWEEKLY },
+  { label: 'Biweekly (Every 2 Weeks)', value: RepaymentCycle.BIWEEKLY },
   { label: 'Monthly', value: RepaymentCycle.MONTHLY },
-  { label: 'Bimonthly', value: RepaymentCycle.BIMONTHLY },
+  { label: 'Bimonthly (Every 2 Months)', value: RepaymentCycle.BIMONTHLY },
   { label: 'Quarterly', value: RepaymentCycle.QUARTERLY },
   { label: 'Yearly', value: RepaymentCycle.YEARLY },
   { label: 'Lump-Sum', value: RepaymentCycle.LUMP_SUM },

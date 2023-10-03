@@ -8,6 +8,9 @@ export function mapLoanFeeToLoanFeeSavePayload(loanFee: LoanFeeForm): LoanFeeSav
     fee_type: loanFee.fee_type ?? '',
     fee_method: loanFee.fee_method ?? '',
     enabled: loanFee.enabled ?? false,
+    credit_regular_savings: loanFee.credit_regular_savings,
+    credit_share_capital: loanFee.credit_share_capital,
+    credit_revenue: loanFee.credit_revenue,
   };
 
   return feeSavePayload;
@@ -20,6 +23,9 @@ export function mapLoanFeeSavePayloadToLoanFee(fee: LoanFeeTemplate): LoanFeeFor
     fee_type: fee.fee_type,
     fee_method: fee.fee_method,
     enabled: fee.enabled ?? false,
+    credit_regular_savings: fee.credit_regular_savings,
+    credit_share_capital: fee.credit_share_capital,
+    credit_revenue: fee.credit_revenue,
   };
   return loanFeeForm;
 }

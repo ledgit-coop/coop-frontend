@@ -4,6 +4,10 @@ export interface LoanFeeForm {
   fee_type?: string | null;
   fee_method?: string | null;
   enabled?: boolean;
+
+  credit_revenue?: boolean;
+  credit_share_capital?: boolean;
+  credit_regular_savings?: boolean;
 }
 
 export interface LoanFeeTemplate extends LoanFeeForm {

@@ -86,6 +86,67 @@
             >Deductible to Principal</label
           >
         </div>
+        <div class="flex align-items-center">
+          <RadioButton
+            input-id="fee-type"
+            name="fee_type"
+            disabled
+          />
+          <label
+            inputId="fee-type"
+            class="ml-2"
+            >Deductible to Amortization</label
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="field col-12">
+      <Label
+        required
+        for="fee-type"
+        >Other Options</Label
+      >
+      <div class="flex flex-column gap-3">
+        <div class="flex align-items-center">
+          <Checkbox
+            inputId="credit-share-capital"
+            name="credit_share_capital"
+            binary
+            v-model="data.form.credit_share_capital"
+          />
+          <label
+            for="credit-share-capital"
+            class="ml-2"
+            >Credit To Share Capital</label
+          >
+        </div>
+        <div class="flex align-items-center">
+          <Checkbox
+            inputId="credit-regular-savings"
+            name="credit_regular_savings"
+            binary
+            v-model="data.form.credit_regular_savings"
+          />
+          <label
+            for="credit-regular-savings"
+            class="ml-2"
+            >Credit To Regular Savings</label
+          >
+        </div>
+        <div class="flex align-items-center">
+          <Checkbox
+            inputId="credit-revenue"
+            name="credit_revenue"
+            binary
+            v-model="data.form.credit_revenue"
+          />
+          <label
+            for="credit-revenue"
+            class="ml-2"
+            >Credit To Revenue</label
+          >
+        </div>
       </div>
     </div>
 
