@@ -116,7 +116,11 @@
           <Column
             field="due_date"
             header="Due Date"
-          ></Column>
+          >
+            <template #body="slotProps">
+              {{ dateFormat(slotProps.data.due_date, DATE_FORMAT_DATE) }}
+            </template>
+          </Column>
           <Column
             field="principal_amount"
             header="Principal Amount"
@@ -193,7 +197,10 @@
               <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.penalty_amount ?? 0), 0) ?? 0)" />
 
               <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.fee_amount ?? 0), 0) ?? 0)" />
-              <Column :colspan="3" :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.due_amount ?? 0), 0) ?? 0)" />
+              <Column
+                :colspan="3"
+                :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.due_amount ?? 0), 0) ?? 0)"
+              />
             </Row>
           </ColumnGroup>
         </DataTable>
@@ -242,12 +249,13 @@ import LoanService from '@/service/LoanService';
 import type { Loan } from '@/types/ui/loans';
 import useAlert from '@/composables/useAlert';
 import type { AxiosError } from 'axios';
-import { formatNumber } from '@/helpers';
+import { dateFormat, formatNumber } from '@/helpers';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import LoanSummary from './LoanSummary.vue';
 import { type LoanSummaryTable } from '@/types/ui/loans';
 import { LogModules } from '@/constants/ui/logs';
+import { DATE_FORMAT_DATE } from '@/constants';
 
 interface Props {
   visible: boolean;
