@@ -24,7 +24,7 @@
         <div class="flex justify-content-between mb-3">
           <div>
             <span class="block text-500 font-medium mb-3">Share Capital</span>
-            <div class="text-900 font-medium text-xl">{{ counts.shared_capital_total }}</div>
+            <div class="text-900 font-medium text-xl">{{ formatNumber(counts.shared_capital_total ?? 0) }}</div>
           </div>
           <div
             class="flex align-items-center justify-content-center bg-cyan-100 border-round"
@@ -33,7 +33,7 @@
             <i class="pi pi-inbox text-cyan-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">{{ counts.shared_capital_current_month }} shares </span>
+        <span class="text-green-500 font-medium">{{ formatNumber(counts.shared_capital_current_month ?? 0) }} shares </span>
         <span class="text-500">this month</span>
       </div>
     </div>
@@ -204,7 +204,7 @@
     <div class="col-12 xl:col-6">
       <div class="card">
         <div class="flex align-items-center mb-5">
-          <h5 class="m-0">Cash Flow (Year {{ currentYear.toString() }})</h5>
+          <h5 class="m-0">Cash Flow (Year {{ filters.cash_flow.year.toString() }})</h5>
           <Dropdown
             filter
             :options="years"
@@ -266,6 +266,7 @@ import type { Loan } from '@/types/ui/loans';
 import { ROUTE_NAME_MEMBERS_VIEW } from '@/constants';
 import router from '@/router';
 import LoanView from '@/components/LoanView.vue';
+import { formatNumber } from '@/helpers';
 
 const currentYear = computed(() => moment().get('year'));
 const { isDarkTheme } = useLayout();
