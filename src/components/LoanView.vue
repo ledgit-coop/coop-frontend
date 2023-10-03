@@ -272,7 +272,7 @@ const basic_information_1 = computed<InformationItem[]>(() => [
   { label: 'Valid ID', value: loan.value?.valid_id ?? '' },
   { label: 'Email', value: loan.value?.email ?? '' },
   { label: 'TIN Number', value: loan.value?.tin_number ?? '' },
-  { label: 'Number of Children', value: loan.value?.number_of_children.toString() ?? '' },
+  { label: 'Number of Children', value: loan.value?.number_of_children?.toString() ?? '' },
   { label: 'Employer Name', value: loan.value?.employer_name ?? '' },
   { label: 'Occupation', value: loan.value?.occupation ?? '' },
   { label: 'Work Address', value: loan.value?.work_address ?? '' },
