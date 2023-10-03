@@ -193,9 +193,7 @@
               <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.penalty_amount ?? 0), 0) ?? 0)" />
 
               <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.fee_amount ?? 0), 0) ?? 0)" />
-              <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.due_amount ?? 0), 0) ?? 0)" />
-              <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.principal_balance ?? 0), 0) ?? 0)" />
-              <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.amount_paid ?? 0), 0) ?? 0)" />
+              <Column :colspan="3" :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.due_amount ?? 0), 0) ?? 0)" />
             </Row>
           </ColumnGroup>
         </DataTable>
