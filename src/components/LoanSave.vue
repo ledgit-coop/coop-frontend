@@ -98,6 +98,7 @@ watch(
   () => props.visible,
   (value) => {
     showModal.value = value ?? false;
+    setMember();
   }
 );
 
