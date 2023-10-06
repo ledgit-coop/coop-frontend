@@ -6,6 +6,12 @@
     :style="{ width: '50vw' }"
     @hide="handleHide"
   >
+    <Message
+      v-if="isReleased"
+      severity="warn"
+      class="mt-0"
+      ><strong>Warning</strong> You are about to edit a released loan.</Message
+    >
     <template v-if="loadings.fetching">
       <Skeleton class="mb-2 full-width"></Skeleton>
       <Skeleton class="mb-2 full-width"></Skeleton> <Skeleton class="mb-2 full-width"></Skeleton>
@@ -61,6 +67,7 @@ import useAlert from '@/composables/useAlert';
 import type { AxiosError } from 'axios';
 import Skeleton from 'primevue/skeleton';
 import useValidation from '@/composables/useValidation';
+import Message from 'primevue/message';
 
 interface Props {
   visible: boolean;
@@ -77,6 +84,8 @@ const { validation } = useValidation();
 const model = reactive<{ form?: LoanForm }>({
   form: {},
 });
+
+const isReleased = ref(false);
 
 const isEditing = computed(() => !!props.loanIdForEdit);
 const showModal = ref(false);
@@ -152,6 +161,7 @@ const loadLoan = async () => {
   try {
     const { data } = await LoanService.show(props.loanIdForEdit ?? 0);
     model.form = mapLoanToLoanForm(data);
+    isReleased.value = data.released ?? false;
   } catch (error) {
     showApiError(error as AxiosError);
   }
@@ -161,5 +171,6 @@ const loadLoan = async () => {
 const handleHide = () => {
   model.form = {};
   validation.value?.$reset();
+  isReleased.value = false;
 };
 </script>

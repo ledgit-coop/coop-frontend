@@ -68,7 +68,6 @@ import LoanPreTerminate from './LoanPreTerminate.vue';
       icon="pi pi-pencil"
       v-tooltip="'Edit'"
       severity="warning"
-      v-if="!loan?.released"
       text
       raised
       rounded
