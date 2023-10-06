@@ -32,7 +32,6 @@
               <Skeleton class="col-6 w-full" />
               <Skeleton class="col-6 w-full" />
               <Skeleton class="col-6 w-full" />
-
             </div>
           </div>
           <div class="col-6">
@@ -329,7 +328,6 @@ import Skeleton from 'primevue/skeleton';
 
 // @ts-ignore
 import html2pdf from 'html2pdf.js';
-
 
 interface Props {
   visible: boolean;

@@ -116,13 +116,29 @@
       field="id"
       header="Action"
       align-frozen="right"
-      style="min-width: 6rem; width: 6rem"
+      style="min-width: 6rem; width: 8rem"
       frozen
     >
       <template #body="slotProps">
-        <div class="flex flex-wrap gap-2">
+        <div class="flex gap-2">
           <Button
-            label="Transactions"
+            icon="pi pi-trash"
+            :disabled="slotProps.data.has_balance"
+            v-tooltip="'Delete Account'"
+            text
+            raised
+            rounded
+            severity="danger"
+            class="mr-2 mb-2"
+            size="small"
+            @click="handleDeleteClick(slotProps.data)"
+          />
+
+          <Button
+            v-tooltip="'View Transactions'"
+            text
+            raised
+            rounded
             icon="pi pi-eye"
             class="p-button-raised mr-2 mb-2"
             size="small"
@@ -168,6 +184,7 @@ import type { AxiosError } from 'axios';
 import { dateFormat, formatCurrency, generateYearListDropdown } from '@/helpers';
 import moment from 'moment';
 import type { DropdownOption } from '@/types/ui';
+import { useConfirm } from 'primevue/useconfirm';
 
 interface Props {
   member?: Member;
@@ -177,7 +194,7 @@ const filters = ref({
   year: moment().get('year').toString(),
   status: undefined,
 });
-
+const confirm = useConfirm();
 const years = computed(() => generateYearListDropdown());
 const accountStatuses = computed<DropdownOption[]>(() => [
   { label: 'Active', value: AccountStatus.ACTIVE },
@@ -194,7 +211,7 @@ const loadings = ref({
   transaction_table: false,
   accounts_table: false,
 });
-const { showApiError } = useAlert();
+const { showApiError, showSuccess } = useAlert();
 
 watch(
   () => props.member?.id,
@@ -238,4 +255,24 @@ const handleViewTransactionClick = (value: MemberAccount) => {
   showModal.value = true;
   handleGetTransactions();
 };
+
+const handleDeleteClick = (value: MemberAccount) => {
+  confirm.require({
+    message: 'The selected account has no balance and it is safe to delete do you want to proceed?',
+    header: 'Delete Account',
+    icon: 'pi pi-exclamation-triangle',
+    acceptClass: 'p-button-danger',
+    accept: async () => {
+      try {
+        await MembersService.deleteAccount(value.id ?? 0);
+        showSuccess('Loan successfully added.');
+        loadAccounts();
+      } catch (error) {
+        showApiError(error as AxiosError);
+      }
+    },
+  });
+};
+
+
 </script>

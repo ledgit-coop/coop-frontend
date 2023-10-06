@@ -197,4 +197,5 @@ export interface MemberAccount {
   updated_at: string;
   latest_transaction?: AccountTransaction;
   account?: Account;
+  has_balance?: boolean;
 }
