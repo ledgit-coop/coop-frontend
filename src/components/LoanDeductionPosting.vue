@@ -38,7 +38,7 @@
         label="Close"
         icon="pi pi-times"
         text
-        @click="showModal = false"
+        @click="handleClickApprove"
       />
     </template>
   </Dialog>

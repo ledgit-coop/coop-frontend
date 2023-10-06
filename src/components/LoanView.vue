@@ -325,8 +325,11 @@ import LoanSummary from './LoanSummary.vue';
 import { type LoanSummaryTable } from '@/types/ui/loans';
 import { LogModules } from '@/constants/ui/logs';
 import { DATE_FORMAT_DATE } from '@/constants';
-import html2pdf from 'html2pdf.js';
 import Skeleton from 'primevue/skeleton';
+
+// @ts-ignore
+import html2pdf from 'html2pdf.js';
+
 
 interface Props {
   visible: boolean;
