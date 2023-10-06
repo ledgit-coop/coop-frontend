@@ -45,6 +45,8 @@ const formatNumber = (value: number): string => {
 };
 
 const terms = (loan: MemberLoanWidgetItem) => {
-  return `${loan.interest}% ` + loan.interest_type === LoanInterestType.PERCENTAGE_BASE ? 'percent' : 'fix amount';
+  return `${loan.interest.toString()}% ${
+    loan.interest_type === LoanInterestType.PERCENTAGE_BASE ? 'percent' : 'fix amount'
+  }`;
 };
 </script>

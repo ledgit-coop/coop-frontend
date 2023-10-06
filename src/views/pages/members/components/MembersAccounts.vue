@@ -273,6 +273,4 @@ const handleDeleteClick = (value: MemberAccount) => {
     },
   });
 };
-
-
 </script>
