@@ -705,7 +705,7 @@ watch(
 watch(
   () => data.form.member_id,
   (value) => {
-    getMemberAccount(value ?? '');
+    if (data.form.member_id) getMemberAccount(value ?? '');
   }
 );
 

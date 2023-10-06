@@ -8,7 +8,9 @@
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">
           <div>
-            <span class="block text-500 font-medium mb-3">{{ value.type }} <small>1% interest</small></span>
+            <span class="block text-500 font-medium mb-3"
+              >{{ value.type }} <small>{{ terms(value) }}</small></span
+            >
 
             <div class="text-900 font-medium text-xl">{{ value.currency }} {{ formatNumber(value.balance) }}</div>
             <small>Outstanding</small>
@@ -21,12 +23,13 @@
           </div>
         </div>
         <span class="text-green-500 font-medium">Paid {{ value.paid }} </span>
-        <span class="text-500"> out of {{ value.terms }} Mos. Term</span>
+        <span class="text-500"> out of {{ value.number_of_repayments }} Repayments</span>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
+import { LoanInterestType } from '@/constants/ui/loans';
 import type { MemberLoanWidgetItem } from '@/types/ui/members';
 
 interface Props {
@@ -39,5 +42,9 @@ const formatNumber = (value: number): string => {
   return Number(value.toFixed(2)).toLocaleString('en', {
     minimumFractionDigits: 2,
   });
+};
+
+const terms = (loan: MemberLoanWidgetItem) => {
+  return `${loan.interest}% ` + loan.interest_type === LoanInterestType.PERCENTAGE_BASE ? 'percent' : 'fix amount';
 };
 </script>

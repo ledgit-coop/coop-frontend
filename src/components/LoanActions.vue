@@ -2,6 +2,19 @@ import LoanPreTerminate from './LoanPreTerminate.vue';
 <template>
   <div class="flex gap-2">
     <Button
+      v-if="loan?.released && false"
+      v-tooltip="'Deduction postings'"
+      icon="pi pi-check-square"
+      text
+      raised
+      severity="warning"
+      rounded
+      class="mr-2 mb-2"
+      size="small"
+      @click="modalsVisibility.deductions_posting = true"
+    />
+
+    <Button
       icon="pi pi-eye"
       v-tooltip="'View'"
       text
@@ -149,6 +162,11 @@ import LoanPreTerminate from './LoanPreTerminate.vue';
     @updated="emit('updated')"
   />
 
+  <LoanDeductionPosting
+    v-model:visible="modalsVisibility.deductions_posting"
+    :loan="loan"
+  />
+
   <LoanPreTerminate
     v-model:visible="modalsVisibility.request_pre_terminate"
     :loan="loan"
@@ -169,6 +187,7 @@ import LoanService from '@/service/LoanService';
 import ReleaseLoan from './ReleaseLoan.vue';
 import LoanPreTerminate from './LoanPreTerminate.vue';
 import ApproveLoan from './ApproveLoan.vue';
+import LoanDeductionPosting from './LoanDeductionPosting.vue';
 
 interface Props {
   loan?: Loan;
@@ -180,6 +199,7 @@ const modalsVisibility = ref({
   release: false,
   request_pre_terminate: false,
   approve: false,
+  deductions_posting: false,
 });
 const confirm = useConfirm();
 

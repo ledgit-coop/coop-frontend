@@ -142,12 +142,13 @@ const loadWidgetData = async () => {
   loadings.value.table = true;
   try {
     const { data } = await LoanService.activeLoans(props.member?.id);
-    console.log(data);
     loansWidget.value = data.map((l) => ({
       type: l.loan_product?.name ?? '',
       balance: l.outstanding ?? 0,
-      terms: l.loan_duration ?? 0,
+      number_of_repayments: Number(l.number_of_repayments ?? 0),
       paid: l.loan_schedules?.filter((r) => r.paid).length ?? 0,
+      interest_type: l.interest_type,
+      interest: l.loan_interest ?? 0,
       currency: 'Php',
     }));
   } catch (error) {

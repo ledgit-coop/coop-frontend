@@ -33,7 +33,9 @@
             <i class="pi pi-inbox text-cyan-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">{{ formatNumber(counts.shared_capital_current_month ?? 0) }} shares </span>
+        <span class="text-green-500 font-medium"
+          >{{ formatNumber(counts.shared_capital_current_month ?? 0) }} shares
+        </span>
         <span class="text-500">this month</span>
       </div>
     </div>

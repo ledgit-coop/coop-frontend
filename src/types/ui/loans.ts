@@ -11,6 +11,7 @@ export interface LoanType {
 export interface Loan {
   id: number;
   member_id: number;
+  loan_number?: string;
   loan_product_id: number;
   member_account_id: number;
   status: string;

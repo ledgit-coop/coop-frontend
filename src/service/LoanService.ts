@@ -39,7 +39,7 @@ class LoanService {
     return apiClient.delete(`${PATH}/${id}`);
   }
 
-  downloadLink(id: number, params: Record<string, any>): AxiosPromise<MemberLoanSchedule[]> {
+  downloadLink(id: number, params: Record<string, any>): AxiosPromise {
     return apiClient.get(`${PATH}/download/${id}`, { params });
   }
 }

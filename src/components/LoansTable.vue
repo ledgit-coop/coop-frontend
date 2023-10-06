@@ -102,7 +102,7 @@
         class="white-space-nowrap"
       >
         <template #body="slotProps">
-          {{ `${slotProps.data.loan_interest} % / ${slotProps.data.loan_interest_period}` }}
+          {{ `${slotProps.data.loan_interest ?? '---'} % / ${slotProps.data.loan_interest_period ?? '---'}` }}
         </template>
       </Column>
       <Column

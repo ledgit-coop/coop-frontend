@@ -86,9 +86,11 @@ export interface MemberFormBeneficiary {
 export interface MemberLoanWidgetItem {
   type: string;
   balance: number;
-  terms: number;
+  interest: number;
+  interest_type?: string;
   paid: number;
   currency: string;
+  number_of_repayments?: number;
 }
 
 export interface MemberSavingsAccountWidgetItem {

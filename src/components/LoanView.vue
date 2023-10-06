@@ -4,71 +4,109 @@
     class="p-dialog-maximized"
     modal
     :style="{ width: '100vw' }"
-    header="Emergency Loan - 1000023"
+    :header="`${loan?.loan_product?.name ?? '---'} - ${loan?.loan_number ?? '---'}`"
     @hide="emit('hide')"
   >
     <LoanStatus :status="loan?.status" />
 
     <TabView>
-      <TabPanel header="Loan Information">
-        <div class="flex">
-          <div class="col-12 md:col-6 p-0 m-0">
-            <PageContentHeader
-              title="Loan Information"
-              size="h6"
-            >
-            </PageContentHeader>
+      <TabPanel
+        :disabled="loadings.fetching"
+        header="Loan Information"
+      >
+        <div
+          v-if="loadings.fetching"
+          class="grid"
+        >
+          <div class="col-6">
+            <div class="flex gap-2 flex-column">
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton
+                style="height: 60px"
+                class="col-6 w-full"
+              />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
 
-            <Information
-              :loading="loadings.fetching"
-              :info="basic_information_1"
-            />
+            </div>
           </div>
-          <div class="col-12 md:col-6 p-0">
-            <PageContentHeader
-              title="Loan Terms"
-              size="h6"
-            >
-            </PageContentHeader>
-
-            <Information
-              :loading="loadings.fetching"
-              :info="basic_information_3"
-            />
-
-            <Information
-              :loading="loadings.fetching"
-              :info="basic_information_2"
-            />
+          <div class="col-6">
+            <div class="flex gap-2 flex-column">
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton
+                style="height: 60px"
+                class="col-6 w-full"
+              />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
+              <Skeleton class="col-6 w-full" />
+            </div>
           </div>
         </div>
 
-        <div class="p-3"></div>
+        <template v-else>
+          <div class="flex">
+            <div class="col-12 md:col-6 p-0 m-0">
+              <PageContentHeader
+                title="Loan Information"
+                size="h6"
+              >
+              </PageContentHeader>
 
-        <div class="flex flex-column gap-2">
-          <span
-            ><i
-              class="pi pi-file-pdf pr-2"
-              style="color: var(--gray-700)"
-            ></i
-            ><a
-              href="#"
-              @click="handleDownload('agreement')"
-              >Download Agreement</a
-            ></span
-          >
-          <span
-            ><i
-              class="pi pi-file-pdf pr-2"
-              style="color: var(--gray-700)"
-            ></i
-            ><a href="#">Download Form</a></span
-          >
-        </div>
-        <div class="p-3"></div>
+              <Information
+                :loading="loadings.fetching"
+                :info="basic_information_1"
+              />
+            </div>
+            <div class="col-12 md:col-6 p-0">
+              <PageContentHeader
+                title="Loan Terms"
+                size="h6"
+              >
+              </PageContentHeader>
+
+              <Information
+                :loading="loadings.fetching"
+                :info="basic_information_3"
+              />
+
+              <Information
+                :loading="loadings.fetching"
+                :info="basic_information_2"
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-column gap-2">
+            <span
+              ><i
+                class="pi pi-file-pdf pr-2"
+                style="color: var(--gray-700)"
+              ></i
+              ><a
+                href="#"
+                @click="handleDownload('agreement')"
+                >Download Agreement</a
+              ></span
+            >
+          </div>
+          <div class="p-3"></div>
+        </template>
       </TabPanel>
 
-      <TabPanel header="Amortization">
+      <TabPanel
+        :disabled="loadings.fetching"
+        header="Amortization"
+      >
         <PageContentHeader
           title="Loan Summary"
           size="h6"
@@ -206,7 +244,38 @@
         </DataTable>
         <div class="p-2"></div>
       </TabPanel>
-      <TabPanel header="Logs">
+
+      <TabPanel
+        :disabled="loadings.fetching"
+        header="Loan Agreement"
+      >
+        <div class="flex flex-column gap-2">
+          <span
+            ><i
+              class="pi pi-file-pdf pr-2"
+              style="color: var(--gray-700)"
+            ></i
+            ><a
+              href="#"
+              @click="handleDownload('agreement')"
+              >Download Agreement</a
+            ></span
+          >
+        </div>
+
+        <div class="flex justify-content-center">
+          <iframe
+            class="border-0 w-7 h-screen"
+            frameBorder="0"
+            ref="agreementFrame"
+          ></iframe>
+        </div>
+      </TabPanel>
+
+      <TabPanel
+        :disabled="loadings.fetching"
+        header="Logs"
+      >
         <PageContentHeader
           title="Comments"
           size="h6"
@@ -256,6 +325,8 @@ import LoanSummary from './LoanSummary.vue';
 import { type LoanSummaryTable } from '@/types/ui/loans';
 import { LogModules } from '@/constants/ui/logs';
 import { DATE_FORMAT_DATE } from '@/constants';
+import html2pdf from 'html2pdf.js';
+import Skeleton from 'primevue/skeleton';
 
 interface Props {
   visible: boolean;
@@ -263,6 +334,7 @@ interface Props {
   disableMember?: boolean;
 }
 
+const agreementFrame = ref();
 const props = defineProps<Props>();
 const emit = defineEmits(['update:visible', 'hide']);
 const showModal = ref(false);
@@ -301,11 +373,11 @@ const basic_information_2 = computed<InformationItem[]>(() => [
   { label: 'Released Date', value: loan.value?.released_date ?? '' },
   { label: 'Interest Method', value: loan.value?.interest_method ?? '' },
   { label: 'Interest Period', value: loan.value?.loan_interest_period ?? '' },
-  { label: 'Interest', value: (loan.value?.loan_interest.toString() ?? '') + '%' },
+  { label: 'Interest', value: (loan.value?.loan_interest ?? '').toString() + '%' },
   { label: 'Loan Duration Period', value: loan.value?.loan_duration_type ?? '' },
-  { label: 'Loan Duration', value: loan.value?.loan_duration.toString() ?? '' },
+  { label: 'Loan Duration', value: (loan.value?.loan_duration ?? '').toString() },
   { label: 'Repayment Cycle', value: loan.value?.repayment_cycle ?? '' },
-  { label: 'Number of Repayments', value: loan.value?.number_of_repayments.toString() ?? '' },
+  { label: 'Number of Repayments', value: (loan.value?.number_of_repayments ?? '').toString() },
   { label: 'Repayment Mode', value: loan.value?.repayment_mode ?? '' },
   { label: 'Disbursement Channels', value: loan.value?.disbursed_channel ?? '' },
 ]);
@@ -347,6 +419,7 @@ watch(
     if (showModal.value) {
       loadLoan();
       loadSchedules();
+      loadAgreement();
     }
   }
 );
@@ -373,7 +446,25 @@ const loadSchedules = async () => {
   loadings.value.fetch_schedule = false;
 };
 
+const loadAgreement = async () => {
+  const { data } = await LoanService.downloadLink(Number(props.loanId ?? 0), { document: 'agreement' });
+  agreementFrame.value.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(data.view);
+};
+
 const handleDownload = async (type: string) => {
-  console.log(await LoanService.downloadLink(loan.value?.id ?? 0, { document: type }));
+  const { data } = await LoanService.downloadLink(Number(props.loanId ?? 0), { document: type });
+  var div = document.createElement('div');
+  div.innerHTML = data.view;
+
+  var opt = {
+    margin: 10,
+    image: { type: 'png', quality: 1 },
+    html2canvas: { scale: 2 },
+    jsPDF: { format: 'letter', orientation: 'portrait' },
+    filename: `${loan.value?.loan_product?.name} - ${loan.value?.loan_number}.pdf`,
+  };
+
+  // New Promise-based usage:
+  html2pdf().set(opt).from(div).save();
 };
 </script>
