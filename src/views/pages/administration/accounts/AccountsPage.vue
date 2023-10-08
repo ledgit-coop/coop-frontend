@@ -27,6 +27,9 @@
           :total-records="totalRecords"
           @sort="onSort"
           @page="onPageChange"
+          :rowsPerPageOptions="[10, 20, 50, 100]"
+          paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+          currentPageReportTemplate="{first} to {last} of {totalRecords}"
         >
           <template #empty> No records found. </template>
 

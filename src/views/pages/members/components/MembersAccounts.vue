@@ -59,10 +59,6 @@
       header="Account No."
       sortable
     ></Column>
-    <Column
-      field="account_holder"
-      header="Holder"
-    ></Column>
 
     <Column
       field="type"
@@ -73,6 +69,12 @@
         {{ slotProps.data.account?.name }}
       </template>
     </Column>
+
+    <Column
+      field="account_holder"
+      header="Holder"
+    ></Column>
+
     <Column
       field="created_at"
       header="Opened Date"
@@ -265,7 +267,7 @@ const handleDeleteClick = (value: MemberAccount) => {
     accept: async () => {
       try {
         await MembersService.deleteAccount(value.id ?? 0);
-        showSuccess('Loan successfully added.');
+        showSuccess('Account successfully deleted.');
         loadAccounts();
       } catch (error) {
         showApiError(error as AxiosError);

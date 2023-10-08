@@ -19,6 +19,9 @@
           export-filename="loan-repayments"
           @page="onPageChange"
           ref="dt"
+          :rowsPerPageOptions="[10, 20, 50, 100]"
+          paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+          currentPageReportTemplate="{first} to {last} of {totalRecords}"
         >
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">

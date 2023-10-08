@@ -1,51 +1,53 @@
 <template>
-  <div
+  <Panel
     v-if="feeTemplates.length"
     class="col-12"
+    :collapsed="collapsed"
+    header="Fees"
+    toggleable
   >
-    <PageContentHeader
-      title="Fees"
-      size="h6"
-    ></PageContentHeader>
-  </div>
-  <div
-    v-if="loadings.fetch"
-    class="col-12 pb-2"
-  >
-    <Skeleton class="w-full"></Skeleton>
-  </div>
-
-  <div
-    v-else
-    v-for="(value, key) in data.form"
-    class="field col-12 lg:col-4"
-    :key="key"
-  >
-    <label for="name">{{ value.fee_name }}</label>
-    <InputNumber
-      :minFractionDigits="2"
-      :maxFractionDigits="3"
-      show-buttons
-      v-model="data.form[key].value"
-      :placeholder="placeholderFeeMethod(value.fee_method ?? '')"
+    <Skeleton
+      v-if="loadings.fetch"
+      class="w-full"
     />
-  </div>
+
+    <div
+      v-else
+      class="grid p-fluid formgrid"
+    >
+      <div
+        v-for="(value, key) in data.form"
+        class="field col-12 lg:col-4"
+        :key="key"
+      >
+        <label for="name">{{ value.fee_name }}</label>
+        <InputNumber
+          :minFractionDigits="2"
+          :maxFractionDigits="3"
+          show-buttons
+          v-model="data.form[key].value"
+          :placeholder="placeholderFeeMethod(value.fee_method ?? '')"
+        />
+      </div>
+    </div>
+  </Panel>
 </template>
 
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue';
-import PageContentHeader from './PageContentHeader.vue';
 import type InputNumber from 'primevue/inputnumber';
 import UtilityService from '@/service/UtilityService';
 import type { LoanFeeJSON, LoanFeeTemplateForm } from '@/types/ui/loan-fee-templates';
 import { LoanFeeMethod } from '@/constants/ui/loan-fee-templates';
-import Skeleton from 'primevue/skeleton';
 import useAlert from '@/composables/useAlert';
 import type { AxiosError } from 'axios';
 import { deepClone } from '@/helpers';
+import Panel from 'primevue/panel';
+import Skeleton from 'primevue/skeleton';
 
 interface Props {
   modelValue?: LoanFeeTemplateForm[];
+  collapsed?: boolean;
 }
 
 const props = defineProps<Props>();

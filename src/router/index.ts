@@ -15,6 +15,7 @@ import {
   ROUTE_NAME_MEMBERS_EDIT,
   ROUTE_NAME_MEMBERS_VIEW,
   ROUTE_NAME_REPAYMENTS,
+  ROUTE_NAME_REPORTS,
   ROUTE_NAME_RESET_PASSWORD,
   ROUTE_NAME_USERS,
 } from '@/constants/routes';
@@ -118,6 +119,15 @@ const router = createRouter({
               },
             },
           ],
+        },
+
+        {
+          path: '/reports',
+          name: ROUTE_NAME_REPORTS,
+          component: () => import('@/views/pages/reports/ReportsPage.vue'),
+          meta: {
+            title: 'Reports',
+          },
         },
 
         {

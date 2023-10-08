@@ -11,6 +11,7 @@ import {
   ROUTE_NAME_LOAN_PRODUCTS,
   ROUTE_NAME_MEMBERS,
   ROUTE_NAME_REPAYMENTS,
+  ROUTE_NAME_REPORTS,
   ROUTE_NAME_USERS,
 } from '@/constants';
 
@@ -26,13 +27,6 @@ const model = ref<any>([
       { label: 'Loans', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS } },
       { label: 'Repayments', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_REPAYMENTS } },
       { label: 'Loan Calculator', icon: 'pi pi-fw pi-history', to: { name: ROUTE_LOAN_CALCULATOR } },
-
-      {
-        label: 'Share Capitals',
-        icon: 'pi pi-fw pi-globe',
-        to: { name: ROUTE_NAME_REPAYMENTS },
-        class: 'line-through pointer-events-none',
-      },
       {
         label: 'Expenses',
         icon: 'pi pi-fw pi-history',
@@ -41,8 +35,7 @@ const model = ref<any>([
       {
         label: 'Reports',
         icon: 'pi pi-fw pi-chart-bar',
-        to: { name: ROUTE_NAME_LOANS },
-        class: 'line-through pointer-events-none',
+        to: { name: ROUTE_NAME_REPORTS },
       },
     ],
   },

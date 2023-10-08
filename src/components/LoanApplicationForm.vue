@@ -577,12 +577,13 @@
       />
     </div>
   </div>
+  <div class="p-2"></div>
 
-  <hr />
   <div class="grid p-fluid formgrid">
     <LoanTerm v-model="data.form.loan_term" />
   </div>
 
+  <div class="p-2"></div>
   <div class="grid p-fluid formgrid">
     <LoanFeeForm v-model="data.form.loan_fees" />
   </div>

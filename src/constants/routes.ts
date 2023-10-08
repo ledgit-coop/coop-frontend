@@ -22,6 +22,8 @@ export const ROUTE_NAME_LOANS_CREATE = 'loans-create';
 
 export const ROUTE_NAME_REPAYMENTS = 'repayments';
 
+export const ROUTE_NAME_REPORTS = 'reports';
+
 export const ROUTE_NAME_LOAN_PRODUCTS = 'loan-products';
 export const ROUTE_NAME_USERS = 'users';
 export const ROUTE_NAME_LOAN_FEES = 'loan-fees';

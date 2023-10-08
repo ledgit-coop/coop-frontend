@@ -16,6 +16,9 @@
       @page="emit('page', $event)"
       export-filename="loans"
       :row-class="({ status }) => (status === MemberLoanStatus.OVERDUE ? 'text-red-500' : undefined)"
+      :rowsPerPageOptions="[10, 20, 50, 100]"
+      paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+      currentPageReportTemplate="{first} to {last} of {totalRecords}"
     >
       <!-- @vue-skip -->
       <template
@@ -105,11 +108,6 @@
           {{ `${slotProps.data.loan_interest ?? '---'} % / ${slotProps.data.loan_interest_period ?? '---'}` }}
         </template>
       </Column>
-      <Column
-        v-if="!hideColumns?.includes('outstanding_balance')"
-        field="outstanding_balance"
-        header="Balance"
-      ></Column>
       <Column
         v-if="!hideColumns?.includes('action')"
         field="id"

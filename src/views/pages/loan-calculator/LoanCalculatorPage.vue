@@ -66,9 +66,12 @@
             v-model="data.form"
             :hide-disbursement-channel="true"
             :hide-repayment-mode="true"
+            :hide-penalties="true"
           />
 
+          <div class="p-2"></div>
           <LoanFeeForm v-model="data.fees" />
+          <div class="p-2"></div>
         </div>
         <Button
           label="Calculate"
