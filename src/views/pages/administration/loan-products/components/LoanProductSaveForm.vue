@@ -58,7 +58,7 @@
     </div>
 
     <LoanTerm v-model="data.form.loan_term" />
-
+    <div class="p-2"></div>
     <LoanFeeForm v-model="data.form.loan_product_fees" />
   </div>
 </template>
