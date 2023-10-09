@@ -97,7 +97,7 @@
           :colspan="6 - (hideColumns?.length ?? 0)"
           footer-style="text-align:right"
         />
-        <Column :footer="formatCurrency(transactions?.reduce((n, p) => n + (p?.amount ?? 0), 0) ?? 0)" />
+        <Column :footer="formatCurrency(transactions?.reduce((n, p) => n + Number(p?.amount ?? 0), 0) ?? 0)" />
       </Row>
     </ColumnGroup>
   </DataTable>
