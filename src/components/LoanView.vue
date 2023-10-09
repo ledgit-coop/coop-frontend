@@ -124,6 +124,7 @@
         <DataTable
           ref="table"
           :value="schedules"
+          :row-class="rowClass"
           table-style="min-width: 50rem"
           scrollable
           :loading="loadings.fetch_schedule"
@@ -467,5 +468,11 @@ const handleDownload = async (type: string) => {
 
   // New Promise-based usage:
   html2pdf().set(opt).from(div).save();
+};
+
+const rowClass = (data: MemberLoanSchedule) => {
+  if (data.paid) return 'paid';
+  else if (data.almost_due) return 'almost-due';
+  else if (data.overdue) return 'overdue';
 };
 </script>

@@ -42,7 +42,11 @@
       field="transaction_date"
       header="Date"
       style="text-wrap: nowrap"
-    ></Column>
+    >
+      <template #body="slotProps">
+        {{ dateFormat(slotProps.data.transaction_date, DATE_FORMAT_DATE) }}
+      </template>
+    </Column>
 
     <Column
       v-if="!hideColumns?.includes('withdrawals')"
@@ -99,8 +103,9 @@
   </DataTable>
 </template>
 <script setup lang="ts">
+import { DATE_FORMAT_DATE } from '@/constants';
 import { AccountTransactionType } from '@/constants/ui/accounts';
-import { formatCurrency } from '@/helpers';
+import { dateFormat, formatCurrency } from '@/helpers';
 import type { AccountTransaction } from '@/types/ui/accounts';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';

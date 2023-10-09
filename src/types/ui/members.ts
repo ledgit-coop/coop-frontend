@@ -158,6 +158,7 @@ export interface MemberLoanSchedule {
   penalty_amount: number;
   due_amount: number;
   principal_balance: number;
+  outstanding_amount?: number;
   is_maturity: number;
   paid: number;
   overdue: number;

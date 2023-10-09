@@ -32,6 +32,7 @@
                   label="Clear"
                   class="p-button-outlined mb-2"
                   size="small"
+                  @click="handleClearFilter"
                 />
 
                 <Button
@@ -142,7 +143,11 @@
             field="due_date"
             header="Due Date"
             sortable
-          ></Column>
+          >
+            <template #body="slotProps">
+              {{ dateFormat(slotProps.data.due_date, DATE_FORMAT_DATE) }}
+            </template>
+          </Column>
 
           <Column
             field="penalty_amount"
@@ -159,12 +164,12 @@
           </Column>
 
           <Column
-            field="due_amount"
+            field="outstanding_amount"
             header="Due Amount"
           >
             <template #body="slotProps">
               {{
-                Number(slotProps.data.due_amount).toLocaleString('en-US', {
+                Number(slotProps.data.outstanding_amount).toLocaleString('en-US', {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })
@@ -253,9 +258,10 @@ import useAlert from '@/composables/useAlert';
 import type { AxiosError } from 'axios';
 import type { DropdownOption } from '@/types/ui';
 import Calendar from 'primevue/calendar';
-import { ROUTE_NAME_MEMBERS_VIEW } from '@/constants';
+import { DATE_FORMAT_DATE, ROUTE_NAME_MEMBERS_VIEW } from '@/constants';
 import useTableParameters from '@/composables/useTableParameters';
 import LoanView from '@/components/LoanView.vue';
+import { dateFormat } from '@/helpers';
 
 interface ModalsVisibility {
   repay: boolean;
@@ -278,7 +284,7 @@ const dt = ref();
 const loans = ref<MemberLoanSchedule[]>([]);
 const selected_loan = ref<MemberLoanSchedule | undefined>();
 const filters = ref({
-  keyword: '',
+  keyword: undefined,
   status: undefined,
   due_date: undefined,
 });
@@ -328,6 +334,15 @@ const handleDueDateChange = () => {
 };
 const handleExport = () => {
   dt.value.exportCSV();
+};
+
+const handleClearFilter = () => {
+  filters.value = {
+    keyword: undefined,
+    status: undefined,
+    due_date: undefined,
+  };
+  loadTable();
 };
 
 const handleViewLoanClick = (value: MemberLoanSchedule) => {
