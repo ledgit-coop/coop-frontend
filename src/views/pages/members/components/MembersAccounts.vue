@@ -155,7 +155,7 @@
     v-model:visible="showModal"
     modal
     header="Transactions"
-    :style="{ width: '50vw' }"
+    :style="{ width: '60vw' }"
   >
     <PageContentHeader
       :title="selected_account?.account?.name"
@@ -164,6 +164,7 @@
     </PageContentHeader>
 
     <AccountTransactionsTable
+      :hide-columns="['type']"
       :loading="loadings.transaction_table"
       :transactions="selected_account_transactions"
     />

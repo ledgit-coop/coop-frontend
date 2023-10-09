@@ -9,4 +9,5 @@ export interface LoanRepaymentPayload {
   payment_remarks?: string | null; // Nullable string
   payment_reference?: string | null; // Nullable string
   payment_channel?: string | null; // Nullable string
+  payment_date?: string | null;
 }

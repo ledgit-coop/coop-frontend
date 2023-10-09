@@ -483,6 +483,7 @@
 
     <div class="field col-12 md:col-6">
       <Label
+        :required="true"
         help-text="Please match the account based on the loan type and if the account did not exists please an account first."
         for="name"
         >Account (Passbook)</Label

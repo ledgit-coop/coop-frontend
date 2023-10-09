@@ -22,7 +22,7 @@
     <Column
       v-if="!hideColumns?.includes('transaction_number')"
       field="transaction_number"
-      header="Transaction No."
+      header="TN"
     ></Column>
     <Column
       v-if="!hideColumns?.includes('type')"
@@ -34,23 +34,26 @@
       v-if="!hideColumns?.includes('particular')"
       field="particular"
       header="Particular"
-    ></Column>
+    >
+    </Column>
 
     <Column
       v-if="!hideColumns?.includes('date')"
       field="transaction_date"
       header="Date"
+      style="text-wrap: nowrap"
     ></Column>
 
     <Column
       v-if="!hideColumns?.includes('withdrawals')"
       field="withdrawals"
       header="Withdrawals"
+      style="text-wrap: nowrap"
     >
       <template #body="slotProps">
         {{
           slotProps.data.transaction_type === AccountTransactionType.WITHDRAWAL
-            ? formatCurrency(slotProps.data.amount)
+            ? formatCurrency(Math.abs(slotProps.data.amount))
             : ''
         }}
       </template>
@@ -59,11 +62,12 @@
       v-if="!hideColumns?.includes('deposits')"
       field="deposits"
       header="Deposits"
+      style="text-wrap: nowrap"
     >
       <template #body="slotProps">
         {{
           slotProps.data.transaction_type === AccountTransactionType.DEPOSIT
-            ? formatCurrency(slotProps.data.amount)
+            ? formatCurrency(Math.abs(slotProps.data.amount))
             : ''
         }}
       </template>
@@ -73,6 +77,7 @@
       v-if="!hideColumns?.includes('running_balance')"
       field="running_balance"
       header="Balance"
+      style="text-wrap: nowrap"
     >
       <template #body="slotProps">
         {{ formatCurrency(slotProps.data.remaining_balance) }}

@@ -30,6 +30,7 @@
           id="amount-paid"
           v-model="model.amount_paid"
           validate="amount_paid"
+          placeholder="Amount"
           v-validation="validation"
         />
 
@@ -126,6 +127,30 @@
       <div class="p-1"></div>
 
       <div class="field col-12">
+        <Label
+          required
+          for="payment_date"
+          >Payment Date</Label
+        >
+
+        <Calendar
+          date-format="yy-mm-dd"
+          id="payment-date"
+          v-model="model.payment_date"
+          mask="true"
+          validate="payment_date"
+          placeholder="Date"
+          v-validation="validation"
+          showButtonBar
+        />
+
+        <FieldErrorMessage
+          :validation="validation"
+          field="payment_date"
+        />
+      </div>
+
+      <div class="field col-12">
         <Label for="name">Reference # (if applicable)</Label>
         <InputText
           id="lastname2"
@@ -181,6 +206,9 @@ import FieldErrorMessage from '@/components/FieldErrorMessage.vue';
 import useAlert from '@/composables/useAlert';
 import LoanRepaymentService from '@/service/LoanRepaymentService';
 import type { AxiosError } from 'axios';
+import Calendar from 'primevue/calendar';
+import moment from 'moment';
+import { DATE_FORMAT_DB } from '@/constants';
 
 interface Props {
   visible: boolean;
@@ -196,6 +224,7 @@ const model = reactive({
   payment_remarks: undefined,
   payment_reference: undefined,
   payment_channel: undefined,
+  payment_date: undefined,
 });
 const showModal = ref(false);
 const loadings = ref({
@@ -206,6 +235,7 @@ const { validation } = useValidation({
   rules: {
     amount_paid: { required },
     payment_channel: { required },
+    payment_date: { required },
   },
   model: form,
   globalConfig: {
@@ -242,6 +272,7 @@ const handleSave = async () => {
       payment_remarks: model.payment_remarks,
       payment_reference: model.payment_reference,
       payment_channel: model.payment_channel,
+      payment_date: moment(model.payment_date).format(DATE_FORMAT_DB),
     });
     emit('updated');
     showModal.value = false;
@@ -259,5 +290,6 @@ const reset = () => {
   model.payment_remarks = undefined;
   model.payment_reference = undefined;
   model.payment_channel = undefined;
+  model.payment_date = undefined;
 };
 </script>

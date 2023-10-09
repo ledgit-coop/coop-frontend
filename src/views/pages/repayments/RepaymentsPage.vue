@@ -145,20 +145,6 @@
           ></Column>
 
           <Column
-            field="fee_amount"
-            header="Penalty"
-          >
-            <template #body="slotProps">
-              {{
-                Number(slotProps.data.fee_amount).toLocaleString('en-US', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })
-              }}
-            </template>
-          </Column>
-
-          <Column
             field="penalty_amount"
             header="Penalty"
           >
