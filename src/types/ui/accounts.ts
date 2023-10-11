@@ -33,6 +33,7 @@ export interface AccountTransaction {
   amount?: number;
   created_at?: string;
   deleted_at?: string;
+  type?: string;
   id?: string;
   member_account_id?: string;
   particular?: string;

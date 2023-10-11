@@ -140,10 +140,17 @@
       <Row>
         <Column
           footer="Total:"
-          :colspan="6 + (showAction ? 1 : 0) - (hideColumns?.length ?? 0)"
+          :colspan="6 - (hideColumns?.length ?? 0)"
           footer-style="text-align:right"
         />
-        <Column :footer="formatCurrency(transactions?.reduce((n, p) => n + Number(p?.amount ?? 0), 0) ?? 0)" />
+        <Column
+          class="white-space-nowrap"
+          :footer="formatCurrency(transactions?.reduce((n, p) => n + Number(p?.amount ?? 0), 0) ?? 0)"
+        />
+        <Column
+          v-if="showAction"
+          footer-style="text-align:right"
+        />
       </Row>
     </ColumnGroup>
   </DataTable>

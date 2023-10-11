@@ -15,6 +15,7 @@
           :rows="rows"
           :loading="loadings.table"
           v-model:download="download"
+          :total-records="totalRecords"
         >
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
@@ -128,7 +129,7 @@ const filters = ref({
 });
 
 const statuses = ref<DropdownOption[]>(MemberLoanStatusDropdowns);
-const { rows, paginate, params } = useTableParameters(filters);
+const { rows, paginate, params, totalRecords } = useTableParameters(filters);
 const download = ref(false);
 const loans = ref<Loan[]>([]);
 const loanProducts = ref<DropdownOption[]>([]);

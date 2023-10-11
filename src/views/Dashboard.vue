@@ -135,72 +135,34 @@
             </template>
           </Column>
         </DataTable>
-
         <LoanView
           v-model:visible="modalsVisibility.view_loan"
           :loan-id="selectedLoan?.id"
           @hide="selectedLoan = undefined"
         />
-
         <small class="text-500">Loans created for the last 10 days</small>
       </div>
       <div class="card">
         <div class="flex justify-content-between align-items-center mb-5">
           <h5>Active Loan Products</h5>
-          <div>
-            <Button
-              icon="pi pi-ellipsis-v"
-              class="p-button-text p-button-plain p-button-rounded"
-              @click="($refs as any).menu2.toggle($event)"
-            ></Button>
-            <Menu
-              ref="menu2"
-              :popup="true"
-              :model="items"
-            ></Menu>
-          </div>
         </div>
         <ul class="list-none p-0 m-0">
-          <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+          <li
+            v-for="(product, index) in activeLoanProducts"
+            :key="index"
+            class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4"
+          >
             <div>
-              <span class="text-900 font-medium mr-2 mb-1 md:mb-0">Salary Loan</span>
-              <div class="mt-1 text-600">1% Interest Rate</div>
+              <span class="text-900 font-medium mr-2 mb-1 md:mb-0">{{ product.name }}</span>
+              <div class="mt-1 text-600">{{ product.interest }}% / {{ product.period }} Interest Rate</div>
             </div>
             <div class="mt-2 md:mt-0 flex align-items-center">
-              <div
-                class="surface-300 border-round overflow-hidden w-10rem lg:w-6rem"
-                style="height: 8px"
-              >
-                <div
-                  class="bg-orange-500 h-full"
-                  style="width: 50%"
-                ></div>
-              </div>
-              <span class="text-orange-500 ml-3 font-medium">%50</span>
-            </div>
-          </li>
-
-          <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
-            <div>
-              <span class="text-900 font-medium mr-2 mb-1 md:mb-0">Negosyo Loan</span>
-              <div class="mt-1 text-600">3% Interest Rate</div>
-            </div>
-            <div class="mt-2 md:mt-0 flex align-items-center">
-              <div
-                class="surface-300 border-round overflow-hidden w-10rem lg:w-6rem"
-                style="height: 8px"
-              >
-                <div
-                  class="bg-orange-500 h-full"
-                  style="width: 50%"
-                ></div>
-              </div>
-              <span class="text-orange-500 ml-3 font-medium">%50</span>
+              <h4 class="text-orange-500 ml-3 font-medium">{{ product.count }}</h4>
             </div>
           </li>
         </ul>
 
-        <small class="text-500">This area is working in progress...</small>
+        <small class="text-500">Active products and count of recorded loans</small>
       </div>
     </div>
     <div class="col-12 xl:col-6">
@@ -233,20 +195,30 @@
       <div class="card">
         <div class="flex align-items-center justify-content-between mb-4">
           <h5>Recent Payments</h5>
-          <div>
-            <Button
-              icon="pi pi-ellipsis-v"
-              class="p-button-text p-button-plain p-button-rounded"
-              @click="($refs as any).menu1.toggle($event)"
-            ></Button>
-            <Menu
-              ref="menu1"
-              :popup="true"
-              :model="items"
-            ></Menu>
-          </div>
         </div>
-        <small class="text-500">This area is working in progress...</small>
+        <DataTable
+          :value="recentPayments"
+          :rows="5"
+          :paginator="true"
+          responsive-layout="scroll"
+          :loading="loadings.recent_payments"
+        >
+          <Column
+            field="particular"
+            header="Particular"
+            sortable
+          >
+          </Column>
+          <Column
+            field="amount"
+            header="Amount"
+          >
+            <template #body="slotProps">
+              {{ formatCurrency(slotProps.data.amount ?? 0) }}
+            </template>
+          </Column>
+        </DataTable>
+        <small class="text-500">Latest 10 recorded payments</small>
       </div>
     </div>
   </div>
@@ -257,9 +229,9 @@ import { computed, onMounted, ref, watch } from 'vue';
 import ProductService from '@/service/ProductService';
 import { useLayout } from '@/layout/composables/layout';
 import Button from 'primevue/button';
-import Menu from 'primevue/menu';
 import DashboardService from '@/service/DashboardService';
 import type { DashboardCount, DashboardCashFlow } from '@/types/api/dashboard';
+import type { ActiveLoanProduct } from '@/types/ui/dashboard';
 import moment from 'moment';
 import { formatCurrency, generateYearListDropdown } from '@/helpers';
 import type { AxiosError } from 'axios';
@@ -269,6 +241,7 @@ import { ROUTE_NAME_MEMBERS_VIEW } from '@/constants';
 import router from '@/router';
 import LoanView from '@/components/LoanView.vue';
 import { formatNumber } from '@/helpers';
+import type { AccountTransaction } from '@/types/ui/accounts';
 
 const currentYear = computed(() => moment().get('year'));
 const { isDarkTheme } = useLayout();
@@ -287,6 +260,8 @@ const loadings = ref({
   cash_flow: false,
   recent_loans: false,
   counts: false,
+  recent_payments: false,
+  active_product_loans: false,
 });
 
 const years = computed(() => generateYearListDropdown());
@@ -311,7 +286,9 @@ const cashflow = ref<DashboardCashFlow[]>([
   },
 ]);
 
+const activeLoanProducts = ref<ActiveLoanProduct[]>([]);
 const recentLoans = ref<Loan[]>([]);
+const recentPayments = ref<AccountTransaction[]>([]);
 const selectedLoan = ref<Loan | undefined>();
 const products = ref(null);
 const lineData = computed(() => ({
@@ -343,10 +320,6 @@ const lineData = computed(() => ({
     },
   ],
 }));
-const items = ref([
-  { label: 'Add New', icon: 'pi pi-fw pi-plus' },
-  { label: 'Remove', icon: 'pi pi-fw pi-minus' },
-]);
 
 const { showApiError } = useAlert();
 
@@ -358,6 +331,8 @@ onMounted(() => {
   loadCounts();
   loadCashflow();
   loadRecentLoans();
+  loadRecentPayments();
+  loadActiveLoanProducts();
 });
 
 const loadRecentLoans = async () => {
@@ -369,6 +344,28 @@ const loadRecentLoans = async () => {
     showApiError(error as AxiosError);
   }
   loadings.value.recent_loans = false;
+};
+
+const loadRecentPayments = async () => {
+  loadings.value.recent_payments = true;
+  try {
+    const { data } = await DashboardService.recentPayments();
+    recentPayments.value = data;
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.recent_payments = false;
+};
+
+const loadActiveLoanProducts = async () => {
+  loadings.value.active_product_loans = true;
+  try {
+    const { data } = await DashboardService.activeLoanProducts();
+    activeLoanProducts.value = data;
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
+  loadings.value.active_product_loans = false;
 };
 
 const loadCounts = async () => {

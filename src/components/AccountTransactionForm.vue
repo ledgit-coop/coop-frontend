@@ -114,6 +114,7 @@
         mask="true"
         validate="transaction_date"
         v-validation="validation"
+        :max-date="new Date()"
         showButtonBar
       />
 
