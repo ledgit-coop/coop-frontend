@@ -56,6 +56,10 @@ class MembersService {
     return apiClient.post(`${PATH}/accounts/transaction/${member_account_id}`, params);
   }
 
+  deleteAccountTransaction(transaction_id: number): AxiosPromise {
+    return apiClient.delete(`${PATH}/accounts/transaction/${transaction_id}`);
+  }
+
   getMemberAccountTrasactions(
     member_id: string,
     params?: GetAccountTransactionsParams

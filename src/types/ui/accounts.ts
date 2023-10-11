@@ -41,4 +41,5 @@ export interface AccountTransaction {
   transaction_type?: AccountTransactionType;
   account_name?: string;
   remaining_balance?: number;
+  posted?: boolean;
 }

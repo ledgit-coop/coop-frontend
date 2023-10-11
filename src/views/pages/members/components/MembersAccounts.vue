@@ -167,6 +167,8 @@
       :hide-columns="['type']"
       :loading="loadings.transaction_table"
       :transactions="selected_account_transactions"
+      show-action
+      @on-delete-click="handleTransactionDeleteClick"
     />
   </Dialog>
 </template>
@@ -275,5 +277,25 @@ const handleDeleteClick = (value: MemberAccount) => {
       }
     },
   });
+};
+
+const handleTransactionDeleteClick = (value: AccountTransaction) => {
+  if (!value.posted) {
+    confirm.require({
+      message: 'Are you sure you want to delete the transaction?',
+      header: 'Delete Transaction',
+      icon: 'pi pi-exclamation-triangle',
+      acceptClass: 'p-button-danger',
+      accept: async () => {
+        try {
+          await MembersService.deleteAccountTransaction(Number(value.id ?? 0));
+          showSuccess('Account transaction successfully deleted.');
+          handleGetTransactions();
+        } catch (error) {
+          showApiError(error as AxiosError);
+        }
+      },
+    });
+  }
 };
 </script>

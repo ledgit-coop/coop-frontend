@@ -23,7 +23,28 @@
       v-if="!hideColumns?.includes('transaction_number')"
       field="transaction_number"
       header="TN"
-    ></Column>
+    >
+      <template #body="slotProps">
+        <div class="flex gap-2 align-items-center">
+          <Tag
+            v-if="slotProps.data.posted"
+            severity="success"
+            rounded
+            value="Posted"
+            class="white-space-nowrap"
+          ></Tag>
+
+          <Tag
+            v-else
+            severity="warning"
+            rounded
+            value="Unposted"
+            class="white-space-nowrap"
+          ></Tag>
+          <span>{{ slotProps.data.transaction_number }}</span>
+        </div>
+      </template>
+    </Column>
     <Column
       v-if="!hideColumns?.includes('type')"
       field="account_name"
@@ -88,13 +109,38 @@
       </template>
     </Column>
 
+    <Column
+      v-if="showAction"
+      field="id"
+      header="Action"
+      align-frozen="right"
+      frozen
+    >
+      <template #body="slotProps">
+        <div class="flex flex-wrap gap-2">
+          <Button
+            icon="pi pi-trash"
+            v-tooltip="'Delete unposted transaction'"
+            text
+            raised
+            :disabled="slotProps.data.posted"
+            rounded
+            class="mr-2 mb-2"
+            size="small"
+            severity="danger"
+            @click="$emit('onDeleteClick', slotProps.data)"
+          />
+        </div>
+      </template>
+    </Column>
+
     <template #empty> No records found. </template>
 
     <ColumnGroup type="footer">
       <Row>
         <Column
           footer="Total:"
-          :colspan="6 - (hideColumns?.length ?? 0)"
+          :colspan="6 + (showAction ? 1 : 0) - (hideColumns?.length ?? 0)"
           footer-style="text-align:right"
         />
         <Column :footer="formatCurrency(transactions?.reduce((n, p) => n + Number(p?.amount ?? 0), 0) ?? 0)" />
@@ -109,12 +155,16 @@ import { dateFormat, formatCurrency } from '@/helpers';
 import type { AccountTransaction } from '@/types/ui/accounts';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
+import Tag from 'primevue/tag';
 
 interface Props {
   hideColumns?: string[];
   transactions?: AccountTransaction[];
   loading?: boolean;
+  showAction?: boolean;
 }
 
 defineProps<Props>();
+
+defineEmits(['onDeleteClick']);
 </script>
