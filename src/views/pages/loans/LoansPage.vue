@@ -16,6 +16,8 @@
           :loading="loadings.table"
           v-model:download="download"
           :total-records="totalRecords"
+          @sort="onSort"
+          @page="onPageChange"
         >
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
@@ -96,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import Button from 'primevue/button';
 import LoanSave from '@components/LoanSave.vue';
 import PageContentHeader from '@components/PageContentHeader.vue';
@@ -129,7 +131,7 @@ const filters = ref({
 });
 
 const statuses = ref<DropdownOption[]>(MemberLoanStatusDropdowns);
-const { rows, paginate, params, totalRecords } = useTableParameters(filters);
+const { rows, paginate, params, totalRecords, onSort, onPageChange } = useTableParameters(filters);
 const download = ref(false);
 const loans = ref<Loan[]>([]);
 const loanProducts = ref<DropdownOption[]>([]);
@@ -143,6 +145,10 @@ const { showApiError } = useAlert();
 onMounted(() => {
   loadTable(params.value);
   getLoanProducts();
+});
+
+watch(params, (params) => {
+  loadTable(params);
 });
 
 const getLoanProducts = async () => {
