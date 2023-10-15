@@ -18,6 +18,10 @@
   background: rgba(255, 0, 0, 0.879) !important;
 }
 
+.loan-draft {
+  background: rgba(85, 85, 85, 0.879) !important;
+}
+
 .p-dropdown .p-dropdown-clear-icon {
   width: 0.7rem;
 }

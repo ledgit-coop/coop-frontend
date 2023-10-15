@@ -76,6 +76,13 @@
     icon="pi pi-exclamation-triangle"
     value="Overdue"
   ></Tag>
+  <Tag
+    v-else-if="status == MemberLoanStatus.DRAFT"
+    severity="info"
+    rounded
+    class="white-space-nowrap loan-draft"
+    value="Save as Draft"
+  ></Tag>
 </template>
 
 <script setup lang="ts">

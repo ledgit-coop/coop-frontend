@@ -8,6 +8,7 @@ export interface LoanFeeForm {
   credit_revenue?: boolean;
   credit_share_capital?: boolean;
   credit_regular_savings?: boolean;
+  show_to_report?: boolean;
 }
 
 export interface LoanFeeTemplate extends LoanFeeForm {
@@ -22,6 +23,8 @@ export interface LoanFeeJSON {
   fee_name: string;
   fee_type?: string | null;
   fee_method?: string | null;
+  credit_regular_savings?: boolean;
+  credit_share_capital?: boolean;
 }
 
 export interface LoanFeeTemplateForm {

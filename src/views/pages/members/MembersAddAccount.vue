@@ -101,7 +101,7 @@ const loadings = ref({
   fetch_holders: false,
 });
 const props = defineProps<Props>();
-const emit = defineEmits(['update:visible']);
+const emit = defineEmits(['update:visible', 'updated']);
 const model = reactive<LoanForm>({});
 const showModal = ref(false);
 const accountId = ref();
@@ -170,6 +170,7 @@ const handleSaveAccount = async () => {
   try {
     await MembersService.postAddAccount(props.memberId?.toString() ?? '', accountId.value, accounHolder.value);
     showModal.value = false;
+    emit('updated');
     showSuccess('Account successfully added.');
   } catch (error) {
     showApiError(error as AxiosError);

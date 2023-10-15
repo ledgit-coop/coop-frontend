@@ -586,7 +586,11 @@
 
   <div class="p-2"></div>
   <div class="grid p-fluid formgrid">
-    <LoanFeeForm v-model="data.form.loan_fees" />
+    <LoanFeeForm
+      :has-savings="hasSavings"
+      v-model="data.form.loan_fees"
+      :has-share-cap="hasShareCap"
+    />
   </div>
 
   <div class="p-1"></div>
@@ -620,6 +624,8 @@ import { CivilStatusDropdown } from '@/constants';
 interface Props {
   modelValue?: LoanForm;
   disableMember?: boolean;
+  hasSavings?: boolean;
+  hasShareCap?: boolean;
 }
 
 const loadings = ref({
@@ -686,7 +692,7 @@ const allowableLoanAmountMessage = computed(() => {
     : null;
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'memberChange']);
 const props = defineProps<Props>();
 
 onMounted(() => {
@@ -787,5 +793,6 @@ const getMemberAccount = async (member_id: string) => {
 const handleChangeMember = (value: DropdownOption) => {
   data.form.member_id = value.value;
   getMemberAccount(value.value);
+  emit('memberChange', value);
 };
 </script>

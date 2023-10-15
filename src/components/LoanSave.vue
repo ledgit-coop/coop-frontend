@@ -35,6 +35,9 @@
       v-else
       v-model="model.form"
       :disable-member="disableMember"
+      :has-savings="hasSavings"
+      :has-share-cap="hasShareCap"
+      @member-change="handleMemberChange"
     />
 
     <template #footer>
@@ -45,10 +48,18 @@
         @click="showModal = false"
       />
       <Button
+        label="Save as Draft"
+        icon="pi pi-save"
+        severity="warning"
+        :loading="loadings.save"
+        @click="handleSaveClick(true)"
+        autofocus
+      />
+      <Button
         label="Submit"
         icon="pi pi-save"
         :loading="loadings.save"
-        @click="handleSaveClick"
+        @click="handleSaveClick(false)"
         autofocus
       />
     </template>
@@ -68,6 +79,8 @@ import type { AxiosError } from 'axios';
 import Skeleton from 'primevue/skeleton';
 import useValidation from '@/composables/useValidation';
 import Message from 'primevue/message';
+import type { DropdownOption } from '@/types/ui';
+import MembersService from '@/service/MembersService';
 
 interface Props {
   visible: boolean;
@@ -93,9 +106,10 @@ const loadings = ref({
   save: false,
   fetching: false,
 });
+const hasSavings = ref(false);
+const hasShareCap = ref(false);
 
 onMounted(() => {
-  setMember();
   showModal.value = props.visible ?? false;
 });
 
@@ -107,36 +121,43 @@ watch(
   () => props.visible,
   (value) => {
     showModal.value = value ?? false;
-    setMember();
+    if (value && props.member) setMember(props.member);
   }
 );
 
-watch(
-  () => props.member,
-  (value) => {
-    if (value) setMember();
-  },
-  {
-    deep: true,
-  }
-);
+// watch(
+//   () => props.member,
+//   (value) => {
+//     if (value) setMember(value);
+//   },
+//   {
+//     deep: true,
+//   }
+// );
 
 watch(showModal, (value) => {
   if (value && isEditing.value) loadLoan();
 });
 
-const setMember = () => {
-  model.form!.member_id = props.member?.id?.toString();
-  model.form!.email = props.member?.email_address?.toString();
-  model.form!.contact_number = props.member?.mobile_number?.toString();
-  model.form!.tin_number = props.member?.tin_no?.toString();
-  model.form!.civil_status = props.member?.civil_status?.toString();
-  model.form!.home_address = props.member?.full_permanent_address?.toString();
-  model.form!.present_address = props.member?.full_present_address?.toString();
-  model.form!.age = props.member?.age;
+const setMember = (member?: Member) => {
+  model.form!.member_id = member?.id?.toString();
+  model.form!.email = member?.email_address?.toString();
+  model.form!.contact_number = member?.mobile_number?.toString();
+  model.form!.tin_number = member?.tin_no?.toString();
+  model.form!.civil_status = member?.civil_status?.toString();
+  model.form!.home_address = member?.full_permanent_address?.toString();
+  model.form!.present_address = member?.full_present_address?.toString();
+  model.form!.age = member?.age;
+  setFeeDisables(member);
 };
 
-const handleSaveClick = async () => {
+const setFeeDisables = (member?: Member) => {
+  console.log(member);
+  hasSavings.value = !!member?.savings_accounts.find((r) => r.is_holder_member);
+  hasShareCap.value = !!member?.share_capital_account;
+};
+
+const handleSaveClick = async (draft: boolean) => {
   await validation.value?.$validate();
   if (validation.value?.$invalid) {
     showError('Please complete the required fields.');
@@ -145,8 +166,17 @@ const handleSaveClick = async () => {
 
   try {
     loadings.value.save = true;
-    if (isEditing.value) await LoanService.update(props.loanIdForEdit ?? 0, mapLoanFormToPayload(model.form!));
-    else await LoanService.postLoan(mapLoanFormToPayload(model.form!));
+    if (isEditing.value)
+      await LoanService.update(props.loanIdForEdit ?? 0, {
+        ...mapLoanFormToPayload(model.form!),
+        is_draft: draft,
+      });
+    else
+      await LoanService.postLoan({
+        ...mapLoanFormToPayload(model.form!),
+        is_draft: draft,
+      });
+
     showSuccess('Loan application saved successfully.');
     showModal.value = false;
     emit('saved');
@@ -162,6 +192,7 @@ const loadLoan = async () => {
     const { data } = await LoanService.show(props.loanIdForEdit ?? 0);
     model.form = mapLoanToLoanForm(data);
     isReleased.value = data.released ?? false;
+    setFeeDisables(data.member);
   } catch (error) {
     showApiError(error as AxiosError);
   }
@@ -172,5 +203,14 @@ const handleHide = () => {
   model.form = {};
   validation.value?.$reset();
   isReleased.value = false;
+};
+
+const handleMemberChange = async (value: DropdownOption) => {
+  try {
+    const { data } = await MembersService.show(value.value);
+    setMember(data);
+  } catch (error) {
+    showApiError(error as AxiosError);
+  }
 };
 </script>

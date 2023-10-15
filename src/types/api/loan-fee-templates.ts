@@ -18,4 +18,5 @@ export interface LoanFeeSavePayload {
   credit_revenue?: boolean;
   credit_share_capital?: boolean;
   credit_regular_savings?: boolean;
+  show_to_report?: boolean;
 }

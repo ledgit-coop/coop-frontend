@@ -147,6 +147,19 @@
             >Credit To Revenue</label
           >
         </div>
+        <div class="flex align-items-center">
+          <Checkbox
+            inputId="show-to-report"
+            name="show-to-report"
+            binary
+            v-model="data.form.show_to_report"
+          />
+          <label
+            for="show-to-report"
+            class="ml-2"
+            >Show to Reports</label
+          >
+        </div>
       </div>
     </div>
 

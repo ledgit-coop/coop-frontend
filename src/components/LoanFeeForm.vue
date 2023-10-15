@@ -15,20 +15,31 @@
       v-else
       class="grid p-fluid formgrid"
     >
-      <div
+      <template
         v-for="(value, key) in data.form"
-        class="field col-12 lg:col-4"
         :key="key"
       >
-        <label for="name">{{ value.fee_name }}</label>
-        <InputNumber
-          :minFractionDigits="2"
-          :maxFractionDigits="3"
-          show-buttons
-          v-model="data.form[key].value"
-          :placeholder="placeholderFeeMethod(value.fee_method ?? '')"
-        />
-      </div>
+        <div class="field col-12 lg:col-4">
+          <Label
+            :help-text="helpText(value)"
+            :help-text-severity="
+              (value.credit_regular_savings && !hasSavings) || (value.credit_share_capital && !hasShareCap)
+                ? 'danger'
+                : undefined
+            "
+            for="name"
+            >{{ value.fee_name }}</Label
+          >
+          <InputNumber
+            :minFractionDigits="2"
+            :maxFractionDigits="3"
+            :disabled="(value.credit_regular_savings && !hasSavings) || (value.credit_share_capital && !hasShareCap)"
+            show-buttons
+            v-model="data.form[key].value"
+            :placeholder="placeholderFeeMethod(value.fee_method ?? '')"
+          />
+        </div>
+      </template>
     </div>
   </Panel>
 </template>
@@ -44,10 +55,13 @@ import type { AxiosError } from 'axios';
 import { deepClone } from '@/helpers';
 import Panel from 'primevue/panel';
 import Skeleton from 'primevue/skeleton';
+import Label from './Label.vue';
 
 interface Props {
   modelValue?: LoanFeeTemplateForm[];
   collapsed?: boolean;
+  hasSavings?: boolean;
+  hasShareCap?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -56,6 +70,12 @@ const data = reactive<{ form: LoanFeeJSON[] }>({
   form: [],
 });
 
+const helpText = (fee: LoanFeeJSON) => {
+  if (fee.credit_regular_savings) return 'Field will disable when the member has no regular savings account.';
+  else if (fee.credit_share_capital) return 'Field will disable when the member has no share capital account.';
+
+  return undefined;
+};
 const feeTemplates = ref<LoanFeeJSON[]>([]);
 
 const loadings = ref({
@@ -80,7 +100,12 @@ const loadFees = async () => {
           fee_name: f.name,
           fee_method: f.fee_method,
           fee_type: f.fee_type,
-          value: f.fee,
+          value:
+            (f.credit_regular_savings && !props.hasSavings) || (f.credit_share_capital && !props.hasShareCap)
+              ? 0
+              : f.fee,
+          credit_regular_savings: f.credit_regular_savings,
+          credit_share_capital: f.credit_share_capital,
         } as LoanFeeJSON)
     );
 

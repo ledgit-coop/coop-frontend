@@ -272,7 +272,10 @@
                 </div>
               </template>
             </TabPanel>
-            <TabPanel header="Share Capital">
+            <TabPanel
+              :disabled="!member?.share_capital"
+              header="Share Capital"
+            >
               <MembersShareCapital
                 v-if="activeIndex == 1"
                 :member="member"
@@ -323,6 +326,7 @@
           <MembersAddAccount
             v-model:visible="modalsVisibility.add_account"
             :member-id="member?.id"
+            @updated="showMember"
           />
         </div>
       </div>

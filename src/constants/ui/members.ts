@@ -25,6 +25,7 @@ export enum MemberLoanStatus {
   RELEASED = 'released',
   REQUEST_PRE_TERMINATION = 'request-pre-termination',
   PRE_TERMINATED = 'pre-terminated',
+  DRAFT = 'draft',
 }
 
 export const MemberLoanStatusDropdowns: DropdownOption[] = [

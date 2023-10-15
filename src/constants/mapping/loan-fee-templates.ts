@@ -11,6 +11,7 @@ export function mapLoanFeeToLoanFeeSavePayload(loanFee: LoanFeeForm): LoanFeeSav
     credit_regular_savings: loanFee.credit_regular_savings,
     credit_share_capital: loanFee.credit_share_capital,
     credit_revenue: loanFee.credit_revenue,
+    show_to_report: loanFee.show_to_report,
   };
 
   return feeSavePayload;
@@ -26,6 +27,7 @@ export function mapLoanFeeSavePayloadToLoanFee(fee: LoanFeeTemplate): LoanFeeFor
     credit_regular_savings: fee.credit_regular_savings,
     credit_share_capital: fee.credit_share_capital,
     credit_revenue: fee.credit_revenue,
+    show_to_report: fee.show_to_report,
   };
   return loanFeeForm;
 }

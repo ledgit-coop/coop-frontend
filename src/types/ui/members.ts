@@ -52,6 +52,7 @@ export interface Member extends MemberForm {
     balance: number;
     latest_transaction: AccountTransaction;
   };
+  share_capital_account?: MemberAccount;
   savings_accounts: MemberAccount[];
 }
 
@@ -199,4 +200,5 @@ export interface MemberAccount {
   latest_transaction?: AccountTransaction;
   account?: Account;
   has_balance?: boolean;
+  is_holder_member?: boolean;
 }

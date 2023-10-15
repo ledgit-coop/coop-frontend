@@ -43,6 +43,8 @@ export interface LoanApplicationPayload {
 
   pre_termination_panalty?: number | null;
   pre_termination_panalty_method?: string | null;
+
+  is_draft?: boolean;
 }
 
 export interface LoanListPayload {
