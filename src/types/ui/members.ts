@@ -201,4 +201,5 @@ export interface MemberAccount {
   account?: Account;
   has_balance?: boolean;
   is_holder_member?: boolean;
+  member?: Member;
 }

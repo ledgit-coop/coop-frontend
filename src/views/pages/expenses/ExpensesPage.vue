@@ -27,6 +27,7 @@
           currentPageReportTemplate="{first} to {last} of {totalRecords}"
           @sort="onSort"
           @page="onPageChange"
+          @update:rows="onRowsChange"
         >
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
@@ -200,7 +201,7 @@ const filters = ref({
 });
 const { showApiError, showSuccess } = useAlert();
 const confirm = useConfirm();
-const { rows, onSort, paginate, totalRecords, onPageChange, params } = useTableParameters(filters);
+const { rows, onSort, paginate, totalRecords, onPageChange, params, onRowsChange } = useTableParameters(filters);
 
 const expenses = ref<Transaction[]>();
 const selectedTransaction = ref<Transaction | undefined>();

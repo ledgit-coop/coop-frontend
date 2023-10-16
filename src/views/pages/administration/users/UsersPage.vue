@@ -30,6 +30,7 @@
           currentPageReportTemplate="{first} to {last} of {totalRecords}"
           @sort="onSort"
           @page="onPageChange"
+          @update:rows="onRowsChange"
         >
           <template #empty> No records found. </template>
 
@@ -150,7 +151,7 @@ const filters = ref({
   keyword: '',
 });
 
-const { rows, onSort, paginate, totalRecords, onPageChange, params } = useTableParameters(filters);
+const { rows, onSort, paginate, totalRecords, onPageChange, params, onRowsChange } = useTableParameters(filters);
 const { showApiError } = useAlert();
 
 const members = ref<UsersTable[]>();

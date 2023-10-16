@@ -1,3 +1,5 @@
+import type { CashFlowReport } from './reports';
+
 export interface DashboardCount {
   shared_capital_total?: number;
   loan_released_count?: number;
@@ -9,12 +11,4 @@ export interface DashboardCount {
   loan_released_current_month?: number;
 }
 
-export interface DashboardCashFlow {
-  month?: string;
-  year?: number;
-  flow: {
-    revenue?: number;
-    expenses?: number;
-    share_capital?: number;
-  };
-}
+export interface DashboardCashFlow extends CashFlowReport {}

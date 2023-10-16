@@ -5,5 +5,6 @@ export enum ActionTransactionType {
   WithdrawSavings = 'withdraw-savings',
   PayAmortization = 'pay-amortization',
   PayMembership = 'pay-membership',
+  PayOrientation = 'pay-orientation',
   PayLoanPreTerminationFee = 'pay-loan-pre-termination-fee',
 }

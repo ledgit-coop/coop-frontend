@@ -1,4 +1,5 @@
 import type { AccountTransactionType } from '@/constants/ui/accounts';
+import type { MemberAccount } from './members';
 
 export interface AccountTransactionHistory {
   id: string;
@@ -43,4 +44,5 @@ export interface AccountTransaction {
   account_name?: string;
   remaining_balance?: number;
   posted?: boolean;
+  member_account?: MemberAccount;
 }

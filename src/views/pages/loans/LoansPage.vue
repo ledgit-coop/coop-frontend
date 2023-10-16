@@ -18,6 +18,7 @@
           :total-records="totalRecords"
           @sort="onSort"
           @page="onPageChange"
+          @update:rows="onRowsChange"
         >
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
@@ -131,7 +132,7 @@ const filters = ref({
 });
 
 const statuses = ref<DropdownOption[]>(MemberLoanStatusDropdowns);
-const { rows, paginate, params, totalRecords, onSort, onPageChange } = useTableParameters(filters);
+const { rows, paginate, params, totalRecords, onSort, onPageChange, onRowsChange } = useTableParameters(filters);
 const download = ref(false);
 const loans = ref<Loan[]>([]);
 const loanProducts = ref<DropdownOption[]>([]);

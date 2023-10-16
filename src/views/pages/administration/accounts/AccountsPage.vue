@@ -27,6 +27,7 @@
           :total-records="totalRecords"
           @sort="onSort"
           @page="onPageChange"
+          @update:rows="onRowsChange"
           :rowsPerPageOptions="[10, 20, 50, 100]"
           paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
           currentPageReportTemplate="{first} to {last} of {totalRecords}"
@@ -173,7 +174,7 @@ const filters = ref({
   keyword: '',
 });
 
-const { rows, onSort, paginate, totalRecords, onPageChange, params } = useTableParameters(filters);
+const { rows, onSort, paginate, totalRecords, onPageChange, params, onRowsChange } = useTableParameters(filters);
 const { showApiError, showSuccess } = useAlert();
 const confirm = useConfirm();
 const members = ref<Account[]>();

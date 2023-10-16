@@ -5,6 +5,7 @@ export default function useTableParameters(filters: Ref<any>) {
   const rows = ref<number | undefined>(0);
   const totalRecords = ref<number | undefined>(0);
   const currentPage = ref<number>(1);
+  const currentLimit = ref<number | undefined>(undefined);
   const sortField = ref<string | undefined>();
   const sortOrder = ref<'asc' | 'desc' | undefined>();
 
@@ -22,8 +23,13 @@ export default function useTableParameters(filters: Ref<any>) {
     currentPage.value = event.page + 1;
   };
 
+  const onRowsChange = (event: any) => {
+    currentLimit.value = event;
+  };
+
   const params = computed(() => ({
     filters: filters.value,
+    limit: currentLimit.value,
     page: currentPage.value,
     sortField: sortField.value,
     sortOrder: sortOrder.value,
@@ -36,5 +42,6 @@ export default function useTableParameters(filters: Ref<any>) {
     totalRecords,
     onPageChange,
     paginate,
+    onRowsChange,
   };
 }

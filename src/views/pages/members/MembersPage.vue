@@ -30,6 +30,7 @@
           currentPageReportTemplate="{first} to {last} of {totalRecords}"
           @sort="onSort"
           @page="onPageChange"
+          @update:rows="onRowsChange"
         >
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
@@ -219,7 +220,7 @@ const filters = ref({
 });
 
 const table = ref();
-const { rows, onSort, paginate, totalRecords, onPageChange, params } = useTableParameters(filters);
+const { rows, onSort, paginate, totalRecords, onPageChange, params, onRowsChange } = useTableParameters(filters);
 const members = ref<MembersTable[]>();
 
 const loadings = ref<PageLoadings>({
@@ -233,6 +234,13 @@ const statuses = ref(MEMBER_STATUSES);
 onMounted(async () => {
   loadTable();
 });
+
+watch(
+  () => rows.value,
+  (row) => {
+    console.log(row);
+  }
+);
 
 watch(params, (params) => {
   loadTable(params);

@@ -18,6 +18,7 @@
           @sort="onSort"
           export-filename="loan-repayments"
           @page="onPageChange"
+          @update:rows="onRowsChange"
           ref="dt"
           :rowsPerPageOptions="[10, 20, 50, 100]"
           paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
@@ -289,7 +290,7 @@ const filters = ref({
   due_date: undefined,
 });
 
-const { rows, onSort, paginate, totalRecords, onPageChange, params } = useTableParameters(filters);
+const { rows, onSort, paginate, totalRecords, onPageChange, params, onRowsChange } = useTableParameters(filters);
 
 const dueAmount = computed<any>(() => selected_loan.value?.due_amount);
 const scheduleId = computed<any>(() => selected_loan.value?.id);

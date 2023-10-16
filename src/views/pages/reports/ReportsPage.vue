@@ -1,39 +1,63 @@
 <template>
-  <div class="card p-4">
-    <PageContentHeader :title="pageTitle">
-      <h5>
-        Report <span>from</span> {{ dateFormat(dates.from_date, DATE_FORMAT_DATE) }} <span>to</span>
-        {{ dateFormat(dates.to_date, DATE_FORMAT_DATE) }}
-      </h5>
-    </PageContentHeader>
+  <div class="card p-4 mb-0">
+    <PageContentHeader :title="pageTitle"> </PageContentHeader>
 
     {{ filters.from_date }}
 
-    <div class="p-fluid formgrid grid">
-      <div class="field col-12 md:col-3">
-        <label for="firstname2">Date Range</label>
-        <Calendar
-          showButtonBar
-          date-format="yy-mm-dd"
-          id="date-hired"
-          v-model="filters.dates"
-          selectionMode="range"
-          :manualInput="false"
-          mask="true"
-        />
-      </div>
+    <div class="flex gap-2">
+      <Button
+        type="button"
+        icon="pi pi-filter"
+        label="Filter"
+        @click="($refs as any)?.op?.toggle($event)"
+      />
+
+      <Button
+        type="button"
+        icon="pi pi-refresh"
+        label="Generate"
+        class="p-button-outlined"
+        :loading="loadings.reload"
+        @click="reloadReport"
+      />
     </div>
 
-    <Button
-      type="button"
-      icon="pi pi-refresh"
-      label="Generate"
-      class="p-button-outlined mb-2"
-      size="small"
-      :loading="loadings.reload"
-      @click="reloadReport"
-    />
+    <OverlayPanel
+      ref="op"
+      style="min-width: 18rem"
+    >
+      <div class="w-full">
+        <div class="p-fluid formgrid grid">
+          <div class="field col-12">
+            <label for="firstname2">Date Range</label>
+            <Calendar
+              show-button-bar
+              date-format="yy-mm-dd"
+              id="date-hired"
+              v-model="filters.dates"
+              selectionMode="range"
+              :manualInput="false"
+              mask="true"
+            />
+          </div>
+        </div>
+
+        <Button
+          type="button"
+          icon="pi pi-check"
+          label="Apply"
+          class="p-button-outlined"
+          :loading="loadings.reload"
+          @click="reloadReport"
+        />
+      </div>
+    </OverlayPanel>
   </div>
+
+  <p class="text-center p-5">
+    Generated Report <span>from</span> {{ dateFormat(dates.from_date, DATE_FORMAT_DATE) }} <span>to</span>
+    {{ dateFormat(dates.to_date, DATE_FORMAT_DATE) }}
+  </p>
 
   <div class="grid">
     <div class="col-12 lg:col-6 xl:col-3">
@@ -101,7 +125,11 @@
       </div>
     </div>
 
-    <div class="col-12 lg:col-6 xl:col-3">
+    <div
+      v-for="(fee, index) in counter.total_all_fees"
+      :key="index"
+      class="col-12 lg:col-6 xl:col-3"
+    >
       <div class="card mb-0 p-4">
         <div class="flex justify-content-between">
           <div
@@ -114,14 +142,18 @@
             <Skeleton />
           </div>
           <div v-else>
-            <span class="block mb-3">Total membership-fee amount</span>
-            <div class="text-900 font-medium text-xl">1000.00 Php</div>
+            <span class="block mb-3">{{ fee.name }}</span>
+            <div class="text-900 font-medium text-xl">{{ formatCurrency(Number(fee.amount ?? 0)) }}</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-12 lg:col-6 xl:col-3">
+    <div
+      v-for="(sub_trans, index) in counter.total_sub_types"
+      :key="index"
+      class="col-12 lg:col-6 xl:col-3"
+    >
       <div class="card mb-0 p-4">
         <div class="flex justify-content-between">
           <div
@@ -134,270 +166,56 @@
             <Skeleton />
           </div>
           <div v-else>
-            <span class="block mb-3">Total processing-fee amount</span>
-            <div class="text-900 font-medium text-xl">1000.00 Php</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-12 lg:col-6 xl:col-3">
-      <div class="card mb-0 p-4">
-        <div class="flex justify-content-between">
-          <div>
-            <span class="block mb-3">Total documentary stamp amount</span>
-            <div class="text-900 font-medium text-xl">1000.00 Php</div>
+            <span class="block mb-3">{{ sub_trans.name }}</span>
+            <div class="text-900 font-medium text-xl">{{ formatCurrency(Number(sub_trans.amount ?? 0)) }}</div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
   <TabView>
     <TabPanel header="Share Capitals">
-      <DataTable
-        table-style="min-width: 50rem"
-        ref="table"
-        export-filename="account-transactions"
-      >
-        <template #header>
-          <div class="flex justify-content-between flex-column sm:flex-row">
-            <Button
-              type="button"
-              icon="pi pi-download"
-              label="Export"
-              class="p-button-outlined mb-2"
-              size="small"
-              @click="($refs as any)?.table?.exportCSV()"
-            />
-          </div>
-        </template>
-
-        <Column
-          field="name"
-          header="Fee"
-        ></Column>
-        <Column
-          field="amount"
-          header="Amount"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Options"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Actions"
-        ></Column>
-
-        <template #empty> No records found. </template>
-      </DataTable>
+      <ShareCapitalReportTable
+        :date-from="dates.from_date"
+        :date-to="dates.to_date"
+        :reload="reload"
+      />
     </TabPanel>
     <TabPanel header="Expenses">
-      <DataTable
-        table-style="min-width: 50rem"
-        ref="table"
-        export-filename="account-transactions"
-      >
-        <template #header>
-          <div class="flex justify-content-between flex-column sm:flex-row">
-            <Button
-              type="button"
-              icon="pi pi-download"
-              label="Export"
-              class="p-button-outlined mb-2"
-              size="small"
-              @click="($refs as any)?.table?.exportCSV()"
-            />
-          </div>
-        </template>
-
-        <Column
-          field="name"
-          header="Fee"
-        ></Column>
-        <Column
-          field="amount"
-          header="Amount"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Options"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Actions"
-        ></Column>
-
-        <template #empty> No records found. </template>
-      </DataTable>
+      <ExpensesReportTable
+        :date-from="dates.from_date"
+        :date-to="dates.to_date"
+        :reload="reload"
+      />
     </TabPanel>
     <TabPanel header="Revenues">
-      <DataTable
-        table-style="min-width: 50rem"
-        ref="table"
-        export-filename="account-transactions"
-      >
-        <template #header>
-          <div class="flex justify-content-between flex-column sm:flex-row">
-            <Button
-              type="button"
-              icon="pi pi-download"
-              label="Export"
-              class="p-button-outlined mb-2"
-              size="small"
-              @click="($refs as any)?.table?.exportCSV()"
-            />
-          </div>
-        </template>
-
-        <Column
-          field="name"
-          header="Fee"
-        ></Column>
-        <Column
-          field="amount"
-          header="Amount"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Options"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Actions"
-        ></Column>
-
-        <template #empty> No records found. </template>
-      </DataTable>
+      <RevenuesReportsTable
+        :date-from="dates.from_date"
+        :date-to="dates.to_date"
+        :reload="reload"
+      />
     </TabPanel>
     <TabPanel header="Loans">
-      <DataTable
-        table-style="min-width: 50rem"
-        ref="table"
-        export-filename="account-transactions"
-      >
-        <template #header>
-          <div class="flex justify-content-between flex-column sm:flex-row">
-            <Button
-              type="button"
-              icon="pi pi-download"
-              label="Export"
-              class="p-button-outlined mb-2"
-              size="small"
-              @click="($refs as any)?.table?.exportCSV()"
-            />
-          </div>
-        </template>
-
-        <Column
-          field="name"
-          header="Fee"
-        ></Column>
-        <Column
-          field="amount"
-          header="Amount"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Options"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Actions"
-        ></Column>
-
-        <template #empty> No records found. </template>
-      </DataTable>
+      <LoansReleasedTable
+        :date-from="dates.from_date"
+        :date-to="dates.to_date"
+        :reload="reload"
+      />
     </TabPanel>
     <TabPanel header="Repayments">
-      <DataTable
-        table-style="min-width: 50rem"
-        ref="table"
-        export-filename="account-transactions"
-      >
-        <template #header>
-          <div class="flex justify-content-between flex-column sm:flex-row">
-            <Button
-              type="button"
-              icon="pi pi-download"
-              label="Export"
-              class="p-button-outlined mb-2"
-              size="small"
-              @click="($refs as any)?.table?.exportCSV()"
-            />
-          </div>
-        </template>
-
-        <Column
-          field="name"
-          header="Fee"
-        ></Column>
-        <Column
-          field="amount"
-          header="Amount"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Options"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Actions"
-        ></Column>
-
-        <template #empty> No records found. </template>
-      </DataTable>
+      <LoanRepaymentReportTable
+        :date-from="dates.from_date"
+        :date-to="dates.to_date"
+        :reload="reload"
+      />
     </TabPanel>
     <TabPanel header="Savings Account Transactions">
-      <DataTable
-        table-style="min-width: 50rem"
-        ref="table"
-        export-filename="account-transactions"
-      >
-        <template #header>
-          <div class="flex justify-content-between flex-column sm:flex-row">
-            <Button
-              type="button"
-              icon="pi pi-download"
-              label="Export"
-              class="p-button-outlined mb-2"
-              size="small"
-              @click="($refs as any)?.table?.exportCSV()"
-            />
-          </div>
-        </template>
-
-        <Column
-          field="name"
-          header="Fee"
-        ></Column>
-        <Column
-          field="amount"
-          header="Amount"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Options"
-        ></Column>
-
-        <Column
-          field="amount"
-          header="Actions"
-        ></Column>
-
-        <template #empty> No records found. </template>
-      </DataTable>
+      <SavingsAccountTransactionReportTable
+        :date-from="dates.from_date"
+        :date-to="dates.to_date"
+        :reload="reload"
+      />
     </TabPanel>
   </TabView>
 </template>
@@ -413,11 +231,19 @@ import moment from 'moment';
 import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import { computed, onMounted, ref } from 'vue';
+import ShareCapitalReportTable from './components/ShareCapitalReportTable.vue';
+import ExpensesReportTable from './components/ExpensesReportTable.vue';
+import RevenuesReportsTable from './components/RevenueReportTable.vue';
+import LoansReleasedTable from './components/LoansReleasedTable.vue';
+import LoanRepaymentReportTable from './components/LoanRepaymentReportTable.vue';
+import SavingsAccountTransactionReportTable from './components/SavingsAccountTransactionReportTable.vue';
+import OverlayPanel from 'primevue/overlaypanel';
 
 const filters = ref<any>({
-  dates: [moment().toDate(), moment().toDate()],
+  dates: [moment().startOf('month').toDate(), moment().endOf('month').toDate()],
 });
 
+const reload = ref(false);
 const dates = computed(() => {
   return {
     from_date: filters.value.dates[0],
@@ -427,12 +253,16 @@ const dates = computed(() => {
 
 const loadings = ref({
   reload: false,
+  share_capital: false,
+  cash_flow: false,
 });
 
 const counter = ref<ReportCounterResponse>({
   total_share_capital_amount: 0,
   total_savings_account_amount: 0,
   total_expenses_amount: 0,
+  total_all_fees: [],
+  total_sub_types: [],
 });
 
 const pageTitle = computed(() => {
@@ -441,25 +271,33 @@ const pageTitle = computed(() => {
 
 const { showApiError } = useAlert();
 
-onMounted(() => {});
+onMounted(() => {
+  reloadReport();
+});
 
 const reloadReport = () => {
+  reload.value = true;
   loadCounter();
+  setTimeout(() => {
+    reload.value = false;
+  }, 2000);
 };
 
-const loadCounter = async () => {
+const loadCounter = () => {
   loadings.value.reload = true;
 
-  try {
-    const { data } = await ReportsService.counter({
-      from: dateFormat(dates.value.from_date, DATE_FORMAT_DB),
-      to: dateFormat(dates.value.to_date, DATE_FORMAT_DB),
+  ReportsService.counter({
+    from: dateFormat(dates.value.from_date, DATE_FORMAT_DB),
+    to: dateFormat(dates.value.to_date, DATE_FORMAT_DB),
+  })
+    .then(({ data }) => {
+      counter.value = data;
+    })
+    .catch((error) => {
+      showApiError(error as AxiosError);
+    })
+    .finally(() => {
+      loadings.value.reload = false;
     });
-
-    counter.value = data;
-  } catch (error) {
-    showApiError(error as AxiosError);
-  }
-  loadings.value.reload = false;
 };
 </script>

@@ -155,9 +155,10 @@ const typeOfTransactions = computed<DropdownOption[]>(() => [
 
   { label: 'Deposit Savings', value: ActionTransactionType.DepositSavings },
   { label: 'Withdraw Savings', value: ActionTransactionType.WithdrawSavings },
+  { label: 'Pay Membership', value: ActionTransactionType.PayMembership },
+  { label: 'Pay Orientation', value: ActionTransactionType.PayOrientation },
 
   { label: 'Pay Amortization', value: ActionTransactionType.PayAmortization, disabled: true },
-  { label: 'Pay Membership', value: ActionTransactionType.PayMembership, disabled: true },
   { label: 'Pay Loan Pre-Termination Fee', value: ActionTransactionType.PayLoanPreTerminationFee, disabled: true },
 ]);
 const accounts = ref<DropdownOption[]>([]);
