@@ -4,7 +4,6 @@ import AppTopbar from './AppTopbar.vue';
 import AppFooter from './AppFooter.vue';
 import AppSidebar from './AppSidebar.vue';
 import AppConfig from './AppConfig.vue';
-import Message from 'primevue/message';
 import { useLayout } from '@/layout/composables/layout';
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
@@ -74,10 +73,6 @@ const isOutsideClicked = (event: any) => {
     </div>
 
     <div class="layout-main-container">
-      <Message severity="warn"
-        >The website is currently in its soft release phase. If you encounter any technical difficulties, please don't
-        hesitate to contact us, and we will promptly resolve the issue. Your feedback is highly appreciated.</Message
-      >
       <div class="layout-main">
         <router-view></router-view>
       </div>

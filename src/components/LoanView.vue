@@ -97,6 +97,18 @@
                 >Download Agreement</a
               ></span
             >
+
+            <span
+              ><i
+                class="pi pi-file-pdf pr-2"
+                style="color: var(--gray-700)"
+              ></i
+              ><a
+                href="#"
+                @click="handleDownload('terms')"
+                >Download Terms</a
+              ></span
+            >
           </div>
           <div class="p-3"></div>
         </template>
@@ -259,6 +271,17 @@
               href="#"
               @click="handleDownload('agreement')"
               >Download Agreement</a
+            ></span
+          >
+          <span
+            ><i
+              class="pi pi-file-pdf pr-2"
+              style="color: var(--gray-700)"
+            ></i
+            ><a
+              href="#"
+              @click="handleDownload('terms')"
+              >Download Terms</a
             ></span
           >
         </div>
@@ -459,11 +482,11 @@ const handleDownload = async (type: string) => {
   div.innerHTML = data.view;
 
   var opt = {
-    margin: 10,
+    margin: type == 'agreement' ? 10 : [20, 25, 20, 25],
     image: { type: 'png', quality: 1 },
     html2canvas: { scale: 2 },
     jsPDF: { format: 'letter', orientation: 'portrait' },
-    filename: `${loan.value?.loan_product?.name} - ${loan.value?.loan_number}.pdf`,
+    filename: `${type}-${loan.value?.loan_product?.name} - ${loan.value?.loan_number}.pdf`,
   };
 
   // New Promise-based usage:
