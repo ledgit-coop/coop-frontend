@@ -37,7 +37,7 @@
               autocomplete="null"
               placeholder="Email address"
               class="w-full md:w-30rem"
-              style="padding: 1rem"
+              style="padding: 0.7rem"
               @keydown.enter="handleLoginClick"
             />
 
@@ -61,10 +61,10 @@
               class="w-full mb-3"
               input-class="w-full"
               @keydown.enter="handleLoginClick"
-              :input-style="{ padding: '1rem' }"
+              :input-style="{ padding: '0.7rem' }"
             ></Password>
 
-            <div class="mb-5">
+            <div class="mb-3">
               <FieldErrorMessage
                 :validation="validation"
                 class="block mt-2"
@@ -91,7 +91,7 @@
             </div>
             <Button
               label="Sign In"
-              class="w-full p-3 text-xl"
+              class="w-full p-3"
               :loading="isSumitted"
               @click="handleLoginClick"
             />

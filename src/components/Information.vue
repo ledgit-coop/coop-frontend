@@ -53,11 +53,6 @@ const display = (value: string | string[]) => {
   width: 100%;
 
   th,
-  td {
-    border: 1px solid rgba(182, 182, 182, 0.633);
-    padding: 0.3rem;
-    text-align: left;
-  }
   th {
     background-color: #f2f2f2;
   }

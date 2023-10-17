@@ -46,3 +46,13 @@ export interface LoanReleasedReportResponse extends Pagination {
 export interface SavingsTransactionsReportResponse extends Pagination {
   data: AccountTransaction[];
 }
+
+export interface ChartReleasedLoanResponse {
+  name: string;
+  count: number;
+}
+
+export interface ChartRevenueResponse {
+  name: string;
+  amount: number;
+}

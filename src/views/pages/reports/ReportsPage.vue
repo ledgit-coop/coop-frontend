@@ -60,6 +60,53 @@
   </p>
 
   <div class="grid">
+    <div class="col-12 md:col-6">
+      <div
+        class="card"
+        style="min-height: 20rem"
+      >
+        <PageContentHeader
+          title="Loans Released"
+          size="h5"
+        />
+
+        <ReleasedLoansReportChart
+          :date-from="dates.from_date"
+          :date-to="dates.to_date"
+          :reload="reload"
+        />
+
+        <p class="text-center p-5 text-500">
+          Generated Chart <span>from</span> {{ dateFormat(dates.from_date, DATE_FORMAT_DATE) }} <span>to</span>
+          {{ dateFormat(dates.to_date, DATE_FORMAT_DATE) }}
+        </p>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <div class="card">
+        <PageContentHeader
+          title="Revenue"
+          size="h5"
+        />
+
+        <div class="flex justify-content-center">
+          <RevenueReportChart
+            :date-from="dates.from_date"
+            :date-to="dates.to_date"
+            :reload="reload"
+          />
+        </div>
+
+        <p class="text-center p-5 text-500">
+          Generated Chart <span>from</span> {{ dateFormat(dates.from_date, DATE_FORMAT_DATE) }} <span>to</span>
+          {{ dateFormat(dates.to_date, DATE_FORMAT_DATE) }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
     <div class="col-12 lg:col-6 xl:col-3">
       <div class="card mb-0 p-4">
         <div class="flex justify-content-between">
@@ -238,6 +285,8 @@ import LoansReleasedTable from './components/LoansReleasedTable.vue';
 import LoanRepaymentReportTable from './components/LoanRepaymentReportTable.vue';
 import SavingsAccountTransactionReportTable from './components/SavingsAccountTransactionReportTable.vue';
 import OverlayPanel from 'primevue/overlaypanel';
+import RevenueReportChart from './components/charts/RevenueReportChart.vue';
+import ReleasedLoansReportChart from './components/charts/ReleasedLoansReportChart.vue';
 
 const filters = ref<any>({
   dates: [moment().startOf('month').toDate(), moment().endOf('month').toDate()],

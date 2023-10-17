@@ -1,6 +1,8 @@
 import type { AxiosPromise } from 'axios';
 import apiClient from '@/http-common';
 import type {
+  ChartReleasedLoanResponse,
+  ChartRevenueResponse,
   ExpensesReportResponse,
   LoanReleasedReportResponse,
   RepaymentsReportResponse,
@@ -34,8 +36,17 @@ class ReportsService {
   loansRepayments(params?: Record<string, any>): AxiosPromise<RepaymentsReportResponse> {
     return apiClient.get(`${PATH}/loans-repayments`, { params });
   }
+
   savingsTransactions(params?: Record<string, any>): AxiosPromise<SavingsTransactionsReportResponse> {
     return apiClient.get(`${PATH}/savings-transactions`, { params });
+  }
+
+  chartsLoansReleased(params?: Record<string, any>): AxiosPromise<ChartReleasedLoanResponse[]> {
+    return apiClient.get(`${PATH}/charts/loans-released`, { params });
+  }
+
+  chartsRevenue(params?: Record<string, any>): AxiosPromise<ChartRevenueResponse[]> {
+    return apiClient.get(`${PATH}/charts/revenue`, { params });
   }
 }
 

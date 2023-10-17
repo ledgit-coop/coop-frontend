@@ -41,7 +41,7 @@
               style="padding: 1rem"
             />
 
-            <div class="mb-5">
+            <div class="mb-3">
               <FieldErrorMessage
                 :validation="validation"
                 class="block mt-2"
@@ -49,12 +49,14 @@
               />
             </div>
 
-            <Button
-              label="Request Password Reset"
-              class="w-full p-3 text-xl"
-              :loading="isSumitted"
-              @click="handleLoginClick"
-            />
+            <div class="flex">
+              <Button
+                label="Request Password Reset"
+                class="ml-auto"
+                :loading="isSumitted"
+                @click="handleLoginClick"
+              />
+            </div>
 
             <div class="flex mt-5">
               <a

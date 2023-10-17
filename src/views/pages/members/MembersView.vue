@@ -6,12 +6,7 @@
         severity="error"
         >Not attended PMES (Pre-membership Education Seminar).</InlineMessage
       >
-      <InlineMessage
-        v-if="member && member?.oriented"
-        severity="success"
-        class="mt-2"
-        >Attended PMES (Pre-membership Education Seminar).</InlineMessage
-      >
+
       <div class="card">
         <div class="grid m-0 align-items-center">
           <Image
@@ -150,14 +145,20 @@
             v-model:active-index="activeIndex"
             scrollable
           >
-            <TabPanel header="Member Information">
-              <template v-if="activeIndex === 0">
-                <div class="p-3">
-                  <div class="grid mt-2">
-                    <div class="col-12 p-0">
-                      <h6>Member Information</h6>
-                    </div>
+            <TabPanel
+              :disabled="true"
+              header="Overview"
+            >
+              <MemberOverview />
+            </TabPanel>
 
+            <TabPanel header="Member Information">
+              <div
+                class="flex flex-column gap-3"
+                v-if="activeIndex === 1"
+              >
+                <Panel header="Basic Information">
+                  <div class="flex gap-2">
                     <div class="col-12 p-0 md:col-6 lg:col-4">
                       <Information
                         :loading="loadings.member_fetch"
@@ -171,37 +172,36 @@
                       />
                     </div>
                   </div>
+                </Panel>
 
-                  <div class="grid mt-4">
-                    <div class="col-12 p-0">
-                      <h6>Addresses</h6>
-                    </div>
-                    <div class="col-12 p-0">
+                <div class="grid p-0">
+                  <Panel
+                    class="col-12 md:col-6 pb-0"
+                    header="Address"
+                  >
+                    <div style="min-height: 9rem">
                       <Information
                         :loading="loadings.member_fetch"
                         :info="address_info"
-                        table-class="w-7"
                       />
                     </div>
-                  </div>
+                  </Panel>
 
-                  <div class="grid mt-4">
-                    <div class="col-12 p-0">
-                      <h6>Spouse</h6>
-                    </div>
-                    <div class="col-12 p-0">
+                  <Panel
+                    class="col-12 md:col-6 pb-0"
+                    header="Spouse"
+                  >
+                    <div style="min-height: 9rem">
                       <Information
                         :loading="loadings.member_fetch"
                         :info="spouse_information"
-                        table-class="w-4"
                       />
                     </div>
-                  </div>
+                  </Panel>
+                </div>
 
-                  <div class="grid mt-4">
-                    <div class="col-12 p-0">
-                      <h6>Parents Information</h6>
-                    </div>
+                <Panel header="Parents Information">
+                  <div class="flex">
                     <div class="col-12 p-0 md:col-6 lg:col-4">
                       <Information
                         :loading="loadings.member_fetch"
@@ -215,87 +215,77 @@
                       />
                     </div>
                   </div>
+                </Panel>
 
-                  <div class="grid mt-4">
-                    <div class="col-12 p-0">
-                      <h6>Beneficiaries</h6>
-                    </div>
-                    <div class="col-12 p-0 md:col-6">
-                      <DataTable
-                        :loading="loadings.member_fetch"
-                        :value="member?.beneficiaries ?? []"
-                      >
-                        <template #empty> No records found. </template>
+                <Panel header="Beneficiaries">
+                  <DataTable
+                    :loading="loadings.member_fetch"
+                    :value="member?.beneficiaries ?? []"
+                  >
+                    <template #empty> No records found. </template>
 
-                        <Column
-                          field="name"
-                          header="Name"
-                        >
-                          <template #body="slotProps">
-                            {{ slotProps.data.name ?? '--' }}
-                          </template>
-                        </Column>
+                    <Column
+                      field="name"
+                      header="Name"
+                    >
+                      <template #body="slotProps">
+                        {{ slotProps.data.name ?? '--' }}
+                      </template>
+                    </Column>
 
-                        <Column
-                          field="birthdate"
-                          header="Birthdate"
-                        >
-                          <template #body="slotProps">
-                            {{ slotProps.data.birthdate ?? '--' }}
-                          </template>
-                        </Column>
+                    <Column
+                      field="birthdate"
+                      header="Birthdate"
+                    >
+                      <template #body="slotProps">
+                        {{ slotProps.data.birthdate ?? '--' }}
+                      </template>
+                    </Column>
 
-                        <Column
-                          field="relationship"
-                          header="Relationship"
-                        >
-                          <template #body="slotProps">
-                            {{ slotProps.data.relationship ?? '--' }}
-                          </template>
-                        </Column>
-                      </DataTable>
-                    </div>
-                  </div>
+                    <Column
+                      field="relationship"
+                      header="Relationship"
+                    >
+                      <template #body="slotProps">
+                        {{ slotProps.data.relationship ?? '--' }}
+                      </template>
+                    </Column>
+                  </DataTable>
+                </Panel>
 
-                  <div class="grid mt-4">
-                    <div class="col-12 p-0">
-                      <h6>In Case of Emergency</h6>
-                    </div>
-                    <div class="col-12 p-0">
-                      <Information
-                        :loading="loadings.member_fetch"
-                        :info="incase_emergency_information"
-                        table-class="w-4"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </template>
+                <Panel header="In Case of Emergency">
+                  <Information
+                    :loading="loadings.member_fetch"
+                    :info="incase_emergency_information"
+                    table-class="w-4"
+                  />
+                </Panel>
+              </div>
             </TabPanel>
             <TabPanel
               :disabled="!member?.share_capital"
               header="Share Capital"
             >
               <MembersShareCapital
-                v-if="activeIndex == 1"
+                v-if="activeIndex == 2"
                 :member="member"
               />
             </TabPanel>
             <TabPanel header="Savings">
               <MembersSavings
-                v-if="activeIndex == 2"
+                v-if="activeIndex == 3"
                 :member="member"
               />
             </TabPanel>
             <TabPanel header="Loans">
               <MembersLoans
-                v-if="activeIndex == 3"
+                v-if="activeIndex == 4"
                 :member="member"
               />
             </TabPanel>
             <TabPanel header="Accounts">
               <MembersAccounts
-                v-if="activeIndex == 4"
+                v-if="activeIndex == 5"
                 :member="member"
               />
             </TabPanel>
@@ -310,7 +300,7 @@
             <TabPanel header="Logs">
               <MembersLogs
                 :member="member"
-                v-if="activeIndex == 6"
+                v-if="activeIndex == 7"
               />
             </TabPanel>
           </TabView>
@@ -344,7 +334,7 @@ import TabPanel from 'primevue/tabpanel';
 import router from '@/router';
 import MembersShareCapital from './components/MembersShareCapital.vue';
 import MembersLoans from './components/MembersLoans.vue';
-import { DATE_FORMAT, ROUTE_NAME_MEMBERS, ROUTE_NAME_MEMBERS_EDIT } from '@/constants';
+import { DATE_FORMAT_DATE, ROUTE_NAME_MEMBERS, ROUTE_NAME_MEMBERS_EDIT } from '@/constants';
 import MembersSavings from './components/MembersSavings.vue';
 import MembersAccounts from './components/MembersAccounts.vue';
 import MakeAccountTransaction from '@components/MakeAccountTransaction.vue';
@@ -362,9 +352,11 @@ import InlineMessage from 'primevue/inlinemessage';
 import LoanSave from '@/components/LoanSave.vue';
 import Image from 'primevue/image';
 import MembersIncome from './components/MembersIncome.vue';
+import MemberOverview from './components/MemberOverview.vue';
 import { MemberStatus } from '@/constants/ui/members';
 import { dateFormat } from '@/helpers';
 import DataTable from 'primevue/datatable';
+import Panel from 'primevue/panel';
 
 interface ModalsVisibility {
   apply_form: boolean;
@@ -382,7 +374,7 @@ const loadings = ref({
 const confirm = useConfirm();
 const route = useRoute();
 const { showApiError, showSuccess } = useAlert();
-const activeIndex = ref(0);
+const activeIndex = ref(1);
 const member_id = computed(() => (route.params.id ?? '').toString());
 const member = ref<Member>();
 const modalsVisibility = ref<ModalsVisibility>({
@@ -397,14 +389,17 @@ const basic_information = computed<InformationItem[]>(() => [
   { label: 'First Name', value: member.value?.first_name ?? '' },
   { label: 'Middle Name', value: member.value?.middle_name ?? '' },
   { label: 'Suffix (Jr. Sr.)', value: member.value?.name_extension ?? '' },
-  { label: 'Date of Birth', value: member.value?.date_of_birth?.toString() ?? '' },
+  {
+    label: 'Date of Birth',
+    value: member.value?.date_of_birth ? dateFormat(member.value?.date_of_birth?.toString(), DATE_FORMAT_DATE) : '',
+  },
   { label: 'Place of Birth', value: member.value?.place_of_birth ?? '' },
   { label: 'Civil Status', value: member.value?.civil_status ?? '' },
   { label: 'Gender', value: member.value?.gender ?? '' },
 ]);
 
 const employment_information = computed<InformationItem[]>(() => [
-  { label: 'Date Hired', value: dateFormat(member.value?.date_hired, DATE_FORMAT) },
+  { label: 'Date Hired', value: dateFormat(member.value?.date_hired, DATE_FORMAT_DATE) },
   { label: 'Department', value: member.value?.department ?? '' },
   { label: 'Position', value: member.value?.position ?? '' },
   { label: 'Employee No.', value: member.value?.employee_no ?? '' },
@@ -435,7 +430,7 @@ const spouse_information = computed<InformationItem[]>(() => [
       member.value?.spouse?.surname ?? '',
     ],
   },
-  { label: 'Date of Birth', value: dateFormat(member.value?.spouse?.date_of_birth, DATE_FORMAT) },
+  { label: 'Date of Birth', value: dateFormat(member.value?.spouse?.date_of_birth, DATE_FORMAT_DATE) },
   { label: 'Occupation', value: member.value?.spouse?.occupation ?? '' },
   { label: 'Contact Number', value: member.value?.spouse?.contact_number ?? '' },
 ]);
@@ -459,7 +454,7 @@ const father_information = computed<InformationItem[]>(() => [
       member.value?.father?.surname ?? '',
     ],
   },
-  { label: 'Date of Birth', value: dateFormat(member.value?.father?.date_of_birth, DATE_FORMAT) },
+  { label: 'Date of Birth', value: dateFormat(member.value?.father?.date_of_birth, DATE_FORMAT_DATE) },
   { label: 'Occupation', value: member.value?.father?.occupation ?? '' },
   { label: 'Contact Number', value: member.value?.father?.contact_number ?? '' },
 ]);
@@ -473,7 +468,7 @@ const mother_information = computed<InformationItem[]>(() => [
       member.value?.mother?.surname ?? '',
     ],
   },
-  { label: 'Date of Birth', value: dateFormat(member.value?.mother?.date_of_birth, DATE_FORMAT) },
+  { label: 'Date of Birth', value: dateFormat(member.value?.mother?.date_of_birth, DATE_FORMAT_DATE) },
   { label: 'Occupation', value: member.value?.mother?.occupation ?? '' },
   { label: 'Contact Number', value: member.value?.mother?.contact_number ?? '' },
 ]);
