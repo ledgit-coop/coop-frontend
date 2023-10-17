@@ -120,7 +120,7 @@
             <Skeleton />
           </div>
           <div v-else>
-            <span class="block mb-3">Total share-capital amount</span>
+            <span class="block mb-3">Total share capital amount</span>
             <div class="text-900 font-medium text-xl">
               {{ formatCurrency(Number(counter.total_share_capital_amount)) }}
             </div>
@@ -166,6 +166,28 @@
             <span class="block mb-3">Total expenses amount</span>
             <div class="text-900 font-medium text-xl">
               {{ formatCurrency(Number(counter.total_expenses_amount ?? 0)) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 lg:col-6 xl:col-3">
+      <div class="card mb-0 p-4">
+        <div class="flex justify-content-between">
+          <div
+            class="grid gap-2 w-full p-2"
+            v-if="loadings.reload"
+          >
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+          </div>
+          <div v-else>
+            <span class="block mb-3">Total loan released amount</span>
+            <div class="text-900 font-medium text-xl">
+              {{ formatCurrency(Number(counter.total_loan_released_amount ?? 0)) }}
             </div>
           </div>
         </div>
