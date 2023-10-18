@@ -9,7 +9,7 @@
     :rows="rows"
     :paginator="true"
     :total-records="totalRecords"
-    :rowsPerPageOptions="[10, 20, 50, 100]"
+    :rowsPerPageOptions="[10, 20, 50, 100, 500, 1000]"
     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
     currentPageReportTemplate="{first} to {last} of {totalRecords}"
     @sort="onSort"

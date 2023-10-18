@@ -2,6 +2,7 @@
   <Chart
     type="bar"
     :data="chartData"
+    class="w-full"
     :options="chartOptions"
   />
 </template>

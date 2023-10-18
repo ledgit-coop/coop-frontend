@@ -14,6 +14,7 @@ import type { ChartRevenueResponse } from '@/types/api/reports';
 import { ref, watch, computed } from 'vue';
 import { REPORT_SHADES_GREEN } from '@/constants/ui/reports';
 import Plugins from 'chartjs-plugin-datalabels';
+import useAlert from '@/composables/useAlert';
 
 interface Props {
   dateFrom?: Date;
@@ -24,6 +25,8 @@ interface Props {
 const props = defineProps<Props>();
 
 const dataset = ref<ChartRevenueResponse[]>([]);
+
+const { showApiError } = useAlert();
 
 const chartData = computed(() => {
   return {
@@ -41,9 +44,6 @@ const chartData = computed(() => {
 const chartOptions = ref({
   responsive: true,
   plugins: {
-    legend: {
-      position: 'right',
-    },
     datalabels: {
       color: 'white',
       formatter: function (value: any) {
@@ -64,8 +64,12 @@ const loadChart = () => {
   ReportsService.chartsRevenue({
     from: dateFormat(props.dateFrom, DATE_FORMAT_DB),
     to: dateFormat(props.dateTo, DATE_FORMAT_DB),
-  }).then(({ data }) => {
-    dataset.value = data;
-  });
+  })
+    .then(({ data }) => {
+      dataset.value = data;
+    })
+    .catch((error) => {
+      showApiError(error);
+    });
 };
 </script>

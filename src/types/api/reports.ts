@@ -8,6 +8,11 @@ export interface ReportCounterResponse {
   total_savings_account_amount?: number;
   total_expenses_amount?: number;
   total_loan_released_amount?: number;
+
+  total_collected_interest_amount?: number;
+  total_collected_penalty_amount?: number;
+  total_collected_amortization?: number;
+
   total_all_fees: {
     amount?: number;
     name?: string;
