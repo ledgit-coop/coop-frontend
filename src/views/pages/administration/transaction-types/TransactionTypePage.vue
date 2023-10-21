@@ -2,10 +2,10 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <PageContentHeader title="Accounts">
+        <PageContentHeader title="Transaction Types">
           <Button
             icon="pi pi-plus"
-            label="Add Account"
+            label="Add Transaction Type"
             @click="modalsVisibility.create = true"
           ></Button>
         </PageContentHeader>
@@ -16,8 +16,8 @@
           :loading="loadings.table"
           :paginator="true"
           :row-hover="true"
-          :value="members"
-          export-filename="accounts"
+          :value="transactionTypes"
+          export-filename="transaction-types"
           class="p-datatable-gridlines"
           data-key="id"
           filter-display="menu"
@@ -81,15 +81,6 @@
             field="type"
             header="Type"
           ></Column>
-
-          <Column
-            field="earn_interest_per_anum"
-            header="Earn % Per Anum"
-          ></Column>
-          <Column
-            field="maintaining_balance"
-            header="Maintaining Balance"
-          ></Column>
           <Column
             field="created_at"
             header="Created At"
@@ -136,10 +127,10 @@
           </Column>
         </DataTable>
 
-        <AccountsSave
+        <TransactionTypeSave
           @updated="loadTable"
           @hide="handleHide"
-          :account-id="selected_account?.id"
+          :transaction-sub-type-id="selectedType?.id"
           v-model:visible="modalsVisibility.create"
         />
       </div>
@@ -157,9 +148,9 @@ import { dateFormat } from '@/helpers';
 import { DATE_TIME_FORMAT } from '@/constants';
 import { useConfirm } from 'primevue/useconfirm';
 import type { AxiosError } from 'axios';
-import type { Account } from '@/types/ui/accounts';
-import AccountsService from '@/service/AccountsService';
-import AccountsSave from './AccountsSave.vue';
+import TransactionTypeService from '@/service/TransactionTypeService';
+import TransactionTypeSave from './TransactionTypeSave.vue';
+import type { TransactionSubType } from '@/types/ui/transaction-type';
 
 interface ModalsVisibility {
   create: boolean;
@@ -177,8 +168,8 @@ const filters = ref({
 const { rows, onSort, paginate, totalRecords, onPageChange, params, onRowsChange } = useTableParameters(filters);
 const { showApiError, showSuccess } = useAlert();
 const confirm = useConfirm();
-const members = ref<Account[]>();
-const selected_account = ref<Account | undefined>();
+const transactionTypes = ref<TransactionSubType[]>();
+const selectedType = ref<TransactionSubType | undefined>();
 const loadings = ref({
   table: false,
 });
@@ -191,9 +182,9 @@ const loadTable = (params?: Record<string, any>) => {
   if (!loadings.value.table) {
     loadings.value.table = true;
 
-    AccountsService.list(params)
+    TransactionTypeService.list(params)
       .then((res) => {
-        members.value = res.data.data;
+        transactionTypes.value = res.data.data;
         paginate(res.data);
       })
       .catch(() => {
@@ -205,8 +196,8 @@ const loadTable = (params?: Record<string, any>) => {
   }
 };
 
-const handleEditClick = (data: Account) => {
-  selected_account.value = data;
+const handleEditClick = (data: TransactionSubType) => {
+  selectedType.value = data;
   modalsVisibility.value.create = true;
 };
 
@@ -218,16 +209,16 @@ const clearFilters = () => {
   loadTable();
 };
 
-const handleDeleteClick = (data: Account) => {
+const handleDeleteClick = (data: TransactionSubType) => {
   confirm.require({
     message: 'Are you sure you want to proceed?',
-    header: 'Delete Account',
+    header: 'Delete transaction type',
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
     accept: async () => {
       try {
-        await AccountsService.destroy(data.id);
-        showSuccess('Account successfully deleted.');
+        await TransactionTypeService.destroy(data.id);
+        showSuccess('Transaction type successfully deleted.');
         loadTable(params.value);
       } catch (error) {
         showApiError(error as AxiosError);
@@ -237,6 +228,6 @@ const handleDeleteClick = (data: Account) => {
 };
 
 const handleHide = () => {
-  selected_account.value = undefined;
+  selectedType.value = undefined;
 };
 </script>

@@ -28,6 +28,7 @@ export const ROUTE_NAME_LOAN_PRODUCTS = 'loan-products';
 export const ROUTE_NAME_USERS = 'users';
 export const ROUTE_NAME_LOAN_FEES = 'loan-fees';
 export const ROUTE_NAME_ACCOUNTS = 'accounts';
+export const ROUTE_NAME_TRANSACTION_TYPES = 'transaction-types';
 
 export const ROUTE_LOAN_CALCULATOR = 'loan-calculator';
 

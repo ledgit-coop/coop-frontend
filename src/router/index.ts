@@ -17,6 +17,7 @@ import {
   ROUTE_NAME_REPAYMENTS,
   ROUTE_NAME_REPORTS,
   ROUTE_NAME_RESET_PASSWORD,
+  ROUTE_NAME_TRANSACTION_TYPES,
   ROUTE_NAME_USERS,
 } from '@/constants/routes';
 
@@ -211,6 +212,20 @@ const router = createRouter({
                   component: () => import('@/views/pages/administration/loan-fee-templates/LoanFeePage.vue'),
                   meta: {
                     title: 'Loan Fees',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'transaction-types',
+              redirect: 'transaction-types/list',
+              children: [
+                {
+                  path: 'list',
+                  name: ROUTE_NAME_TRANSACTION_TYPES,
+                  component: () => import('@/views/pages/administration/transaction-types/TransactionTypePage.vue'),
+                  meta: {
+                    title: 'Transaction Types',
                   },
                 },
               ],

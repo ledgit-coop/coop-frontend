@@ -1,3 +1,5 @@
+import type { TransactionSubType } from './transaction-type';
+
 export interface Transaction {
   id: number;
   particular: string;
@@ -9,10 +11,13 @@ export interface Transaction {
   type?: string;
   parameters?: any;
   posted?: boolean;
+  transaction_sub_type_id?: number;
+  transaction_sub_type?: TransactionSubType;
 }
 
 export interface TransactionForm {
   particular?: string;
   transaction_date?: string | Date;
   amount?: number;
+  transaction_sub_type_id?: number;
 }

@@ -18,6 +18,7 @@
           :value="expenses"
           data-key="id"
           filter-display="menu"
+          export-filename="expenses"
           responsive-layout="scroll"
           :rows="rows"
           :lazy="true"
@@ -40,9 +41,46 @@
                   size="small"
                   @click="clearFilters()"
                 />
+                <Button
+                  type="button"
+                  icon="pi pi-download"
+                  label="Export"
+                  class="p-button-outlined mb-2"
+                  size="small"
+                  @click="($refs as any)?.table?.exportCSV()"
+                />
               </div>
 
               <div class="grid gap-1 m-0 align-items-start ml-auto">
+                <div class="w-18rem">
+                  <Calendar
+                    date-format="M-dd-yy"
+                    mask="true"
+                    id="applied-date"
+                    v-model="filters.transaction_dates"
+                    show-button-bar
+                    show-icon
+                    class="w-full"
+                    selectionMode="range"
+                    placeholder="Filter Transaction Date"
+                    @hide="loadTable(params)"
+                    :hide-on-range-selection="true"
+                  />
+                </div>
+
+                <Dropdown
+                  showClear
+                  filter
+                  option-value="value"
+                  option-label="label"
+                  v-model="filters.transaction_sub_type_id"
+                  @change="loadTable(params)"
+                  :loading="loadings.expense_type_fetch"
+                  placeholder="Select Type of Expense"
+                  :options="expenseType"
+                >
+                </Dropdown>
+
                 <span class="p-input-icon-left mb-2">
                   <i class="pi pi-search" />
                   <InputText
@@ -103,6 +141,15 @@
             <template #body="slotProps">
               {{ dateFormat(slotProps.data.transaction_date, DATE_FORMAT) }}
             </template>
+          </Column>
+
+          <Column
+            field="transaction_sub_type.name"
+            header="Expense Type"
+            sort-field="transaction_sub_type_id"
+            style="min-width: 12rem"
+            sortable
+          >
           </Column>
 
           <Column
@@ -186,6 +233,8 @@ import ExpensesService from '@/service/ExpensesService';
 import type { ExpensesListPayload } from '@/types/api/expenses';
 import { dateFormat, formatNumber } from '@/helpers';
 import { DATE_TIME_FORMAT, DATE_FORMAT } from '@/constants';
+import type { DropdownOption } from '@/types/ui';
+import UtilityService from '@/service/UtilityService';
 
 interface ModalsVisibility {
   save_transaction: boolean;
@@ -195,9 +244,18 @@ const modalsVisibility = ref<ModalsVisibility>({
   save_transaction: false,
 });
 
-const filters = ref({
+const expenseType = ref<DropdownOption[]>([]);
+
+const filters = ref<{
+  status: string;
+  keyword: string;
+  transaction_sub_type_id: any;
+  transaction_dates?: any;
+}>({
   status: '',
   keyword: '',
+  transaction_sub_type_id: undefined,
+  transaction_dates: [],
 });
 const { showApiError, showSuccess } = useAlert();
 const confirm = useConfirm();
@@ -207,10 +265,12 @@ const expenses = ref<Transaction[]>();
 const selectedTransaction = ref<Transaction | undefined>();
 const loadings = ref({
   table: false,
+  expense_type_fetch: false,
 });
 
 onMounted(async () => {
   loadTable();
+  loadExpenseSubTypes();
 });
 
 watch(params, (params) => {
@@ -226,6 +286,8 @@ const clearFilters = () => {
   filters.value = {
     status: '',
     keyword: '',
+    transaction_sub_type_id: undefined,
+    transaction_dates: [],
   };
 };
 
@@ -267,5 +329,22 @@ const handleExpenseDeleteClick = (transaction: Transaction) => {
       }
     },
   });
+};
+
+const loadExpenseSubTypes = () => {
+  loadings.value.expense_type_fetch = true;
+  UtilityService.getTransactionSubTypeExpenses()
+    .then(({ data }) => {
+      expenseType.value = data.map<DropdownOption>((t) => ({
+        label: t.name?.toString() ?? '',
+        value: t.id.toString() ?? '',
+      }));
+    })
+    .catch((error) => {
+      showApiError(error);
+    })
+    .finally(() => {
+      loadings.value.expense_type_fetch = false;
+    });
 };
 </script>

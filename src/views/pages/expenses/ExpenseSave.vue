@@ -112,6 +112,7 @@ const handleSaveClick = async () => {
       particular: model.value.form.particular?.toString() ?? '',
       amount: model.value.form.amount,
       date: dateFormat(model.value.form.transaction_date, DATE_FORMAT_DB),
+      transaction_sub_type_id: model.value.form.transaction_sub_type_id,
     };
     if (!isEditing.value) await ExpensesService.store(payload);
     else await ExpensesService.update(props.id ?? 0, payload);

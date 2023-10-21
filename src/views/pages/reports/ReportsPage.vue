@@ -46,6 +46,7 @@
               v-model="filters.dates"
               selectionMode="range"
               :manualInput="false"
+              :hide-on-range-selection="true"
               mask="true"
             />
           </div>

@@ -13,4 +13,5 @@ export interface ExpenseSavePayload {
   particular: string;
   amount?: number;
   date: string | null;
+  transaction_sub_type_id?: number;
 }

@@ -12,6 +12,7 @@ import {
   ROUTE_NAME_MEMBERS,
   ROUTE_NAME_REPAYMENTS,
   ROUTE_NAME_REPORTS,
+  ROUTE_NAME_TRANSACTION_TYPES,
   ROUTE_NAME_USERS,
 } from '@/constants';
 
@@ -55,6 +56,11 @@ const model = ref<any>([
         label: 'Account Types',
         icon: 'pi pi-fw pi-book',
         to: { name: ROUTE_NAME_ACCOUNTS },
+      },
+      {
+        label: 'Transaction Types',
+        icon: 'pi pi-fw pi-book',
+        to: { name: ROUTE_NAME_TRANSACTION_TYPES },
       },
     ],
   },

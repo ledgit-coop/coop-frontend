@@ -4,6 +4,7 @@ import type { DropdownOption, GuarantorDropdown } from '@/types/ui';
 import type { AccountType } from '@/constants/ui/accounts';
 import type { LoanCalculatorRequest } from '@/types/api/loans';
 import type { LoanFeeTemplate } from '@/types/ui/loan-fee-templates';
+import type { TransactionSubType } from '@/types/ui/transaction-type';
 
 const PATH = '/api/utility';
 class UtilityService {
@@ -41,6 +42,10 @@ class UtilityService {
 
   getMemberAccountHoldersDropdown(member_id: string): AxiosPromise<DropdownOption[]> {
     return apiClient.get(`${PATH}/members/${member_id}/account-holders/dropdown`);
+  }
+
+  getTransactionSubTypeExpenses(): AxiosPromise<TransactionSubType[]> {
+    return apiClient.get(`${PATH}/transaction-sub-types/expenses`);
   }
 }
 
