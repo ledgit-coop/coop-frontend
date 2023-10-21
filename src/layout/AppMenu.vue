@@ -25,9 +25,9 @@ const model = ref<any>([
     label: 'Operations',
     items: [
       { label: 'Members', icon: 'pi pi-fw pi-id-card', to: { name: ROUTE_NAME_MEMBERS } },
-      { label: 'Loans', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_LOANS } },
+      { label: 'Loans', icon: 'pi pi-credit-card', to: { name: ROUTE_NAME_LOANS } },
       { label: 'Repayments', icon: 'pi pi-fw pi-history', to: { name: ROUTE_NAME_REPAYMENTS } },
-      { label: 'Loan Calculator', icon: 'pi pi-fw pi-history', to: { name: ROUTE_LOAN_CALCULATOR } },
+      { label: 'Loan Calculator', icon: 'pi pi-calculator', to: { name: ROUTE_LOAN_CALCULATOR } },
       {
         label: 'Expenses',
         icon: 'pi pi-fw pi-history',

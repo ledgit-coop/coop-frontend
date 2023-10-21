@@ -94,21 +94,14 @@
             </div>
           </template>
           <template #empty> No records found. </template>
-
-          <Column
-            field="id"
-            header="ID"
-            style="min-width: 5rem"
-            sortable
-          >
-          </Column>
-
           <Column
             field="transaction_number"
             header="Transaction #"
             sort-field="transaction_number"
+            class="white-space-nowrap"
             style="min-width: 12rem"
             sortable
+            frozen
           >
           </Column>
 
@@ -139,7 +132,7 @@
             sortable
           >
             <template #body="slotProps">
-              {{ dateFormat(slotProps.data.transaction_date, DATE_FORMAT) }}
+              {{ dateFormat(slotProps.data.transaction_date, DATE_FORMAT_DATE) }}
             </template>
           </Column>
 
@@ -175,6 +168,7 @@
             field="id"
             header="Action"
             align-frozen="right"
+            class="froze-right"
             style="min-width: 12rem"
             frozen
           >
@@ -232,7 +226,7 @@ import type { Transaction } from '@/types/ui/transactions';
 import ExpensesService from '@/service/ExpensesService';
 import type { ExpensesListPayload } from '@/types/api/expenses';
 import { dateFormat, formatNumber } from '@/helpers';
-import { DATE_TIME_FORMAT, DATE_FORMAT } from '@/constants';
+import { DATE_TIME_FORMAT, DATE_FORMAT, DATE_FORMAT_DATE } from '@/constants';
 import type { DropdownOption } from '@/types/ui';
 import UtilityService from '@/service/UtilityService';
 

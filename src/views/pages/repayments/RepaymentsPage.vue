@@ -48,13 +48,16 @@
 
               <div class="grid gap-1 m-0 align-items-start ml-auto">
                 <Calendar
-                  date-format="yy-mm-dd"
+                  date-format="M-dd-yy"
                   id="date-hired"
                   mask="true"
                   v-model="filters.due_date"
-                  placeholder="Due date"
+                  selection-mode="range"
+                  placeholder="Select due date"
                   showButtonBar
-                  @update:model-value="handleDueDateChange"
+                  @hide="handleDueDateChange"
+                  :hide-on-range-selection="true"
+                  show-icon
                 />
 
                 <Dropdown
@@ -310,16 +313,21 @@ watch(params, () => {
 });
 
 const loadTable = async () => {
-  loadings.value.table = true;
-  try {
-    const { data } = await LoanRepaymentService.list({ ...params.value });
-    loans.value = data.data;
-    paginate(data);
-  } catch (error) {
-    showApiError(error as AxiosError);
-  }
+  if (loadings.value.table) return;
 
-  loadings.value.table = false;
+  loadings.value.table = true;
+
+  LoanRepaymentService.list({ ...params.value })
+    .then(({ data }) => {
+      loans.value = data.data;
+      paginate(data);
+    })
+    .catch((error) => {
+      showApiError(error as AxiosError);
+    })
+    .finally(() => {
+      loadings.value.table = false;
+    });
 };
 const handlePayload = (value: MemberLoanSchedule) => {
   selected_loan.value = value;

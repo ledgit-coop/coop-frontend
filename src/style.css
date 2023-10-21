@@ -36,3 +36,31 @@ table .overdue {
 table .paid {
   background-color: rgb(230, 243, 226) !important;
 }
+/* 
+.p-datatable-scrollable .p-frozen-column::after:not(.p-frozen-column.froze-right) {
+  box-shadow: inset 10px 0 8px -8px #3c6daf40;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: -1px;
+  width: 30px;
+  transform: translate(100%);
+  transition: box-shadow .3s;
+  content: "";
+  pointer-events: none;
+} */
+
+.p-datatable-scrollable .p-frozen-column.froze-right::before {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: -1px;
+  width: 30px;
+  content: '';
+  transform: translate(-100%);
+  transition: box-shadow 0.3s;
+  box-shadow: inset -10px 0 8px -8px #3c6daf40;
+  pointer-events: none;
+}

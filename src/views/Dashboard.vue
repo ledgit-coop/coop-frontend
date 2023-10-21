@@ -134,6 +134,8 @@
               />
             </template>
           </Column>
+
+          <template #empty> No recent records found. </template>
         </DataTable>
         <LoanView
           v-model:visible="modalsVisibility.view_loan"
@@ -217,6 +219,7 @@
               {{ formatCurrency(slotProps.data.amount ?? 0) }}
             </template>
           </Column>
+          <template #empty> No recent records found. </template>
         </DataTable>
         <small class="text-500">Latest 10 recorded payments</small>
       </div>
