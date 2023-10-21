@@ -226,7 +226,7 @@ import type { Transaction } from '@/types/ui/transactions';
 import ExpensesService from '@/service/ExpensesService';
 import type { ExpensesListPayload } from '@/types/api/expenses';
 import { dateFormat, formatNumber } from '@/helpers';
-import { DATE_TIME_FORMAT, DATE_FORMAT, DATE_FORMAT_DATE } from '@/constants';
+import { DATE_TIME_FORMAT, DATE_FORMAT_DATE } from '@/constants';
 import type { DropdownOption } from '@/types/ui';
 import UtilityService from '@/service/UtilityService';
 
