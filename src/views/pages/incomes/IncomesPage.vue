@@ -2,10 +2,10 @@
   <div class="grid">
     <div class="col-12">
       <div class="card">
-        <PageContentHeader title="Expenses">
+        <PageContentHeader title="Incomes">
           <Button
             icon="pi pi-plus"
-            label="Add Expenses"
+            label="Add Incomes"
             @click="handleAddClick"
           ></Button>
         </PageContentHeader>
@@ -15,10 +15,10 @@
           :loading="loadings.table"
           :paginator="true"
           :row-hover="true"
-          :value="expenses"
+          :value="incomes"
           data-key="id"
           filter-display="menu"
-          export-filename="expenses"
+          export-filename="incomes"
           responsive-layout="scroll"
           :rows="rows"
           :lazy="true"
@@ -75,9 +75,9 @@
                   option-label="label"
                   v-model="filters.transaction_sub_type_id"
                   @change="loadTable(params)"
-                  :loading="loadings.expense_type_fetch"
-                  placeholder="Select Type of Expense"
-                  :options="expenseType"
+                  :loading="loadings.income_type_fetch"
+                  placeholder="Select Type of Income"
+                  :options="incomeType"
                 >
                 </Dropdown>
 
@@ -138,7 +138,7 @@
 
           <Column
             field="transaction_sub_type.name"
-            header="Expense Type"
+            header="Income Type"
             sort-field="transaction_sub_type_id"
             class="white-space-nowrap"
             sortable
@@ -156,7 +156,7 @@
           <Column
             field="created_at"
             header="Created At"
-            class="white-space-nowrap"
+            style="min-width: 12rem"
             sortable
           >
             <template #body="slotProps">
@@ -193,7 +193,7 @@
                   severity="danger"
                   rounded
                   class="mr-2 mb-2"
-                  @click="handleExpenseDeleteClick(slotProps.data)"
+                  @click="handleIncomeDeleteClick(slotProps.data)"
                   size="small"
                 />
               </div>
@@ -201,7 +201,7 @@
           </Column>
         </DataTable>
 
-        <ExpenseSave
+        <IncomeSave
           @updated="loadTable(params)"
           @hide="selectedTransaction = undefined"
           :id="selectedTransaction?.id"
@@ -216,15 +216,15 @@
 import { ref, onMounted, watch } from 'vue';
 import Button from 'primevue/button';
 import PageContentHeader from '@/components/PageContentHeader.vue';
-import ExpenseSave from './ExpenseSave.vue';
+import IncomeSave from './IncomeSave.vue';
 import DataTable from 'primevue/datatable';
 import useTableParameters from '@/composables/useTableParameters';
 import useAlert from '@/composables/useAlert';
 import { useConfirm } from 'primevue/useconfirm';
 import type { AxiosError } from 'axios';
 import type { Transaction } from '@/types/ui/transactions';
-import ExpensesService from '@/service/ExpensesService';
-import type { ExpensesListPayload } from '@/types/api/expenses';
+import IncomeService from '@/service/IncomeService';
+import type { IncomesListPayload } from '@/types/api/income';
 import { dateFormat, formatNumber } from '@/helpers';
 import { DATE_TIME_FORMAT, DATE_FORMAT_DATE } from '@/constants';
 import type { DropdownOption } from '@/types/ui';
@@ -238,7 +238,7 @@ const modalsVisibility = ref<ModalsVisibility>({
   save_transaction: false,
 });
 
-const expenseType = ref<DropdownOption[]>([]);
+const incomeType = ref<DropdownOption[]>([]);
 
 const filters = ref<{
   status: string;
@@ -255,16 +255,16 @@ const { showApiError, showSuccess } = useAlert();
 const confirm = useConfirm();
 const { rows, onSort, paginate, totalRecords, onPageChange, params, onRowsChange } = useTableParameters(filters);
 
-const expenses = ref<Transaction[]>();
+const incomes = ref<Transaction[]>();
 const selectedTransaction = ref<Transaction | undefined>();
 const loadings = ref({
   table: false,
-  expense_type_fetch: false,
+  income_type_fetch: false,
 });
 
 onMounted(async () => {
   loadTable();
-  loadExpenseSubTypes();
+  loadIncomeSubTypes();
 });
 
 watch(params, (params) => {
@@ -290,12 +290,12 @@ const handleAddClick = () => {
   selectedTransaction.value = undefined;
 };
 
-const loadTable = (params?: ExpensesListPayload) => {
+const loadTable = (params?: IncomesListPayload) => {
   if (!loadings.value.table) {
     loadings.value.table = true;
-    ExpensesService.list(params)
+    IncomeService.list(params)
       .then((res) => {
-        expenses.value = res.data.data;
+        incomes.value = res.data.data;
         paginate(res.data);
       })
       .catch((error) => {
@@ -307,16 +307,16 @@ const loadTable = (params?: ExpensesListPayload) => {
   }
 };
 
-const handleExpenseDeleteClick = (transaction: Transaction) => {
+const handleIncomeDeleteClick = (transaction: Transaction) => {
   confirm.require({
     message: 'Are you sure you want to proceed?',
-    header: 'Delete Expense',
+    header: 'Delete Income',
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
     accept: async () => {
       try {
-        await ExpensesService.destroy(transaction.id);
-        showSuccess('Expense successfully deleted.');
+        await IncomeService.destroy(transaction.id);
+        showSuccess('Income successfully deleted.');
         loadTable(params.value);
       } catch (error) {
         showApiError(error as AxiosError);
@@ -325,11 +325,11 @@ const handleExpenseDeleteClick = (transaction: Transaction) => {
   });
 };
 
-const loadExpenseSubTypes = () => {
-  loadings.value.expense_type_fetch = true;
-  UtilityService.getTransactionSubTypeExpenses()
+const loadIncomeSubTypes = () => {
+  loadings.value.income_type_fetch = true;
+  UtilityService.getTransactionSubTypeIncomes()
     .then(({ data }) => {
-      expenseType.value = data.map<DropdownOption>((t) => ({
+      incomeType.value = data.map<DropdownOption>((t) => ({
         label: t.name?.toString() ?? '',
         value: t.id.toString() ?? '',
       }));
@@ -338,7 +338,7 @@ const loadExpenseSubTypes = () => {
       showApiError(error);
     })
     .finally(() => {
-      loadings.value.expense_type_fetch = false;
+      loadings.value.income_type_fetch = false;
     });
 };
 </script>

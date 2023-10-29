@@ -1,3 +1,5 @@
+import type { TransactionSubType } from './transaction-type';
+
 export interface LoanFeeForm {
   name?: string;
   fee?: number;
@@ -9,12 +11,15 @@ export interface LoanFeeForm {
   credit_share_capital?: boolean;
   credit_regular_savings?: boolean;
   show_to_report?: boolean;
+
+  transaction_sub_type_id?: string;
 }
 
 export interface LoanFeeTemplate extends LoanFeeForm {
   id: number;
   created_at: string;
   updated_at: string;
+  transaction_sub_type?: TransactionSubType;
 }
 
 export interface LoanFeeJSON {

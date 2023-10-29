@@ -47,6 +47,14 @@ class UtilityService {
   getTransactionSubTypeExpenses(): AxiosPromise<TransactionSubType[]> {
     return apiClient.get(`${PATH}/transaction-sub-types/expenses`);
   }
+
+  getTransactionSubTypeIncomes(): AxiosPromise<TransactionSubType[]> {
+    return apiClient.get(`${PATH}/transaction-sub-types/revenues`);
+  }
+
+  getTransactionSubTypes(types?: string[]): AxiosPromise<TransactionSubType[]> {
+    return apiClient.get(`${PATH}/transaction-sub-types/dropdown`, { params: { types } });
+  }
 }
 
 export default new UtilityService();

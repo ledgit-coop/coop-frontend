@@ -26,6 +26,21 @@
           size="small"
           @click="($refs as any)?.table?.exportCSV()"
         />
+
+        <div class="grid gap-1 m-0 align-items-start ml-auto">
+          <Dropdown
+            showClear
+            filter
+            option-value="value"
+            option-label="label"
+            v-model="filters.transaction_sub_type_id"
+            @change="loadTable()"
+            :loading="loadings.income_type_fetch"
+            placeholder="Select Type of Income"
+            :options="incomeType"
+          >
+          </Dropdown>
+        </div>
       </div>
     </template>
 
@@ -49,6 +64,14 @@
     </Column>
 
     <Column
+      field="transaction_sub_type.name"
+      header="Income Type"
+      sort-field="transaction_sub_type_id"
+      class="white-space-nowrap"
+      sortable
+    >
+    </Column>
+    <Column
       field="amount"
       header="Amount"
     >
@@ -56,14 +79,13 @@
         {{ formatCurrency(slotProps.data.amount) }}
       </template>
     </Column>
-
     <template #empty> No records found. </template>
 
     <ColumnGroup type="footer">
       <Row>
         <Column
           footer="Total:"
-          :colspan="3"
+          :colspan="4"
           footer-style="text-align:right"
         />
         <Column
@@ -81,10 +103,12 @@ import useTableParameters from '@/composables/useTableParameters';
 import { DATE_FORMAT_DATE, DATE_FORMAT_DB } from '@/constants';
 import { dateFormat, formatCurrency } from '@/helpers';
 import ReportsService from '@/service/ReportsService';
+import UtilityService from '@/service/UtilityService';
+import type { DropdownOption } from '@/types/ui';
 import type { Transaction } from '@/types/ui/transactions';
 import type { AxiosError } from 'axios';
 import Button from 'primevue/button';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 interface Props {
   dateFrom?: Date;
@@ -93,16 +117,18 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-
+const incomeType = ref<DropdownOption[]>([]);
 const filters = computed(() => ({
   from: dateFormat(props.dateFrom, DATE_FORMAT_DB),
   to: dateFormat(props.dateTo, DATE_FORMAT_DB),
+  transaction_sub_type_id: undefined,
 }));
 
 const { rows, onSort, paginate, totalRecords, onPageChange, params, onRowsChange } = useTableParameters(filters);
 
 const loadings = ref({
   table: false,
+  income_type_fetch: false,
 });
 
 watch(params, () => {
@@ -115,6 +141,10 @@ watch(
     if (value && props.dateFrom && props.dateTo) loadTable();
   }
 );
+
+onMounted(() => {
+  loadIncomeSubTypes();
+});
 
 const { showApiError } = useAlert();
 
@@ -133,6 +163,23 @@ const loadTable = async () => {
     })
     .finally(() => {
       loadings.value.table = false;
+    });
+};
+
+const loadIncomeSubTypes = () => {
+  loadings.value.income_type_fetch = true;
+  UtilityService.getTransactionSubTypeIncomes()
+    .then(({ data }) => {
+      incomeType.value = data.map<DropdownOption>((t) => ({
+        label: t.name?.toString() ?? '',
+        value: t.id.toString() ?? '',
+      }));
+    })
+    .catch((error) => {
+      showApiError(error);
+    })
+    .finally(() => {
+      loadings.value.income_type_fetch = false;
     });
 };
 </script>

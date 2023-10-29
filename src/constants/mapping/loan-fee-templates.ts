@@ -12,6 +12,7 @@ export function mapLoanFeeToLoanFeeSavePayload(loanFee: LoanFeeForm): LoanFeeSav
     credit_share_capital: loanFee.credit_share_capital,
     credit_revenue: loanFee.credit_revenue,
     show_to_report: loanFee.show_to_report,
+    transaction_sub_type_id: loanFee.transaction_sub_type_id,
   };
 
   return feeSavePayload;
@@ -28,6 +29,7 @@ export function mapLoanFeeSavePayloadToLoanFee(fee: LoanFeeTemplate): LoanFeeFor
     credit_share_capital: fee.credit_share_capital,
     credit_revenue: fee.credit_revenue,
     show_to_report: fee.show_to_report,
+    transaction_sub_type_id: fee.transaction_sub_type_id?.toString(),
   };
   return loanFeeForm;
 }

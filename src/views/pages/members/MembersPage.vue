@@ -16,7 +16,6 @@
           :paginator="true"
           :row-hover="true"
           :value="members"
-          class="p-datatable-gridlines"
           data-key="id"
           filter-display="menu"
           responsive-layout="scroll"
@@ -114,6 +113,7 @@
             header="Name"
             sort-field="first_name"
             style="min-width: 12rem"
+            class="white-space-nowrap"
             sortable
           >
           </Column>
@@ -121,7 +121,7 @@
           <Column
             field="email_address"
             header="Email Address"
-            style="min-width: 12rem"
+            class="white-space-nowrap"
             sortable
           >
           </Column>
@@ -129,18 +129,21 @@
           <Column
             field="gender"
             header="Gender"
-            style="min-width: 12rem"
+            class="white-space-nowrap"
             sortable
           >
+            <template #body="slotProps">
+              {{ capitalizeFirstLetter(slotProps.data.gender) }}
+            </template>
           </Column>
 
           <Column
             field="member_at"
             header="Joined"
-            style="min-width: 12rem"
+            class="white-space-nowrap"
           >
             <template #body="slotProps">
-              {{ dateFormat(slotProps.data.member_at, DATE_FORMAT) }}
+              {{ dateFormat(slotProps.data.member_at, DATE_FORMAT_DATE) }}
             </template>
           </Column>
 
@@ -167,6 +170,7 @@
             field="id"
             header="Action"
             align-frozen="right"
+            class="froze-right"
             style="min-width: 12rem"
             frozen
           >
@@ -205,8 +209,8 @@ import InputText from 'primevue/inputtext';
 import PageContentHeader from '@/components/PageContentHeader.vue';
 import useAlert from '@/composables/useAlert';
 import useTableParameters from '@/composables/useTableParameters';
-import { DATE_FORMAT } from '@/constants';
-import { dateFormat } from '@/helpers';
+import { DATE_FORMAT_DATE } from '@/constants';
+import { capitalizeFirstLetter, dateFormat } from '@/helpers';
 import Avatar from 'primevue/avatar';
 import Image from 'primevue/image';
 
@@ -255,8 +259,8 @@ const loadTable = (params?: Record<string, any>) => {
         members.value = res.data.data;
         paginate(res.data);
       })
-      .catch(() => {
-        showApiError();
+      .catch((error) => {
+        showApiError(error);
       })
       .finally(() => {
         loadings.value.table = false;

@@ -325,6 +325,32 @@
           </div>
         </div>
       </div>
+
+      <div class="col-12 lg:col-6 xl:col-3">
+        <div class="card mb-0 p-4">
+          <div class="flex justify-content-between">
+            <div
+              class="grid gap-2 w-full p-2"
+              v-if="loadings.reload"
+            >
+              <Skeleton />
+              <Skeleton />
+              <Skeleton />
+              <Skeleton />
+            </div>
+            <div v-else>
+              <Label
+                class="pb-3"
+                help-text="Loan amortization for collection which includes interest, penalties and principal amount."
+                >Total loans collection</Label
+              >
+              <div class="text-900 font-medium text-xl">
+                {{ formatCurrency(Number(counter.total_loans_collection ?? 0)) }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -372,6 +398,127 @@
       />
     </TabPanel>
   </TabView>
+
+  <p class="text-center p-5 font-bold">All Time Report</p>
+
+  <div class="grid">
+    <div class="col-12 lg:col-6 xl:col-3">
+      <div class="card mb-0 p-4">
+        <div class="flex justify-content-between">
+          <div
+            class="grid gap-2 w-full p-2"
+            v-if="loadings.reload"
+          >
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+          </div>
+          <div v-else>
+            <Label class="pb-3">Total released loan amount</Label>
+            <div class="text-900 font-medium text-xl">
+              {{ formatCurrency(Number(counter.all_time_total_loan_released_amount ?? 0)) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 lg:col-6 xl:col-3">
+      <div class="card mb-0 p-4">
+        <div class="flex justify-content-between">
+          <div
+            class="grid gap-2 w-full p-2"
+            v-if="loadings.reload"
+          >
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+          </div>
+          <div v-else>
+            <Label class="pb-3">Total loan interest amount</Label>
+            <div class="text-900 font-medium text-xl">
+              {{ formatCurrency(Number(counter.all_time_interest_loan_interest ?? 0)) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 lg:col-6 xl:col-3">
+      <div class="card mb-0 p-4">
+        <div class="flex justify-content-between">
+          <div
+            class="grid gap-2 w-full p-2"
+            v-if="loadings.reload"
+          >
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+          </div>
+          <div v-else>
+            <Label
+              class="pb-3"
+              help-text="Loan amortization for collection which includes interest, penalties and principal amount."
+              >Total unpaid loans</Label
+            >
+            <div class="text-900 font-medium text-xl">
+              {{ formatCurrency(Number(counter.all_time_total_loans_collection ?? 0)) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 lg:col-6 xl:col-3">
+      <div class="card mb-0 p-4">
+        <div class="flex justify-content-between">
+          <div
+            class="grid gap-2 w-full p-2"
+            v-if="loadings.reload"
+          >
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+          </div>
+          <div v-else>
+            <Label
+              class="pb-3"
+              help-text="Loan amortization collected which includes interest, penalties and principal amount."
+              >Total paid loans</Label
+            >
+            <div class="text-900 font-medium text-xl">
+              {{ formatCurrency(Number(counter.all_time_total_loans_collected ?? 0)) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 lg:col-6 xl:col-3">
+      <div class="card mb-0 p-4">
+        <div class="flex justify-content-between">
+          <div
+            class="grid gap-2 w-full p-2"
+            v-if="loadings.reload"
+          >
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+          </div>
+          <div v-else>
+            <Label class="pb-3">Total share capital amount</Label>
+            <div class="text-900 font-medium text-xl">
+              {{ formatCurrency(Number(counter.all_time_share_capital_total_amount ?? 0)) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import PageContentHeader from '@/components/PageContentHeader.vue';
@@ -421,6 +568,7 @@ const counter = ref<ReportCounterResponse>({
   total_share_capital_amount: 0,
   total_savings_account_amount: 0,
   total_expenses_amount: 0,
+  total_loans_collection: 0,
   total_all_fees: [],
   total_sub_types: [],
 });

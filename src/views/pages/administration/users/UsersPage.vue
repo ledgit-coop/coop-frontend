@@ -173,8 +173,8 @@ const loadTable = (params?: Record<string, any>) => {
         members.value = res.data.data;
         paginate(res.data);
       })
-      .catch(() => {
-        showApiError();
+      .catch((error) => {
+        showApiError(error);
       })
       .finally(() => {
         loadings.value.table = false;

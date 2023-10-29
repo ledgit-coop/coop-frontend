@@ -12,6 +12,7 @@ export interface ReportCounterResponse {
   total_collected_interest_amount?: number;
   total_collected_penalty_amount?: number;
   total_collected_amortization?: number;
+  total_loans_collection?: number;
 
   total_all_fees: {
     amount?: number;
@@ -21,6 +22,12 @@ export interface ReportCounterResponse {
     amount?: number;
     name?: string;
   }[];
+
+  all_time_total_loans_collection?: number;
+  all_time_share_capital_total_amount?: number;
+  all_time_total_loan_released_amount?: number;
+  all_time_interest_loan_interest?: number;
+  all_time_total_loans_collected?: number;
 }
 
 export interface CashFlowReport {

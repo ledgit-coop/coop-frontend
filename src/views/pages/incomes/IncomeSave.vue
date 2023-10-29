@@ -2,10 +2,9 @@
   <Dialog
     v-model:visible="showModal"
     modal
-    :header="isEditing ? 'Edit Loan Fee' : 'Add Loan Fee'"
-    :style="{ width: '40vw' }"
-    @show="handleShow"
-    @hide="emit('hide')"
+    :header="isEditing ? 'Edit Income' : 'Add Income'"
+    :style="{ width: '30vw' }"
+    @hide="handleHide"
   >
     <template v-if="loadings.fetch">
       <Skeleton class="mb-2 full-width"></Skeleton>
@@ -26,7 +25,7 @@
         class="mb-2 full-width"
       ></Skeleton>
     </template>
-    <LoanFeeSaveForm
+    <IncomeSaveForm
       v-else
       v-model="model.form"
     />
@@ -52,13 +51,16 @@
 import Dialog from 'primevue/dialog';
 import { computed, onMounted, ref, watch } from 'vue';
 import Button from 'primevue/button';
-import LoanFeeSaveForm from './components/LoanFeeSaveForm.vue';
-import type { LoanFeeForm } from '@/types/ui/loan-fee-templates';
-import LoanFeeTemplateService from '@/service/LoanFeeTemplateService';
-import { mapLoanFeeToLoanFeeSavePayload, mapLoanFeeSavePayloadToLoanFee } from '@/constants/mapping/loan-fee-templates';
 import useAlert from '@/composables/useAlert';
 import type { AxiosError } from 'axios';
+import type { TransactionForm } from '@/types/ui/transactions';
+import IncomeSaveForm from './components/IncomeSaveForm.vue';
+import IncomeService from '@/service/IncomeService';
+import { dateFormat } from '@/helpers';
+import { DATE_FORMAT_DB } from '@/constants';
 import useValidation from '@/composables/useValidation';
+import moment from 'moment';
+
 interface Props {
   visible: boolean;
   id?: number;
@@ -67,13 +69,14 @@ interface Props {
 const { showApiError, showSuccess, showError } = useAlert();
 const props = defineProps<Props>();
 const emit = defineEmits(['update:visible', 'updated', 'hide']);
-const model = ref<{ form: LoanFeeForm }>({ form: {} });
+const model = ref<{ form: TransactionForm }>({ form: {} });
 const showModal = ref(false);
 const loadings = ref({
   save: false,
   fetch: false,
 });
 const isEditing = computed(() => !!props.id);
+
 const { validation } = useValidation();
 
 onMounted(() => {
@@ -88,27 +91,33 @@ watch(
   () => props.visible,
   (value) => {
     showModal.value = value ?? false;
+
     if (value) {
       model.value.form = {};
-      if (props.id) loadFee();
+      validation.value?.$reset();
     }
+    if (props.id) loadIncome();
   }
 );
 
 const handleSaveClick = async () => {
-  await validation.value?.$validate();
-
+  validation.value?.$validate();
   if (validation.value?.$invalid) {
     showError('Please complete the required fields.');
     return;
   }
-
   loadings.value.save = true;
   try {
-    if (!isEditing.value) await LoanFeeTemplateService.store(mapLoanFeeToLoanFeeSavePayload(model.value.form));
-    else await LoanFeeTemplateService.update(props.id ?? 0, mapLoanFeeToLoanFeeSavePayload(model.value.form));
+    const payload = {
+      particular: model.value.form.particular?.toString() ?? '',
+      amount: model.value.form.amount,
+      date: dateFormat(model.value.form.transaction_date, DATE_FORMAT_DB),
+      transaction_sub_type_id: model.value.form.transaction_sub_type_id,
+    };
+    if (!isEditing.value) await IncomeService.store(payload);
+    else await IncomeService.update(props.id ?? 0, payload);
 
-    showSuccess('Loan fee successfully saved.');
+    showSuccess('Income successfully saved.');
     showModal.value = false;
     emit('updated');
   } catch (error) {
@@ -117,33 +126,22 @@ const handleSaveClick = async () => {
   loadings.value.save = false;
 };
 
-const loadFee = async () => {
+const loadIncome = async () => {
   loadings.value.fetch = true;
   try {
-    const { data } = await LoanFeeTemplateService.show(props.id ?? 0);
-    model.value.form = mapLoanFeeSavePayloadToLoanFee(data);
-    console.log(model.value.form);
+    const { data } = await IncomeService.show(props.id ?? 0);
+    model.value.form = {
+      particular: data.particular ?? '',
+      transaction_date: moment(data.transaction_date).toDate(),
+      amount: data.amount ?? 0,
+    };
   } catch (error) {
     showApiError(error as AxiosError);
   }
   loadings.value.fetch = false;
 };
 
-const handleShow = () => {
-  model.value.form = {
-    name: undefined,
-    fee: undefined,
-    fee_type: undefined,
-    fee_method: undefined,
-    enabled: undefined,
-
-    credit_revenue: undefined,
-    credit_share_capital: undefined,
-    credit_regular_savings: undefined,
-    show_to_report: undefined,
-
-    transaction_sub_type_id: undefined,
-  };
-  validation.value?.$reset();
+const handleHide = () => {
+  emit('hide');
 };
 </script>

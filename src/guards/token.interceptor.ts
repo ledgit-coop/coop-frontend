@@ -3,7 +3,7 @@ import apiClient from '@/http-common';
 import TokenService from '@/service/TokenService';
 import AuthService from '@/service/AuthService';
 
-import { RESPONSE_UNAUTHORIZED } from '@/constants';
+import { RESPONSE_UNAUTHORIZED, SERVICE_UNAVAILABLE } from '@/constants';
 
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import type { Store } from 'vuex';
@@ -14,8 +14,9 @@ const setup = (store: Store<any>) => {
     (config: AxiosRequestConfig) => {
       const token = TokenService.getAuthToken();
       const isLoggedIn = computed(() => store.getters('auth/token'));
-      if (config.headers && isLoggedIn) {
-        config.headers['Authorization'] = `Bearer ${token}`;
+      if (config.headers) {
+        if (isLoggedIn) config.headers['Authorization'] = `Bearer ${token}`;
+        config.headers['Accept'] = 'application/json';
       }
       return config as any;
     },
@@ -35,8 +36,10 @@ const setup = (store: Store<any>) => {
       // TODO: remove refreshTokenEnabled in the condition to enable refresh access token
       const refreshTokenEnabled = false;
       if (!API_PUBLIC_ROUTES.includes(originalConfig.url) && err.response) {
-        // Access Token was expired
-        if (err.response.status === RESPONSE_UNAUTHORIZED && !originalConfig._retry) {
+        if (err.response.status === SERVICE_UNAVAILABLE) {
+          store.commit('system/setIsMaintenance', true);
+        } else if (err.response.status === RESPONSE_UNAUTHORIZED && !originalConfig._retry) {
+          // Access Token was expired
           originalConfig._retry = true;
           if (refreshTokenEnabled) {
             try {

@@ -10,6 +10,12 @@
         id="product-name"
         v-model="data.form.name"
         type="text"
+        validate="name"
+        v-validation="validation"
+      />
+      <FieldErrorMessage
+        :validation="validation"
+        field="name"
       />
     </div>
 
@@ -47,6 +53,10 @@
           >
         </div>
       </div>
+      <FieldErrorMessage
+        :validation="validation"
+        field="fee_method"
+      />
     </div>
 
     <div class="field col-12">
@@ -63,6 +73,13 @@
         :placeholder="data.form.fee_method === LoanFeeMethod.FIX_AMOUNT ? 'Fee Amount' : 'Fee %'"
         v-model="data.form.fee"
         type="text"
+        validate="fee"
+        v-validation="validation"
+      />
+
+      <FieldErrorMessage
+        :validation="validation"
+        field="fee"
       />
     </div>
 
@@ -99,6 +116,10 @@
           >
         </div>
       </div>
+      <FieldErrorMessage
+        :validation="validation"
+        field="fee_type"
+      />
     </div>
 
     <div class="field col-12">
@@ -107,46 +128,51 @@
         for="fee-type"
         >Other Options</Label
       >
-      <div class="flex flex-column gap-3">
+
+      <div class="flex flex-wrap gap-3">
         <div class="flex align-items-center">
-          <Checkbox
-            inputId="credit-share-capital"
-            name="credit_share_capital"
-            binary
-            v-model="data.form.credit_share_capital"
+          <RadioButton
+            v-model="creditType"
+            inputId="share-capital"
+            name="credit_type"
+            value="share-capital"
           />
           <label
-            for="credit-share-capital"
+            for="share-capital"
             class="ml-2"
             >Credit To Share Capital</label
           >
         </div>
         <div class="flex align-items-center">
-          <Checkbox
-            inputId="credit-regular-savings"
-            name="credit_regular_savings"
-            binary
-            v-model="data.form.credit_regular_savings"
+          <RadioButton
+            v-model="creditType"
+            inputId="regular-savings"
+            name="credit_type"
+            value="regular-savings"
           />
           <label
-            for="credit-regular-savings"
+            for="egular-savings"
             class="ml-2"
             >Credit To Regular Savings</label
           >
         </div>
         <div class="flex align-items-center">
-          <Checkbox
-            inputId="credit-revenue"
-            name="credit_revenue"
-            binary
-            v-model="data.form.credit_revenue"
+          <RadioButton
+            v-model="creditType"
+            inputId="revenue"
+            name="credit_type"
+            value="revenue"
           />
           <label
-            for="credit-revenue"
+            for="revenue"
             class="ml-2"
             >Credit To Revenue</label
           >
         </div>
+      </div>
+
+      <div class="m-3"></div>
+      <div class="flex flex-column gap-3">
         <div class="flex align-items-center">
           <Checkbox
             inputId="show-to-report"
@@ -164,6 +190,33 @@
     </div>
 
     <div class="field col-12">
+      <Label
+        :required="data.form.credit_revenue"
+        for="fee"
+        help-text="Transaction type is not applicable to share capital and savings account"
+        >Transaction Type</Label
+      >
+      <Dropdown
+        showClear
+        filter
+        option-value="value"
+        option-label="label"
+        v-model="data.form.transaction_sub_type_id"
+        :loading="loadings.fetch_sub_type"
+        placeholder="Select Type of Transaction"
+        :options="subTypes"
+        validate="transaction_sub_type_id"
+        v-validation="validation"
+        :disabled="disableTransaction"
+      >
+      </Dropdown>
+      <FieldErrorMessage
+        :validation="validation"
+        field="transaction_sub_type_id"
+      />
+    </div>
+
+    <div class="field col-12">
       <Label required>Active</Label>
       <div class="flex flex-wrap gap-3">
         <InputSwitch v-model="data.form.enabled" />
@@ -175,24 +228,85 @@
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import Label from '@/components/Label.vue';
-import { onMounted, reactive, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import type { LoanFeeForm } from '@/types/ui/loan-fee-templates';
 import { LoanFeeMethod, LoanFeeType } from '@/constants/ui/loan-fee-templates';
 import InputSwitch from 'primevue/inputswitch';
+import Dropdown from 'primevue/dropdown';
+import type { DropdownOption } from '@/types/ui';
+import UtilityService from '@/service/UtilityService';
+import useAlert from '@/composables/useAlert';
+import { required, requiredIf } from '@vuelidate/validators';
+import useValidation from '@/composables/useValidation';
+import FieldErrorMessage from '@/components/FieldErrorMessage.vue';
+import { TransactionSubTypeTypes } from '@/constants/ui/transaction-types';
 
 interface Props {
   modelValue?: LoanFeeForm;
 }
 
+const subTypes = ref<DropdownOption[]>([]);
 const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue']);
 const data = reactive<{ form: LoanFeeForm }>({
   form: {},
 });
+const { showApiError } = useAlert();
+const loadings = ref({
+  fetch_sub_type: false,
+});
+
+const creditType = ref<any>(undefined);
+const form = computed(() => data.form);
+
+const rules = computed(() => ({
+  name: { required },
+  fee: { required },
+  fee_type: { required },
+  fee_method: { required },
+  transaction_sub_type_id: {
+    requiredIf: requiredIf((form.value.credit_revenue ?? false) && disableTransaction.value),
+  },
+}));
+
+const disableTransaction = computed(
+  () => (form.value.credit_share_capital ?? false) || (form.value.credit_regular_savings ?? false)
+);
+const { validation } = useValidation({
+  rules,
+  model: form,
+});
 
 onMounted(() => {
   data.form = props.modelValue ?? {};
+  setCreditType();
+  loadIncomeSubTypes();
 });
+
+watch(
+  () => creditType.value,
+  (value) => {
+    data.form.credit_revenue = false;
+    data.form.credit_regular_savings = false;
+    data.form.credit_share_capital = false;
+
+    switch (value) {
+      case 'share-capital':
+        data.form.credit_share_capital = true;
+
+        break;
+      case 'revenue':
+        data.form.credit_revenue = true;
+        break;
+
+      case 'regular-savings':
+        data.form.credit_regular_savings = true;
+
+        break;
+    }
+    handleDisableTransaction();
+  }
+);
 
 watch(
   () => data.form,
@@ -208,9 +322,39 @@ watch(
   () => props.modelValue,
   (value) => {
     data.form = value ?? {};
+    setCreditType();
   },
   {
     deep: true,
   }
 );
+
+const setCreditType = () => {
+  if (data.form?.credit_regular_savings) creditType.value = 'regular-savings';
+  else if (data.form?.credit_share_capital) creditType.value = 'share-capital';
+  else if (data.form?.credit_revenue) creditType.value = 'revenue';
+};
+
+const loadIncomeSubTypes = () => {
+  loadings.value.fetch_sub_type = true;
+  UtilityService.getTransactionSubTypes([TransactionSubTypeTypes.LIABILITIES, TransactionSubTypeTypes.REVENUE])
+    .then(({ data }) => {
+      subTypes.value = data.map<DropdownOption>((t) => ({
+        label: t.name?.toString() ?? '',
+        value: t.id.toString() ?? '',
+      }));
+    })
+    .catch((error) => {
+      showApiError(error);
+    })
+    .finally(() => {
+      loadings.value.fetch_sub_type = false;
+    });
+};
+
+const handleDisableTransaction = () => {
+  if (disableTransaction.value) {
+    data.form.transaction_sub_type_id = undefined;
+  }
+};
 </script>

@@ -230,8 +230,8 @@ const loadTable = (params?: LoanProductListPayload) => {
         loanProducts.value = res.data.data;
         paginate(res.data);
       })
-      .catch(() => {
-        showApiError();
+      .catch((error) => {
+        showApiError(error);
       })
       .finally(() => {
         loadings.value.table = false;

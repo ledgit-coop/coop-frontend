@@ -6,11 +6,27 @@
     filter
     option-value="value"
     option-label="label"
-    option-disabled="disabled"
     placeholder="Select Guarantor"
     :loading="loading"
     class="w-full"
   >
+    <template #option="slotProps">
+      <div
+        class="flex align-items-center p-2"
+        v-tooltip="slotProps.option.extra.twice ? 'The member has already been guaranteed twice!' : undefined"
+      >
+        <i
+          v-if="!slotProps.option.extra.twice"
+          class="pi pi-check pr-3 text-green-500"
+        ></i>
+        <i
+          v-else
+          class="pi pi-times pr-3 text-red-500"
+        ></i>
+
+        <div>{{ slotProps.option.label }}</div>
+      </div>
+    </template>
   </Dropdown>
 </template>
 <script setup lang="ts">

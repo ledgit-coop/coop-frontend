@@ -33,6 +33,7 @@ export const ROUTE_NAME_TRANSACTION_TYPES = 'transaction-types';
 export const ROUTE_LOAN_CALCULATOR = 'loan-calculator';
 
 export const ROUTE_NAME_EXPENSES = 'expenses';
+export const ROUTE_NAME_INCOMES = 'incomes';
 
 export const PUBLIC_ROUTES: Array<string> = [
   ROUTE_NAME_LOGIN,

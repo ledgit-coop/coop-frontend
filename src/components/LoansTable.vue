@@ -83,6 +83,7 @@
       <Column
         v-if="!hideColumns?.includes('applied_amount')"
         field="applied_amount"
+        class="white-space-nowrap"
         header="Loan Amount"
       >
         <template #body="slotProps">
@@ -93,6 +94,7 @@
         v-if="!hideColumns?.includes('principal_amount')"
         field="principal_amount"
         header="Approved Amount"
+        class="white-space-nowrap"
       >
         <template #body="slotProps">
           {{ formatCurrency(slotProps.data.principal_amount ?? 0) }}

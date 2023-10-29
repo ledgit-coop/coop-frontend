@@ -6,6 +6,7 @@ import {
   ROUTE_LOAN_CALCULATOR,
   ROUTE_NAME_ACCOUNTS,
   ROUTE_NAME_EXPENSES,
+  ROUTE_NAME_INCOMES,
   ROUTE_NAME_FORGOT_PASSWORD,
   ROUTE_NAME_LOANS,
   ROUTE_NAME_LOAN_FEES,
@@ -157,6 +158,14 @@ const router = createRouter({
           },
         },
 
+        {
+          path: '/incomes',
+          name: ROUTE_NAME_INCOMES,
+          component: () => import('@/views/pages/incomes/IncomesPage.vue'),
+          meta: {
+            title: 'Incomes',
+          },
+        },
         {
           path: '/admin',
           children: [

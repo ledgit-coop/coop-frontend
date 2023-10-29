@@ -81,6 +81,12 @@
             style="min-width: 12rem"
             sortable
           >
+            <template #body="slotProps">
+              <template v-if="slotProps.data.fee_method === LoanFeeMethod.PERCENTAGE">{{
+                `${slotProps.data.fee}%`
+              }}</template>
+              <template v-else>{{ formatNumber(slotProps.data.fee) }}</template>
+            </template>
           </Column>
 
           <Column
@@ -93,9 +99,9 @@
           </Column>
 
           <Column
-            field="fee_method"
-            header="Method"
-            sort-field="fee_method"
+            field="transaction_sub_type.name"
+            header="Transaction"
+            sort-field="transaction_sub_id"
             style="min-width: 12rem"
             sortable
           >
@@ -107,6 +113,9 @@
             style="min-width: 12rem"
             sortable
           >
+            <template #body="slotProps">
+              {{ dateFormat(slotProps.data.created_at, DATE_TIME_FORMAT) }}
+            </template>
           </Column>
 
           <Column
@@ -183,6 +192,9 @@ import useAlert from '@/composables/useAlert';
 import { useConfirm } from 'primevue/useconfirm';
 import type { AxiosError } from 'axios';
 import LoanFeeTemplateService from '@/service/LoanFeeTemplateService';
+import { DATE_TIME_FORMAT } from '@/constants';
+import { dateFormat, formatNumber } from '@/helpers';
+import { LoanFeeMethod } from '@/constants/ui/loan-fee-templates';
 
 interface ModalsVisibility {
   save_fee: boolean;
@@ -239,8 +251,8 @@ const loadTable = (params?: LoanFeeListPayload) => {
         loanFees.value = res.data.data;
         paginate(res.data);
       })
-      .catch(() => {
-        showApiError();
+      .catch((error) => {
+        showApiError(error);
       })
       .finally(() => {
         loadings.value.table = false;
