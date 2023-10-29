@@ -56,6 +56,18 @@
               <div class="grid gap-1 m-0 align-items-start ml-auto">
                 <Dropdown
                   showClear
+                  v-model="filters.others"
+                  :options="otherFilters"
+                  filter
+                  option-value="value"
+                  option-label="label"
+                  placeholder="Other Filter"
+                  style="min-width: 10rem"
+                  @change="loadTable(params)"
+                >
+                </Dropdown>
+                <Dropdown
+                  showClear
                   v-model="filters.status"
                   :options="statuses"
                   filter
@@ -203,7 +215,7 @@ import { ROUTE_NAME_MEMBERS_CREATE, ROUTE_NAME_MEMBERS_VIEW } from '@/constants/
 import MembersService from '@/service/MembersService';
 import type { MembersTable } from '@/types/ui/members';
 import Tag from 'primevue/tag';
-import { MemberStatus, MEMBER_STATUSES } from '@/constants/ui/members';
+import { MemberStatus, MEMBER_STATUSES, MEMBER_OTHER_FILTER } from '@/constants/ui/members';
 import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import PageContentHeader from '@/components/PageContentHeader.vue';
@@ -221,6 +233,7 @@ interface PageLoadings {
 const filters = ref({
   status: '',
   keyword: '',
+  others: undefined,
 });
 
 const table = ref();
@@ -234,6 +247,8 @@ const loadings = ref<PageLoadings>({
 const { showApiError } = useAlert();
 
 const statuses = ref(MEMBER_STATUSES);
+
+const otherFilters = ref(MEMBER_OTHER_FILTER);
 
 onMounted(async () => {
   loadTable();
@@ -277,6 +292,7 @@ const clearFilters = () => {
   filters.value = {
     status: '',
     keyword: '',
+    others: undefined,
   };
 };
 </script>

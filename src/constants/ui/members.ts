@@ -14,6 +14,13 @@ export const MEMBER_STATUSES: DropdownOption[] = [
   { label: 'Terminated', value: MemberStatus.TERMINATED },
 ];
 
+export const MEMBER_OTHER_FILTER: DropdownOption[] = [
+  { label: 'Not Paid Membership', value: 'not-paid-membership' },
+  { label: 'Not Attended Orientation', value: 'not-attended-orientation' },
+  { label: 'Already Paid Membership', value: 'already-paid-membership' },
+  { label: 'Already Attended Orientation', value: 'already-attended-orientation' },
+];
+
 export enum MemberLoanStatus {
   EVAULUATION = 'evaluation',
   PRE_APPROVED = 'pre-approved',

@@ -6,7 +6,11 @@
         severity="error"
         >Not attended PMES (Pre-membership Education Seminar).</InlineMessage
       >
-
+      <InlineMessage
+        v-if="member && !member?.paid_membership"
+        severity="warn"
+        >Membership fee not paid.</InlineMessage
+      >
       <div class="card">
         <div class="grid m-0 align-items-center">
           <Image
@@ -405,6 +409,7 @@ const employment_information = computed<InformationItem[]>(() => [
   { label: 'Employee No.', value: member.value?.employee_no ?? '' },
   { label: 'TIN No.', value: member.value?.tin_no ?? '' },
   { label: 'Email Address', value: member.value?.email_address ?? '' },
+  { label: 'Date Joined', value: dateFormat(member.value?.member_at, DATE_FORMAT_DATE) },
 ]);
 const address_info = computed<InformationItem[]>(() => [
   {

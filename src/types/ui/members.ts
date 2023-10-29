@@ -54,6 +54,7 @@ export interface Member extends MemberForm {
   };
   share_capital_account?: MemberAccount;
   savings_accounts: MemberAccount[];
+  paid_membership?: boolean;
 }
 
 export interface MemberAddress {
