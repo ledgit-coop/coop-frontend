@@ -33,4 +33,9 @@ export interface ProductSavePayload {
 
   pre_termination_panalty?: number | null;
   pre_termination_panalty_method?: string | null;
+
+  disbursement_transaction_sub_type_id: number | string;
+  principal_transaction_sub_type_id: number | string;
+  interest_transaction_sub_type_id: number | string;
+  penalty_transaction_sub_type_id: number | string;
 }

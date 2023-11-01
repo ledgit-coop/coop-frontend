@@ -5,7 +5,7 @@ export interface InformationItem {
 
 export interface DropdownOption {
   label: string;
-  value: string;
+  value: any;
   disabled?: boolean;
   extra?: any;
 }

@@ -60,6 +60,8 @@
     <LoanTerm v-model="data.form.loan_term" />
     <div class="p-2"></div>
     <LoanFeeForm v-model="data.form.loan_product_fees" />
+    <div class="p-2"></div>
+    <LoanAccountingForm v-model="data.form.loan_accounting" />
   </div>
 </template>
 <script setup lang="ts">
@@ -71,6 +73,7 @@ import Label from '@/components/Label.vue';
 import LoanFeeForm from '@/components/LoanFeeForm.vue';
 import { onMounted, reactive, watch } from 'vue';
 import type { LoanProductForm } from '@/types/ui/loan-products';
+import LoanAccountingForm from './LoanAccountingForm.vue';
 
 interface Props {
   modelValue?: LoanProductForm;

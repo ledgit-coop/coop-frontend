@@ -8,9 +8,17 @@ export interface LoanProductForm {
   max_principal_amount?: number | null;
   loan_term?: LoanTermForm;
   loan_product_fees?: LoanProductFee[];
+  loan_accounting?: LoanAccountingForm;
 }
 
-export interface LoanProduct {
+export interface LoanAccountingForm {
+  disbursement_transaction_sub_type_id?: number | string;
+  principal_transaction_sub_type_id?: number | string;
+  interest_transaction_sub_type_id?: number | string;
+  penalty_transaction_sub_type_id?: number | string;
+}
+
+export interface LoanProduct extends LoanAccountingForm {
   id: number;
   name: string;
   locked?: boolean;

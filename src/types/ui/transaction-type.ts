@@ -6,6 +6,7 @@ export interface TransactionSubTypeSaveForm {
 export interface TransactionSubType extends TransactionSubTypeSaveForm {
   id: number;
   key: string;
+  locked?: boolean;
   created_at: string; // Timestamp in ISO 8601 format
   updated_at: string; // Timestamp in ISO 8601 format
 }

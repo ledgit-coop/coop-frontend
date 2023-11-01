@@ -71,6 +71,19 @@
 
           <Column
             field="id"
+            class="wrap-text"
+          >
+            <template #body="slotProps">
+              <i
+                v-if="slotProps.data.locked"
+                class="pi pi-lock"
+                v-tooltip="'Locked'"
+                style="color: 'var(--primary-color)'"
+              ></i>
+            </template>
+          </Column>
+          <Column
+            field="id"
             header="ID"
           ></Column>
           <Column
@@ -92,6 +105,7 @@
 
           <Column
             field="id"
+            class="froze-right"
             header="Action"
             align-frozen="right"
             style="min-width: 12rem"
@@ -112,6 +126,7 @@
                   @click="handleEditClick(slotProps.data)"
                 />
                 <Button
+                  :disabled="slotProps.data.locked"
                   icon="pi pi-trash"
                   v-tooltip="'Delete'"
                   text

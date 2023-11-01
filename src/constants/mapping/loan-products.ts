@@ -1,5 +1,5 @@
 import type { ProductSavePayload } from '@/types/api/loan-product';
-import type { LoanProduct, LoanProductForm } from '@/types/ui/loan-products';
+import type { LoanAccountingForm, LoanProduct, LoanProductForm } from '@/types/ui/loan-products';
 import type { LoanTermForm } from '@/types/ui/loans';
 
 export function mapLoanProductToProductSavePayload(loanProduct: LoanProductForm): ProductSavePayload {
@@ -27,12 +27,17 @@ export function mapLoanProductToProductSavePayload(loanProduct: LoanProductForm)
 
     pre_termination_panalty: loanProduct.loan_term?.pre_termination_panalty,
     pre_termination_panalty_method: loanProduct.loan_term?.pre_termination_panalty_method,
+
+    disbursement_transaction_sub_type_id: loanProduct.loan_accounting?.disbursement_transaction_sub_type_id ?? 0,
+    principal_transaction_sub_type_id: loanProduct.loan_accounting?.principal_transaction_sub_type_id ?? 0,
+    interest_transaction_sub_type_id: loanProduct.loan_accounting?.interest_transaction_sub_type_id ?? 0,
+    penalty_transaction_sub_type_id: loanProduct.loan_accounting?.penalty_transaction_sub_type_id ?? 0,
   };
 
   return productSavePayload;
 }
 
-export function mapProductSavePayloadToLoanProduct(productSavePayload: ProductSavePayload): LoanProductForm {
+export function mapProductSavePayloadToLoanProduct(productSavePayload: LoanProduct): LoanProductForm {
   const loanTermForm: LoanTermForm = {
     disbursed_channel: productSavePayload.disbursed_channel,
     interest_method: productSavePayload.interest_method,
@@ -53,6 +58,14 @@ export function mapProductSavePayloadToLoanProduct(productSavePayload: ProductSa
     pre_termination_panalty: productSavePayload.pre_termination_panalty,
     pre_termination_panalty_method: productSavePayload.pre_termination_panalty_method,
   };
+
+  const accountingForm: LoanAccountingForm = {
+    disbursement_transaction_sub_type_id: productSavePayload.disbursement_transaction_sub_type_id ?? 0,
+    principal_transaction_sub_type_id: productSavePayload.principal_transaction_sub_type_id ?? 0,
+    interest_transaction_sub_type_id: productSavePayload.interest_transaction_sub_type_id ?? 0,
+    penalty_transaction_sub_type_id: productSavePayload.penalty_transaction_sub_type_id ?? 0,
+  };
+
   const loanProductForm: LoanProductForm = {
     name: productSavePayload.name ?? '',
     default_principal_amount: productSavePayload.default_principal_amount,
@@ -60,6 +73,7 @@ export function mapProductSavePayloadToLoanProduct(productSavePayload: ProductSa
     max_principal_amount: productSavePayload.max_principal_amount,
     loan_term: loanTermForm,
     loan_product_fees: productSavePayload.loan_product_fees ?? [],
+    loan_accounting: accountingForm,
   };
 
   return loanProductForm;

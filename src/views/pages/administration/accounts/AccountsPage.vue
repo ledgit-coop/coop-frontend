@@ -102,6 +102,7 @@
           <Column
             field="id"
             header="Action"
+            class="froze-right"
             align-frozen="right"
             style="min-width: 12rem"
             :exportable="false"
