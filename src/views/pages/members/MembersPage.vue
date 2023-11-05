@@ -289,7 +289,7 @@ const handleNavigateView = (event: any) => {
 };
 
 const handleExportClick = () => {
-  MembersService.exportMembersCSV(params)
+  MembersService.exportMembersCSV(params.value)
     .then((res) => {
       // create file link in browser's memory
       const href = URL.createObjectURL(res.data);
