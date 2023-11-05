@@ -118,3 +118,28 @@ export function createSlug(inputString: string): string {
 export function capitalizeFirstLetter(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
+
+export function exportToCSV(arrayOfObjects: any, fileName: string) {
+  // Convert array of objects to a CSV string
+  const csvData = arrayOfObjects
+    .map((item: any) =>
+      Object.values(item)
+        .map((value) => `"${String(value ?? '').replace(/"/g, '""')}"`)
+        .join(',')
+    )
+    .join('\n');
+
+  // Create a blob with the CSV data
+  const blob = new Blob([csvData], { type: 'text/csv' });
+
+  // Create a data URI to make it downloadable
+  const dataURI = URL.createObjectURL(blob);
+
+  // Create a download link
+  const downloadLink = document.createElement('a');
+  downloadLink.href = dataURI;
+  downloadLink.download = fileName;
+
+  // Trigger the download
+  downloadLink.click();
+}

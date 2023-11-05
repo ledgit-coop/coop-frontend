@@ -17,7 +17,7 @@ class MembersService {
   }
 
   exportMembersCSV(params?: Record<string, any>): AxiosPromise {
-    return apiClient.get('/api/members/export/csv', { params, responseType: 'blob' });
+    return apiClient.get('/api/members/export/csv', { params });
   }
 
   show(id: string): AxiosPromise<Member> {

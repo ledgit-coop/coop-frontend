@@ -225,6 +225,7 @@ import { DATE_FORMAT_DATE } from '@/constants';
 import { capitalizeFirstLetter, dateFormat } from '@/helpers';
 import Avatar from 'primevue/avatar';
 import Image from 'primevue/image';
+import { exportToCSV } from '@/helpers';
 
 interface PageLoadings {
   table: boolean;
@@ -253,13 +254,6 @@ const otherFilters = ref(MEMBER_OTHER_FILTER);
 onMounted(async () => {
   loadTable();
 });
-
-watch(
-  () => rows.value,
-  (row) => {
-    console.log(row);
-  }
-);
 
 watch(params, (params) => {
   loadTable(params);
@@ -291,19 +285,7 @@ const handleNavigateView = (event: any) => {
 const handleExportClick = () => {
   MembersService.exportMembersCSV(params.value)
     .then((res) => {
-      // create file link in browser's memory
-      const href = URL.createObjectURL(res.data);
-
-      // create "a" HTML element with href to file & click
-      const link = document.createElement('a');
-      link.href = href;
-      link.setAttribute('download', 'members.csv'); //or any other extension
-      document.body.appendChild(link);
-      link.click();
-
-      // clean up "a" element & remove ObjectURL
-      document.body.removeChild(link);
-      URL.revokeObjectURL(href);
+      exportToCSV(res.data, 'members');
     })
     .catch((error) => {
       showApiError(error);
