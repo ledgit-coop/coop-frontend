@@ -16,6 +16,10 @@ class MembersService {
     return apiClient.get('/api/members', { params });
   }
 
+  exportMembersCSV(params?: Record<string, any>): AxiosPromise {
+    return apiClient.get('/api/members/export/csv', { params, responseType: 'blob' });
+  }
+
   show(id: string): AxiosPromise<Member> {
     return apiClient.get(`${PATH}/${id}`);
   }

@@ -49,7 +49,7 @@
                   label="Export"
                   class="p-button-outlined mb-2"
                   size="small"
-                  @click="($refs as any).table.exportCSV()"
+                  @click="handleExportClick"
                 />
               </div>
 
@@ -286,6 +286,31 @@ const loadTable = (params?: Record<string, any>) => {
 const handleNavigateView = (event: any) => {
   console.log(event);
   router.push({ name: ROUTE_NAME_MEMBERS_VIEW, params: { id: event.data.id } });
+};
+
+const handleExportClick = () => {
+  MembersService.exportMembersCSV(params)
+    .then((res) => {
+      // create file link in browser's memory
+      const href = URL.createObjectURL(res.data);
+
+      // create "a" HTML element with href to file & click
+      const link = document.createElement('a');
+      link.href = href;
+      link.setAttribute('download', 'members.csv'); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+
+      // clean up "a" element & remove ObjectURL
+      document.body.removeChild(link);
+      URL.revokeObjectURL(href);
+    })
+    .catch((error) => {
+      showApiError(error);
+    })
+    .finally(() => {
+      loadings.value.table = false;
+    });
 };
 
 const clearFilters = () => {
