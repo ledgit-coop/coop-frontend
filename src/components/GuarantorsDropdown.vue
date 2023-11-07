@@ -36,6 +36,7 @@ import type { GuarantorDropdown } from '@/types/ui';
 import type { AxiosError } from 'axios';
 import Dropdown from 'primevue/dropdown';
 import { onMounted, ref, watch } from 'vue';
+import { debounce } from 'lodash';
 
 interface Props {
   modelValue?: number | string;
@@ -78,7 +79,7 @@ onMounted(() => {
   guarantor.value = props.modelValue ?? undefined;
 });
 
-const loadGuarantors = async () => {
+const loadGuarantors = debounce(async () => {
   loading.value = true;
   try {
     var { data: list } = await UtilityService.getGuarantors({ member_id: props.memberId });
@@ -87,5 +88,5 @@ const loadGuarantors = async () => {
     showApiError(error as AxiosError);
   }
   loading.value = false;
-};
+}, 1000);
 </script>
