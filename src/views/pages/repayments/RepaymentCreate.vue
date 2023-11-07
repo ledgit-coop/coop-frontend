@@ -6,16 +6,63 @@
     :style="{ width: '40vw' }"
   >
     <div class="grid p-fluid formgrid">
-      <div class="field col-12">
-        <Label for="name">Due Amount</Label>
-        <InputNumber
-          :minFractionDigits="2"
-          :maxFractionDigits="3"
-          id="lastname2"
-          type="text"
-          :model-value="dueAmount"
-          readonly
-        />
+      <div class="field col-12 mb-5">
+        <Label class="mb-3">Choose Amount To Pay</Label>
+        <div class="flex flex-wrap gap-3 flex-column pl-3">
+          <div class="flex align-items-center">
+            <RadioButton
+              v-model="amountPaidChoice"
+              inputId="choice-amount"
+              name="choice_amount"
+              :value="overdueAmount"
+            />
+            <label
+              for="choice-amount"
+              class="ml-2 text-red-500"
+              >{{ formatNumber(overdueAmount ?? 0) }} - Over-Due Amount</label
+            >
+          </div>
+
+          <div class="flex align-items-center">
+            <RadioButton
+              v-model="amountPaidChoice"
+              inputId="choice-amount"
+              name="choice_amount"
+              :value="dueAmount"
+            />
+            <label
+              for="choice-amount"
+              class="ml-2"
+              >{{ formatNumber(dueAmount ?? 0) }} - Total Due Amount</label
+            >
+          </div>
+          <div class="flex align-items-center">
+            <RadioButton
+              v-model="amountPaidChoice"
+              inputId="ingredient2"
+              name="choice_amount"
+              :value="outstandingAmount"
+            />
+            <label
+              for="ingredient2"
+              class="ml-2"
+              >{{ formatNumber(outstandingAmount ?? 0) }} - Total Outstanding Amount</label
+            >
+          </div>
+          <div class="flex align-items-center">
+            <RadioButton
+              v-model="amountPaidChoice"
+              inputId="ingredient3"
+              name="choice_amount"
+              :value="0"
+            />
+            <label
+              for="ingredient3"
+              class="ml-2"
+              >Other Amount</label
+            >
+          </div>
+        </div>
       </div>
 
       <div class="field col-12">
@@ -209,23 +256,28 @@ import type { AxiosError } from 'axios';
 import Calendar from 'primevue/calendar';
 import moment from 'moment';
 import { DATE_FORMAT_DB } from '@/constants';
+import RadioButton from 'primevue/radiobutton';
+import { formatNumber } from '@/helpers';
 
 interface Props {
   visible: boolean;
   dueAmount?: number;
+  overdueAmount?: number;
+  outstandingAmount?: number;
   scheduleId?: string | number;
 }
 
 const { showApiError, showError, showSuccess } = useAlert();
 const props = defineProps<Props>();
 const emit = defineEmits(['update:visible', 'updated']);
-const model = reactive({
+const model = reactive<any>({
   amount_paid: undefined,
   payment_remarks: undefined,
   payment_reference: undefined,
   payment_channel: undefined,
   payment_date: undefined,
 });
+const amountPaidChoice = ref(0);
 const showModal = ref(false);
 const loadings = ref({
   save: false,
@@ -250,12 +302,23 @@ onMounted(() => {
 watch(showModal, (value) => {
   emit('update:visible', value);
   reset();
+  if (value) {
+    model.amount_paid = props.dueAmount;
+    amountPaidChoice.value = props.dueAmount ?? 0;
+  }
 });
 
 watch(
   () => props.visible,
   (value) => {
     showModal.value = value ?? false;
+  }
+);
+
+watch(
+  () => amountPaidChoice.value,
+  (value) => {
+    model.amount_paid = Number(value ?? 0);
   }
 );
 

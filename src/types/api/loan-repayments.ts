@@ -1,7 +1,11 @@
-import type { MemberLoanSchedule } from '../ui/members';
+import type { Loan } from '../ui/loans';
 
+export interface LoanRepayment extends Loan {
+  due_date?: string;
+  has_overdue?: boolean;
+}
 export interface ListLoanRepaymentResponse {
-  data: MemberLoanSchedule[];
+  data: LoanRepayment[];
 }
 
 export interface LoanRepaymentPayload {

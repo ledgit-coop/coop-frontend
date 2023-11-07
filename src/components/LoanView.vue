@@ -9,7 +9,7 @@
   >
     <LoanStatus :status="loan?.status" />
 
-    <TabView>
+    <TabView :active-index="activeIndex">
       <TabPanel
         :disabled="loadings.fetching"
         header="Loan Information"
@@ -357,6 +357,7 @@ interface Props {
   visible: boolean;
   loanId?: string | number;
   disableMember?: boolean;
+  tabView?: 'info' | 'amortization' | 'agreement' | 'logs';
 }
 
 const agreementFrame = ref();
@@ -364,6 +365,7 @@ const props = defineProps<Props>();
 const emit = defineEmits(['update:visible', 'hide']);
 const showModal = ref(false);
 const loan = ref<Loan>();
+const activeIndex = ref(0);
 const schedules = ref<MemberLoanSchedule[]>([]);
 const basic_information_1 = computed<InformationItem[]>(() => [
   { label: 'Member', value: loan.value?.member?.full_name ?? '' },
@@ -393,6 +395,7 @@ const basic_information_3 = computed<InformationItem[]>(() => [
   { label: 'Loan Purpose', value: loan.value?.loan_purpose ?? '' },
   { label: 'Account', value: loan.value?.member_account?.account?.name ?? '' },
 ]);
+
 const basic_information_2 = computed<InformationItem[]>(() => [
   { label: 'Applied Date', value: loan.value?.applied_date ?? '' },
   { label: 'Released Date', value: loan.value?.released_date ?? '' },
@@ -436,6 +439,32 @@ onMounted(() => {
 watch(showModal, (value) => {
   emit('update:visible', value);
 });
+
+watch(
+  () => props.tabView,
+  (value) => {
+    switch (value) {
+      case 'agreement':
+        activeIndex.value = 2;
+        break;
+
+      case 'amortization':
+        activeIndex.value = 1;
+        break;
+
+      case 'info':
+        activeIndex.value = 0;
+        break;
+
+      case 'logs':
+        activeIndex.value = 3;
+        break;
+      default:
+        activeIndex.value = 0;
+        break;
+    }
+  }
+);
 
 watch(
   () => props.visible,

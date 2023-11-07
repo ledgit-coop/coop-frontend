@@ -70,7 +70,11 @@
           />
 
           <div class="p-2"></div>
-          <LoanFeeForm v-model="data.fees" />
+          <LoanFeeForm
+            v-model="data.fees"
+            :has-savings="true"
+            :has-share-cap="true"
+          />
           <div class="p-2"></div>
         </div>
         <Button
