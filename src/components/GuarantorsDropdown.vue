@@ -49,7 +49,9 @@ const guarantors = ref<GuarantorDropdown[]>([]);
 const guarantor = ref<string | number>();
 const loading = ref(false);
 
-onMounted(() => {});
+onMounted(() => {
+  if (!props.memberId) loadGuarantors();
+});
 
 watch(
   () => guarantor.value,

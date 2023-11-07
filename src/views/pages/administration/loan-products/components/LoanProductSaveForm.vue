@@ -59,7 +59,11 @@
 
     <LoanTerm v-model="data.form.loan_term" />
     <div class="p-2"></div>
-    <LoanFeeForm v-model="data.form.loan_product_fees" />
+    <LoanFeeForm
+      v-model="data.form.loan_product_fees"
+      :has-savings="true"
+      :has-share-cap="true"
+    />
     <div class="p-2"></div>
     <LoanAccountingForm v-model="data.form.loan_accounting" />
   </div>
