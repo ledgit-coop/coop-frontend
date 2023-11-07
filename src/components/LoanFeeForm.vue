@@ -151,7 +151,7 @@ watch(
 const updateData = () => {
   for (let index = 0; index < feeTemplates.value.length; index++) {
     const element = feeTemplates.value[index];
-    const ou = props.modelValue?.find((r) => r.loan_fee_template_id === element.fee_id);
+    const ou = props.modelValue?.find((r) => Number(r.loan_fee_template_id) === Number(element.fee_id));
 
     if (ou) data.form[index].value = ou.fee;
     else data.form[index].value = element.value;
