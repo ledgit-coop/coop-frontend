@@ -28,6 +28,7 @@ export interface ReportCounterResponse {
   all_time_total_loan_released_amount?: number;
   all_time_interest_loan_interest?: number;
   all_time_total_loans_collected?: number;
+  all_time_total_expenses_amount?: number;
 }
 
 export interface CashFlowReport {
