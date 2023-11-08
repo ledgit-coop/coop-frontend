@@ -67,6 +67,8 @@
         :minFractionDigits="2"
         :maxFractionDigits="3"
         id="amount"
+        mode="currency"
+        currency="PHP"
         input-id="locale-user"
         v-validation="validation"
         validate="amount"

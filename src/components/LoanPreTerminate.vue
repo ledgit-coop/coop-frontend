@@ -12,6 +12,8 @@
           :minFractionDigits="2"
           :maxFractionDigits="3"
           id="amount"
+          mode="currency"
+          currency="PHP"
           validate="amount"
           v-model="data.form.amount"
           v-validation="validation"

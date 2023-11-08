@@ -14,6 +14,8 @@
           :minFractionDigits="2"
           :maxFractionDigits="3"
           show-buttons
+          mode="currency"
+          currency="PHP"
           id="approved-amount"
           validate="approved_amount"
           v-model="approvedAmount"

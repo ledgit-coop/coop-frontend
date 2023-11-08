@@ -140,6 +140,10 @@
           table-style="min-width: 50rem"
           scrollable
           :loading="loadings.fetch_schedule"
+          v-model:editingRows="editingRows"
+          editMode="row"
+          dataKey="id"
+          @row-edit-save="onRowEditSave"
         >
           <template #header>
             <div class="flex justify-content-between flex-column sm:flex-row">
@@ -170,6 +174,17 @@
             <template #body="slotProps">
               {{ dateFormat(slotProps.data.due_date, DATE_FORMAT_DATE) }}
             </template>
+
+            <template #editor="{ data, field }">
+              <Calendar
+                date-format="yy-mm-dd"
+                mask="true"
+                id="due-date"
+                v-model="data[field]"
+                showButtonBar
+                show-icon
+              />
+            </template>
           </Column>
           <Column
             field="principal_amount"
@@ -177,6 +192,15 @@
           >
             <template #body="slotProps">
               {{ formatNumber(slotProps.data.principal_amount) }}
+            </template>
+
+            <template #editor="{ data, field }">
+              <InputNumber
+                v-model="data[field]"
+                mode="currency"
+                currency="PHP"
+                locale="en-US"
+              />
             </template>
           </Column>
 
@@ -187,6 +211,15 @@
             <template #body="slotProps">
               {{ formatNumber(slotProps.data.interest_amount) }}
             </template>
+
+            <template #editor="{ data, field }">
+              <InputNumber
+                v-model="data[field]"
+                mode="currency"
+                currency="PHP"
+                locale="en-US"
+              />
+            </template>
           </Column>
 
           <Column
@@ -196,14 +229,14 @@
             <template #body="slotProps">
               {{ formatNumber(slotProps.data.penalty_amount) }}
             </template>
-          </Column>
 
-          <Column
-            field="fee_amount"
-            header="Fees"
-          >
-            <template #body="slotProps">
-              {{ formatNumber(slotProps.data.fee_amount) }}
+            <template #editor="{ data, field }">
+              <InputNumber
+                v-model="data[field]"
+                mode="currency"
+                currency="PHP"
+                locale="en-US"
+              />
             </template>
           </Column>
 
@@ -232,7 +265,22 @@
             <template #body="slotProps">
               {{ formatNumber(slotProps.data.amount_paid) }}
             </template>
+
+            <template #editor="{ data, field }">
+              <InputNumber
+                v-model="data[field]"
+                mode="currency"
+                currency="PHP"
+                locale="en-US"
+              />
+            </template>
           </Column>
+
+          <Column
+            :rowEditor="true"
+            style="width: 10%; min-width: 8rem"
+            bodyStyle="text-align:center"
+          ></Column>
 
           <ColumnGroup type="footer">
             <Row>
@@ -248,7 +296,7 @@
 
               <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.fee_amount ?? 0), 0) ?? 0)" />
               <Column
-                :colspan="3"
+                :colspan="4"
                 :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.due_amount ?? 0), 0) ?? 0)"
               />
             </Row>
@@ -347,11 +395,13 @@ import TabPanel from 'primevue/tabpanel';
 import LoanSummary from './LoanSummary.vue';
 import { type LoanSummaryTable } from '@/types/ui/loans';
 import { LogModules } from '@/constants/ui/logs';
-import { DATE_FORMAT_DATE } from '@/constants';
+import { DATE_FORMAT_DATE, DATE_FORMAT_DB } from '@/constants';
 import Skeleton from 'primevue/skeleton';
 
 // @ts-ignore
 import html2pdf from 'html2pdf.js';
+import moment from 'moment';
+import { useConfirm } from 'primevue/useconfirm';
 
 interface Props {
   visible: boolean;
@@ -359,13 +409,14 @@ interface Props {
   disableMember?: boolean;
   tabView?: 'info' | 'amortization' | 'agreement' | 'logs';
 }
-
+const confirm = useConfirm();
 const agreementFrame = ref();
 const props = defineProps<Props>();
 const emit = defineEmits(['update:visible', 'hide']);
 const showModal = ref(false);
 const loan = ref<Loan>();
 const activeIndex = ref(0);
+const editingRows = ref<any>([]);
 const schedules = ref<MemberLoanSchedule[]>([]);
 const basic_information_1 = computed<InformationItem[]>(() => [
   { label: 'Member', value: loan.value?.member?.full_name ?? '' },
@@ -477,6 +528,36 @@ watch(
     }
   }
 );
+
+const onRowEditSave = (event: any) => {
+  if (event.newData) {
+    confirm.require({
+      message:
+        'Please ensure that any modifications made to the loan amortization schedule are accurately mirrored in the loan-related accounts. Kindly confirm your understanding of this requirement?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptClass: 'p-button-warning',
+
+      accept: () => {
+        const data = event.newData;
+        LoanService.updateSchedule(data.id, {
+          due_date: moment(data.due_date).format(DATE_FORMAT_DB),
+          principal_amount: data.principal_amount,
+          interest_amount: data.interest_amount,
+          penalty_amount: data.penalty_amount,
+          amount_paid: data.amount_paid,
+        })
+          .then(({ data }) => {
+            schedules.value[event.index] = data;
+            schedules.value[event.index].due_amount = data.due_amount;
+          })
+          .catch((error) => {
+            showApiError(error);
+          });
+      },
+    });
+  }
+};
 
 const loadLoan = async () => {
   loadings.value.fetching = true;

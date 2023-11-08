@@ -73,3 +73,11 @@ export interface LoanCalculatorRequest {
     fee?: number;
   }[];
 }
+
+export interface UpdateLoanSchedulePayload {
+  due_date?: string;
+  principal_amount?: number;
+  interest_amount?: number;
+  penalty_amount?: number;
+  amount_paid?: number;
+}

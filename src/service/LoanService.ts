@@ -1,4 +1,9 @@
-import type { ListLoanResponse, LoanApplicationPayload, LoanListPayload } from '@/types/api/loans';
+import type {
+  ListLoanResponse,
+  LoanApplicationPayload,
+  LoanListPayload,
+  UpdateLoanSchedulePayload,
+} from '@/types/api/loans';
 import type { AxiosPromise } from 'axios';
 import apiClient from '@/http-common';
 import type { Loan } from '@/types/ui/loans';
@@ -41,6 +46,10 @@ class LoanService {
 
   downloadLink(id: number, params: Record<string, any>): AxiosPromise {
     return apiClient.get(`${PATH}/download/${id}`, { params });
+  }
+
+  updateSchedule(schedule_id: number, payload: UpdateLoanSchedulePayload): AxiosPromise<MemberLoanSchedule> {
+    return apiClient.post(`${PATH}/schedule/${schedule_id}`, payload);
   }
 }
 
