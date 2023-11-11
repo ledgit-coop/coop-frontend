@@ -224,7 +224,7 @@ const handleDeleteClick = () => {
     accept: async () => {
       try {
         await LoanService.destroy(props.loan?.id ?? 0);
-        showSuccess('Loan successfully added.');
+        showSuccess('Loan successfully deleted.');
         emit('updated');
       } catch (error) {
         showApiError(error as AxiosError);
