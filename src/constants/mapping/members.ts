@@ -23,6 +23,16 @@ export function mapMemberFormToPostMemberPayload(memberForm: MemberForm): PostMe
     mobile_number: memberForm.mobile_number ?? '',
     telephone_number: memberForm.telephone_number ?? '',
     oriented: memberForm.oriented ?? false,
+
+    paid_membership: memberForm.paid_membership ?? false,
+    record_membership_payment: memberForm.record_membership_payment ?? false,
+    record_orientation_fee: memberForm.record_orientation_fee ?? false,
+    orientation_date: memberForm.orientation_date
+      ? moment(memberForm.orientation_date).format(DATE_FORMAT_DB)
+      : undefined,
+    membership_fee_amount: memberForm.membership_fee_amount ?? undefined,
+    orientation_fee_amount: memberForm.orientation_fee_amount ?? undefined,
+
     profile_picture_url: memberForm.profile_picture_url,
     in_case_emergency_address: memberForm.in_case_emergency_address,
     in_case_emergency_contact: memberForm.in_case_emergency_contact,

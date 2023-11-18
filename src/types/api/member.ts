@@ -19,6 +19,14 @@ export interface PostMemberPayload {
   email_address?: string;
   member_at: string; // Assuming a date string format
   oriented?: boolean;
+
+  paid_membership?: boolean;
+  record_membership_payment?: boolean;
+  record_orientation_fee?: boolean;
+  orientation_date?: string;
+  membership_fee_amount?: number;
+  orientation_fee_amount?: number;
+
   mobile_number?: string;
   telephone_number?: string;
   profile_picture_url?: string;

@@ -443,7 +443,7 @@ const spouse_information = computed<InformationItem[]>(() => [
 const incase_emergency_information = computed<InformationItem[]>(() => [
   {
     label: 'Name',
-    value: member.value?.in_case_emergency_contact ?? '',
+    value: member.value?.in_case_emergency_person ?? '',
   },
   { label: 'Address', value: member.value?.in_case_emergency_address ?? '' },
   { label: 'Contact', value: member.value?.in_case_emergency_contact ?? '' },

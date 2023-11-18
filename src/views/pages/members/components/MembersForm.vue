@@ -581,21 +581,6 @@
           :validation="validation"
           field="member_at"
         />
-
-        <div class="flex align-items-center pt-3">
-          <Checkbox
-            inputId="oriented"
-            name="oriented"
-            binary
-            v-model="data.form.oriented"
-          />
-          <label
-            for="ingredient1"
-            class="ml-2"
-          >
-            Done PMES?
-          </label>
-        </div>
       </div>
     </div>
 

@@ -16,7 +16,6 @@ export interface MemberForm {
   tin_no?: string | null;
   email_address?: string | null;
   member_at?: string;
-  oriented?: boolean;
   gender?: string;
   telephone_number?: string;
   mobile_number?: string;
@@ -33,6 +32,15 @@ export interface MemberForm {
   mother: MemberRelatedPerson;
   spouse: MemberRelatedPerson;
   profile_picture_url?: string;
+
+  oriented?: boolean;
+  paid_membership?: boolean;
+  record_membership_payment?: boolean;
+  record_orientation_fee?: boolean;
+
+  membership_fee_amount?: number;
+  orientation_fee_amount?: number;
+  orientation_date?: string;
 }
 
 export interface Member extends MemberForm {
