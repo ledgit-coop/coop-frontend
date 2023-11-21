@@ -141,6 +141,7 @@ import FieldErrorMessage from './FieldErrorMessage.vue';
 import Label from './Label.vue';
 import { ActionTransactionType } from '@/constants/ui/transactions';
 import { AccountType } from '@/constants/ui/accounts';
+import InputText from 'primevue/inputtext';
 
 interface Props {
   memberId?: string | number;

@@ -19,6 +19,8 @@ export const MEMBER_OTHER_FILTER: DropdownOption[] = [
   { label: 'Not Attended Orientation', value: 'not-attended-orientation' },
   { label: 'Already Paid Membership', value: 'already-paid-membership' },
   { label: 'Already Attended Orientation', value: 'already-attended-orientation' },
+  { label: 'Guarantor Twice', value: 'guarantor-twice' },
+  { label: 'Guarantor Once', value: 'guarantor-once' },
 ];
 
 export enum MemberLoanStatus {

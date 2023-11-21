@@ -1,4 +1,14 @@
 <template>
+  <div class="flex col-12">
+    <Button
+      icon="pi pi-refresh"
+      class="white-space-nowrap p-0 ml-auto"
+      link
+      label="Refresh"
+      @click="loadTable(params)"
+    />
+  </div>
+
   <template v-if="loansWidget.length > 0">
     <MembersLoanWidget
       v-if="loansWidget.length > 0"
@@ -76,6 +86,7 @@ import LoanActions from '@/components/LoanActions.vue';
 import UtilityService from '@/service/UtilityService';
 import type { DropdownOption } from '@/types/ui';
 import { generateYearListDropdown } from '@/helpers';
+import Button from 'primevue/button';
 
 interface Props {
   member?: Member;

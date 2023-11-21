@@ -1,4 +1,14 @@
 <template>
+  <div class="flex col-12">
+    <Button
+      icon="pi pi-refresh"
+      class="white-space-nowrap p-0 ml-auto"
+      link
+      label="Refresh"
+      @click="loadhShareCapitalTransactions"
+    />
+  </div>
+
   <div class="card mb-0">
     <Skeleton
       v-if="!props.member"
@@ -99,6 +109,7 @@ import { dateFormat, generateYearListDropdown } from '@/helpers';
 import type { AccountTransaction } from '@/types/ui/accounts';
 import type { AxiosError } from 'axios';
 import useAlert from '@/composables/useAlert';
+import Button from 'primevue/button';
 
 interface Props {
   member?: Member;

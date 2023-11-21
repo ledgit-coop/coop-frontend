@@ -771,6 +771,7 @@ const getLoanProduct = async (id: number) => {
     const { data: product } = await LoanProductService.show(id);
     selectedLoanProduct.value = product;
     data.form.loan_term = mapLoanProductToTerms(product);
+    data.form.loan_fees = product.loan_product_fees;
   } catch (error) {
     showApiError(error as AxiosError);
   }

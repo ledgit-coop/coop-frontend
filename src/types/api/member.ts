@@ -1,6 +1,8 @@
 import type { AccountType } from '@/constants/ui/accounts';
 import type { Pagination } from '@/types/ui';
-import type { MembersTable } from '@/types/ui/members';
+import type { MemberAccount, MembersTable } from '@/types/ui/members';
+import type { Log } from '../ui/logs';
+import type { Loan } from '../ui/loans';
 
 export interface PostMemberPayload {
   member_number?: string;
@@ -95,4 +97,19 @@ export interface GetAccountTransactionsParams {
   member_account_id?: string;
   year?: string;
   type?: AccountType;
+}
+
+export interface GetMemberOverview {
+  recent_activities: Log[];
+  active_loans: { amount?: number; name: string; interest?: number; period?: string }[];
+  pending_loans: {
+    status?: string;
+    amount?: number;
+    name: string;
+    interest?: number;
+    period?: string;
+    applied_date?: string;
+  }[];
+  savings_accounts?: MemberAccount[];
+  gaurantee_loans?: Loan[];
 }

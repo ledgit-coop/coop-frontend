@@ -1,4 +1,14 @@
 <template>
+  <div class="flex col-12">
+    <Button
+      icon="pi pi-refresh"
+      class="white-space-nowrap p-0 ml-auto"
+      link
+      label="Refresh"
+      @click="loadTransactions"
+    />
+  </div>
+
   <MembersSavingsAccountWidget
     v-if="accountsWidget.length"
     :accounts="accountsWidget"
@@ -56,6 +66,7 @@ import useAlert from '@/composables/useAlert';
 import { dateFormat, generateYearListDropdown } from '@/helpers';
 import { DATE_FORMAT_DATE } from '@/constants';
 import { AccountType } from '@/constants/ui/accounts';
+import Button from 'primevue/button';
 
 interface Props {
   member?: Member;

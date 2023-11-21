@@ -149,14 +149,26 @@
             v-model:active-index="activeIndex"
             scrollable
           >
-            <TabPanel
-              :disabled="true"
-              header="Overview"
-            >
-              <MemberOverview />
+            <TabPanel header="Overview">
+              <MemberOverview
+                :member="member"
+                @on-click-view-loans="activeIndex = 4"
+                @on-click-view-share-cap="activeIndex = 2"
+                @on-click-view-accounts="activeIndex = 3"
+              />
             </TabPanel>
 
             <TabPanel header="Member Information">
+              <div class="flex col-12">
+                <Button
+                  icon="pi pi-refresh"
+                  class="white-space-nowrap p-0 ml-auto"
+                  link
+                  label="Refresh"
+                  @click="showMember"
+                />
+              </div>
+
               <div
                 class="flex flex-column gap-3"
                 v-if="activeIndex === 1"
@@ -329,7 +341,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import Avatar from 'primevue/avatar';
 import Information from '@components/Information.vue';
 import type { InformationItem } from '@/types/ui';
@@ -378,7 +390,7 @@ const loadings = ref({
 const confirm = useConfirm();
 const route = useRoute();
 const { showApiError, showSuccess } = useAlert();
-const activeIndex = ref(1);
+const activeIndex = ref(0);
 const member_id = computed(() => (route.params.id ?? '').toString());
 const member = ref<Member>();
 const modalsVisibility = ref<ModalsVisibility>({
@@ -481,6 +493,13 @@ const mother_information = computed<InformationItem[]>(() => [
 onMounted(() => {
   showMember();
 });
+
+watch(
+  () => route,
+  (value) => {
+    console.log(value);
+  }
+);
 
 const showMember = async () => {
   loadings.value.member_fetch = true;

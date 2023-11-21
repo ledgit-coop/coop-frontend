@@ -1,4 +1,14 @@
 <template>
+  <div class="flex col-12">
+    <Button
+      icon="pi pi-refresh"
+      class="white-space-nowrap p-0 ml-auto"
+      link
+      label="Refresh"
+      @click="loadAccounts()"
+    />
+  </div>
+
   <PageContentHeader
     title="Accounts"
     size="h5"

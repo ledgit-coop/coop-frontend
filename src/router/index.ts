@@ -20,6 +20,8 @@ import {
   ROUTE_NAME_RESET_PASSWORD,
   ROUTE_NAME_TRANSACTION_TYPES,
   ROUTE_NAME_USERS,
+  ROUTE_NAME_NET_SURPLUS,
+  ROUTE_NAME_SETTINGS,
 } from '@/constants/routes';
 
 const router = createRouter({
@@ -238,6 +240,30 @@ const router = createRouter({
                   },
                 },
               ],
+            },
+
+            {
+              path: 'net-surplus',
+              redirect: 'net-surplus/list',
+              children: [
+                {
+                  path: 'list',
+                  name: ROUTE_NAME_NET_SURPLUS,
+                  component: () => import('@/views/pages/administration/net-surplus/NetSurplusPage.vue'),
+                  meta: {
+                    title: 'Net Surplus',
+                  },
+                },
+              ],
+            },
+
+            {
+              path: 'settings',
+              name: ROUTE_NAME_SETTINGS,
+              component: () => import('@/views/pages/administration/settings/SettingsPage.vue'),
+              meta: {
+                title: 'Settings',
+              },
             },
           ],
         },

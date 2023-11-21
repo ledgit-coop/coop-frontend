@@ -17,11 +17,6 @@ const items = ref([
     command: () => {},
   },
   {
-    label: 'Settings',
-    icon: 'pi pi-fw pi-cog',
-    command: () => {},
-  },
-  {
     label: 'Sign out',
 
     icon: 'pi pi-sign-out',

@@ -11,8 +11,10 @@ import {
   ROUTE_NAME_LOAN_FEES,
   ROUTE_NAME_LOAN_PRODUCTS,
   ROUTE_NAME_MEMBERS,
+  ROUTE_NAME_NET_SURPLUS,
   ROUTE_NAME_REPAYMENTS,
   ROUTE_NAME_REPORTS,
+  ROUTE_NAME_SETTINGS,
   ROUTE_NAME_TRANSACTION_TYPES,
   ROUTE_NAME_USERS,
 } from '@/constants';
@@ -67,6 +69,16 @@ const model = ref<any>([
         label: 'Transaction Types',
         icon: 'pi pi-fw pi-book',
         to: { name: ROUTE_NAME_TRANSACTION_TYPES },
+      },
+      {
+        label: 'Net Surplus',
+        icon: 'pi pi-fw pi-book',
+        to: { name: ROUTE_NAME_NET_SURPLUS },
+      },
+      {
+        label: 'Settings',
+        icon: 'pi pi-fw pi-cog',
+        to: { name: ROUTE_NAME_SETTINGS },
       },
     ],
   },

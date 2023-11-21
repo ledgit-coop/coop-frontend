@@ -29,6 +29,8 @@ export const ROUTE_NAME_USERS = 'users';
 export const ROUTE_NAME_LOAN_FEES = 'loan-fees';
 export const ROUTE_NAME_ACCOUNTS = 'accounts';
 export const ROUTE_NAME_TRANSACTION_TYPES = 'transaction-types';
+export const ROUTE_NAME_NET_SURPLUS = 'net-surplus';
+export const ROUTE_NAME_SETTINGS = 'settings';
 
 export const ROUTE_LOAN_CALCULATOR = 'loan-calculator';
 
