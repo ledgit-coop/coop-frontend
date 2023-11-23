@@ -190,7 +190,7 @@ import type { AccountTransaction } from '@/types/ui/accounts';
 
 import PageContentHeader from '@components/PageContentHeader.vue';
 import Button from 'primevue/button';
-import { AccountStatus } from '@/constants/ui/accounts';
+import { AccountStatus, MemberAccountTransactionType } from '@/constants/ui/accounts';
 import AccountTransactionsTable from '@components/AccountTransactionsTable.vue';
 import Dialog from 'primevue/dialog';
 import MembersService from '@/service/MembersService';
@@ -290,22 +290,31 @@ const handleDeleteClick = (value: MemberAccount) => {
 };
 
 const handleTransactionDeleteClick = (value: AccountTransaction) => {
-  if (!value.posted) {
-    confirm.require({
-      message: 'Are you sure you want to delete the transaction?',
-      header: 'Delete Transaction',
-      icon: 'pi pi-exclamation-triangle',
-      acceptClass: 'p-button-danger',
-      accept: async () => {
-        try {
-          await MembersService.deleteAccountTransaction(Number(value.id ?? 0));
-          showSuccess('Account transaction successfully deleted.');
-          handleGetTransactions();
-        } catch (error) {
-          showApiError(error as AxiosError);
-        }
-      },
-    });
+  let message = 'Are you sure you want to delete the transaction?';
+  if (value.posted && value.type !== MemberAccountTransactionType.LOAN_PAYMENT) {
+    message = 'The transaction is already posted are you sure you want to proceed?';
+  } else if (value.posted && value.type === MemberAccountTransactionType.LOAN_PAYMENT) {
+    message =
+      'The transaction is already posted are you sure you want to proceed? Please also make sure that you will reconcile the loan schedules.';
+  } else if (!value.posted && value.type === MemberAccountTransactionType.LOAN_PAYMENT) {
+    message =
+      'Please also make sure that you will reconcile the loan schedules before you proceed. Do you want to proceed?';
   }
+
+  confirm.require({
+    message,
+    header: 'Delete Transaction',
+    icon: 'pi pi-exclamation-triangle',
+    acceptClass: 'p-button-danger',
+    accept: async () => {
+      try {
+        await MembersService.deleteAccountTransaction(Number(value.id ?? 0));
+        showSuccess('Account transaction successfully deleted.');
+        handleGetTransactions();
+      } catch (error) {
+        showApiError(error as AxiosError);
+      }
+    },
+  });
 };
 </script>

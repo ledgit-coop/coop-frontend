@@ -123,7 +123,6 @@
             v-tooltip="'Delete unposted transaction'"
             text
             raised
-            :disabled="slotProps.data.posted"
             rounded
             class="mr-2 mb-2"
             size="small"
