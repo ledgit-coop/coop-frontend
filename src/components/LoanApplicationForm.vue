@@ -594,6 +594,7 @@
       :has-savings="hasSavings"
       v-model="data.form.loan_fees"
       :has-share-cap="hasShareCap"
+      :fee-templates="loanFeeTemplates"
     />
   </div>
 
@@ -611,11 +612,11 @@ import type { AxiosError } from 'axios';
 import { SalaryRange } from '@/constants/ui/loans';
 import InputNumber from 'primevue/inputnumber';
 import Skeleton from 'primevue/skeleton';
-import type { LoanForm } from '@/types/ui/loans';
+import type { LoanFee, LoanForm } from '@/types/ui/loans';
 import LoanProductService from '@/service/LoanProductService';
 import InlineMessage from 'primevue/inlinemessage';
 import type { LoanProduct } from '@/types/ui/loan-products';
-import { formatNumber } from '@/helpers';
+import { deepClone, formatNumber } from '@/helpers';
 import { mapLoanProductToTerms } from '@/constants/mapping/loan-products';
 import useValidation from '@/composables/useValidation';
 import FieldErrorMessage from './FieldErrorMessage.vue';
@@ -624,6 +625,8 @@ import { required } from '@vuelidate/validators';
 import LoanFeeForm from './LoanFeeForm.vue';
 import { AccountType } from '@/constants/ui/accounts';
 import { CivilStatusDropdown } from '@/constants';
+import { mapLoanFeeTemplate, loanFeeToFormTemplate } from '@/constants/mapping/loan-fee-templates';
+import type { LoanFeeJSON, LoanFeeTemplate } from '@/types/ui/loan-fee-templates';
 
 interface Props {
   modelValue?: LoanForm;
@@ -655,6 +658,7 @@ const loanProducts = ref<DropdownOption[]>([]);
 const data = reactive<{ form: LoanForm }>({
   form: {},
 });
+const loanFeeTemplates = ref<LoanFeeJSON[]>([]);
 
 const form = computed(() => data.form);
 const { validation } = useValidation({
@@ -724,7 +728,23 @@ watch(
 watch(
   () => props.modelValue,
   (value) => {
+    // Set
     data.form = value ?? {};
+
+    // Clone the actual database record
+    const cp = deepClone<LoanFee[]>(data.form.loan_fees ?? []);
+
+    // Load template from saved loan data
+    if (cp && cp.length) {
+      const templates = mapLoanFeeTemplate(
+        cp.map((e) => e.loan_fee_template as LoanFeeTemplate).filter((r) => r) ?? [],
+        props.hasSavings,
+        props.hasShareCap
+      );
+      if (templates.length) {
+        loanFeeTemplates.value = loanFeeToFormTemplate(templates, cp);
+      }
+    }
   },
   {
     deep: true,
@@ -766,16 +786,24 @@ const getLoanProducts = async () => {
 };
 
 const getLoanProduct = async (id: number) => {
-  try {
-    loadings.value.loan_products = true;
-    const { data: product } = await LoanProductService.show(id);
-    selectedLoanProduct.value = product;
-    data.form.loan_term = mapLoanProductToTerms(product);
-    data.form.loan_fees = product.loan_product_fees;
-  } catch (error) {
-    showApiError(error as AxiosError);
-  }
-  loadings.value.loan_products = false;
+  loadings.value.loan_products = true;
+  LoanProductService.show(id)
+    .then(({ data: product }) => {
+      selectedLoanProduct.value = product;
+      data.form.loan_term = mapLoanProductToTerms(product);
+
+      if (product.loan_product_fees) {
+        loanFeeTemplates.value = mapLoanFeeTemplate(
+          product.loan_product_fees.map((e) => e.loan_fee_template as LoanFeeTemplate) ?? [],
+          props.hasSavings,
+          props.hasShareCap
+        );
+      }
+    })
+    .catch((error) => showApiError(error))
+    .finally(() => {
+      loadings.value.loan_products = false;
+    });
 };
 
 const handleTypeLoanClick = (id: any) => {

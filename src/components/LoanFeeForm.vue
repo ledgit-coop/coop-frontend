@@ -1,6 +1,5 @@
 <template>
   <Panel
-    v-if="feeTemplates.length"
     class="col-12"
     :collapsed="collapsed"
     header="Fees"
@@ -45,23 +44,22 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import type InputNumber from 'primevue/inputnumber';
-import UtilityService from '@/service/UtilityService';
 import type { LoanFeeJSON, LoanFeeTemplateForm } from '@/types/ui/loan-fee-templates';
 import { LoanFeeMethod } from '@/constants/ui/loan-fee-templates';
-import useAlert from '@/composables/useAlert';
-import type { AxiosError } from 'axios';
-import { deepClone } from '@/helpers';
 import Panel from 'primevue/panel';
 import Skeleton from 'primevue/skeleton';
 import Label from './Label.vue';
+import { debounce } from 'lodash';
+import { deepClone } from '@/helpers';
 
 interface Props {
   modelValue?: LoanFeeTemplateForm[];
   collapsed?: boolean;
   hasSavings?: boolean;
   hasShareCap?: boolean;
+  feeTemplates?: LoanFeeJSON[];
 }
 
 const props = defineProps<Props>();
@@ -76,12 +74,10 @@ const helpText = (fee: LoanFeeJSON) => {
 
   return undefined;
 };
-const feeTemplates = ref<LoanFeeJSON[]>([]);
 
 const loadings = ref({
   fetch: false,
 });
-const { showApiError } = useAlert();
 const placeholderFeeMethod = (fee_type?: string) => {
   if (fee_type === LoanFeeMethod.FIX_AMOUNT) return 'Fix Amount';
   else if (fee_type === LoanFeeMethod.PERCENTAGE) return '%';
@@ -89,41 +85,15 @@ const placeholderFeeMethod = (fee_type?: string) => {
   return '';
 };
 
-const loadFees = async () => {
-  loadings.value.fetch = true;
-  try {
-    const { data: fees } = await UtilityService.getLoanFees();
-    const mapped = fees.map(
-      (f) =>
-        ({
-          fee_id: f.id,
-          fee_name: f.name,
-          fee_method: f.fee_method,
-          fee_type: f.fee_type,
-          value:
-            (f.credit_regular_savings && !props.hasSavings) || (f.credit_share_capital && !props.hasShareCap)
-              ? 0
-              : f.fee,
-          credit_regular_savings: f.credit_regular_savings,
-          credit_share_capital: f.credit_share_capital,
-        } as LoanFeeJSON)
-    );
-
-    // @Note: need to use deep clone to unbind two objects
-    feeTemplates.value = deepClone<LoanFeeJSON[]>(mapped); // Keep original
-    data.form = deepClone<LoanFeeJSON[]>(mapped);
-
-    updateData();
-  } catch (error) {
-    showApiError(error as AxiosError);
+watch(
+  () => props.feeTemplates,
+  (mapped) => {
+    if (mapped) {
+      data.form = deepClone<LoanFeeJSON[]>(mapped);
+      updateData();
+    }
   }
-
-  loadings.value.fetch = false;
-};
-
-onMounted(() => {
-  loadFees();
-});
+);
 
 watch(
   () => data.form,
@@ -148,13 +118,16 @@ watch(
   }
 );
 
-const updateData = () => {
-  for (let index = 0; index < feeTemplates.value.length; index++) {
-    const element = feeTemplates.value[index];
-    const ou = props.modelValue?.find((r) => Number(r.loan_fee_template_id) === Number(element.fee_id));
+const updateData = debounce(() => {
+  if (props.feeTemplates)
+    for (let index = 0; index < props.feeTemplates.length; index++) {
+      const element = props.feeTemplates[index];
+      const ou = props.modelValue?.find((r) => Number(r.loan_fee_template_id) === Number(element.fee_id));
 
-    if (ou) data.form[index].value = ou.fee;
-    else data.form[index].value = element.value;
-  }
-};
+      if (element.credit_share_capital === true && !props.hasShareCap) data.form[index].value = 0;
+      else if (element.credit_regular_savings === true && !props.hasSavings) data.form[index].value = 0;
+      else if (ou) data.form[index].value = ou.fee;
+      else data.form[index].value = element.value;
+    }
+});
 </script>

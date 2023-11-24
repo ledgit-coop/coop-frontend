@@ -49,5 +49,5 @@ export interface LoanProduct extends LoanAccountingForm {
 }
 
 export interface LoanProductFee extends LoanFeeTemplateForm {
-  loan_product_template?: LoanFeeTemplate;
+  loan_fee_template?: LoanFeeTemplate;
 }

@@ -421,7 +421,7 @@ const schedules = ref<MemberLoanSchedule[]>([]);
 const basic_information_1 = computed<InformationItem[]>(() => [
   { label: 'Member', value: loan.value?.member?.full_name ?? '' },
   { label: 'Contact Number', value: loan.value?.contact_number ?? '' },
-  { label: 'Age', value: loan.value?.age.toString() ?? '' },
+  { label: 'Age', value: loan.value?.age?.toString() ?? '' },
   { label: 'Civil Status', value: loan.value?.civil_status ?? '' },
   { label: 'Present Address', value: loan.value?.present_address ?? '' },
   { label: 'Home Address', value: loan.value?.home_address ?? '' },

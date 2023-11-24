@@ -11,6 +11,7 @@
   <div class="grid">
     <div class="grid flex-column col-12 md:col-4 sm:col-6">
       <Panel
+        v-if="member?.share_capital"
         class="col-12"
         header="Share Capital"
       >

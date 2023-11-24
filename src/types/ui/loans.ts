@@ -132,7 +132,6 @@ export interface LoanTermForm {
 
 export interface LoanFee extends LoanFeeTemplateForm {
   amount?: number;
-  loan_product_template?: LoanFeeTemplate;
   loan_fee_template?: LoanFeeTemplate;
 }
 
