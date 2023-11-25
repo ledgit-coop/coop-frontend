@@ -160,7 +160,7 @@ const typeOfTransactions = computed<DropdownOption[]>(() => [
   { label: 'Withdraw Savings', value: ActionTransactionType.WithdrawSavings },
   { label: 'Pay Membership', value: ActionTransactionType.PayMembership },
   { label: 'Pay Orientation', value: ActionTransactionType.PayOrientation },
-
+  { label: 'Pay Mortuary', value: ActionTransactionType.PayMortuary },
   { label: 'Pay Amortization', value: ActionTransactionType.PayAmortization, disabled: true },
   { label: 'Pay Loan Pre-Termination Fee', value: ActionTransactionType.PayLoanPreTerminationFee, disabled: true },
 ]);

@@ -71,6 +71,7 @@
 
           <div class="p-2"></div>
           <LoanFeeForm
+            :fee-templates="loanFeeTemplates"
             v-model="data.fees"
             :has-savings="true"
             :has-share-cap="true"
@@ -115,10 +116,12 @@ import LoanSummary from '@/components/LoanSummary.vue';
 import LoanTerm from '@/components/LoanTerm.vue';
 import useAlert from '@/composables/useAlert';
 import { DATE_FORMAT_DB } from '@/constants';
+import { mapLoanFeeTemplate, loanProductFeeToTemplate } from '@/constants/mapping/loan-fee-templates';
 import { mapLoanProductToTerms } from '@/constants/mapping/loan-products';
 import LoanProductService from '@/service/LoanProductService';
 import UtilityService from '@/service/UtilityService';
 import type { DropdownOption } from '@/types/ui';
+import type { LoanFeeJSON, LoanFeeTemplate } from '@/types/ui/loan-fee-templates';
 import type { LoanProduct, LoanProductFee } from '@/types/ui/loan-products';
 import { type LoanCalculator, type LoanSummaryTable, type LoanTermForm } from '@/types/ui/loans';
 import PageContentHeader from '@components/PageContentHeader.vue';
@@ -141,6 +144,7 @@ const loadings = ref({
   compute: false,
   loan_products: false,
 });
+const loanFeeTemplates = ref<LoanFeeJSON[]>([]);
 const loanProducts = ref<DropdownOption[]>([]);
 const selectedLoanProduct = ref<LoanProduct>();
 const loan_calculator = ref<LoanCalculator>();
@@ -213,6 +217,17 @@ const getLoanProduct = async (id: number) => {
     data.form = mapLoanProductToTerms(product);
     selectedLoanProduct.value = product;
     data.fees = product.loan_product_fees;
+
+    if (product.loan_product_fees) {
+      loanFeeTemplates.value = loanProductFeeToTemplate(
+        product.loan_product_fees,
+        mapLoanFeeTemplate(
+          product.loan_product_fees.map((e) => e.loan_fee_template as LoanFeeTemplate) ?? [],
+          true,
+          true
+        )
+      );
+    }
   } catch (error) {
     showApiError(error as AxiosError);
   }

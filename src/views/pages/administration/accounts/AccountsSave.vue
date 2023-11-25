@@ -235,6 +235,7 @@ const types = ref<DropdownOption[]>([
   { label: 'Regular', value: AccountType.REGULAR },
   { label: 'Savings', value: AccountType.SAVINGS },
   { label: 'Share Capital', value: AccountType.SHARE_CAPITAL },
+  { label: 'Mortuary', value: AccountType.MORTUARY },
 ]);
 
 const penalty_method = ref<DropdownOption[]>([

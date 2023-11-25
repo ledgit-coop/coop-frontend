@@ -14,6 +14,7 @@ export function mapLoanFeeToLoanFeeSavePayload(loanFee: LoanFeeForm): LoanFeeSav
     credit_share_capital: loanFee.credit_share_capital,
     credit_revenue: loanFee.credit_revenue,
     show_to_report: loanFee.show_to_report,
+    credit_mortuary: loanFee.credit_mortuary,
     transaction_sub_type_id: loanFee.transaction_sub_type_id,
   };
 
@@ -31,6 +32,7 @@ export function mapLoanFeeSavePayloadToLoanFee(fee: LoanFeeTemplate): LoanFeeFor
     credit_share_capital: fee.credit_share_capital,
     credit_revenue: fee.credit_revenue,
     show_to_report: fee.show_to_report,
+    credit_mortuary: fee.credit_mortuary,
     transaction_sub_type_id: fee.transaction_sub_type_id?.toString(),
   };
   return loanFeeForm;
@@ -66,6 +68,16 @@ export const loanFeeToFormTemplate = (loanFeeDb: LoanFeeJSON[], form: LoanFee[])
   return loanFeeDb.map((r) => {
     const f = form.find((t) => t.loan_fee_template_id === r.fee_id);
 
+    return {
+      ...r,
+      ...(f ? { value: f.fee } : {}),
+    };
+  });
+};
+
+export const loanProductFeeToTemplate = (loanFeeDb: LoanProductFee[], form: LoanFeeJSON[]): LoanFeeJSON[] => {
+  return form.map((r) => {
+    const f = loanFeeDb.find((t) => t.loan_fee_template_id === r.fee_id);
     return {
       ...r,
       ...(f ? { value: f.fee } : {}),

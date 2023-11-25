@@ -6,7 +6,8 @@ export enum AccountStatus {
 export enum AccountType {
   REGULAR = 'regular',
   SAVINGS = 'savings',
-  SHARE_CAPITAL = 'share-capita',
+  SHARE_CAPITAL = 'share-capital',
+  MORTUARY = 'mortuary',
 }
 
 export enum AccountTransactionType {

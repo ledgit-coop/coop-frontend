@@ -155,6 +155,7 @@
                 @on-click-view-loans="activeIndex = 4"
                 @on-click-view-share-cap="activeIndex = 2"
                 @on-click-view-accounts="activeIndex = 3"
+                @on-click-view-mortuary="activeIndex = 6"
               />
             </TabPanel>
 
@@ -307,6 +308,16 @@
             </TabPanel>
 
             <TabPanel
+              :disabled="!member?.mortuary"
+              header="Mortuary"
+            >
+              <MemberMortuary
+                v-if="activeIndex == 6"
+                :member="member"
+              />
+            </TabPanel>
+
+            <TabPanel
               :disabled="true"
               header="Income"
             >
@@ -316,7 +327,7 @@
             <TabPanel header="Logs">
               <MembersLogs
                 :member="member"
-                v-if="activeIndex == 7"
+                v-if="activeIndex == 8"
               />
             </TabPanel>
           </TabView>
@@ -373,6 +384,7 @@ import { MemberStatus } from '@/constants/ui/members';
 import { dateFormat } from '@/helpers';
 import DataTable from 'primevue/datatable';
 import Panel from 'primevue/panel';
+import MemberMortuary from './components/MemberMortuary.vue';
 
 interface ModalsVisibility {
   apply_form: boolean;

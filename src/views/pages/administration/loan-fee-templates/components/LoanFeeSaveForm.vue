@@ -159,6 +159,19 @@
         <div class="flex align-items-center">
           <RadioButton
             v-model="creditType"
+            inputId="mortuary"
+            name="credit_type"
+            value="mortuary"
+          />
+          <label
+            for="mortuary"
+            class="ml-2"
+            >Credit To Mortuary</label
+          >
+        </div>
+        <div class="flex align-items-center">
+          <RadioButton
+            v-model="creditType"
             inputId="revenue"
             name="credit_type"
             value="revenue"
@@ -270,7 +283,10 @@ const rules = computed(() => ({
 }));
 
 const disableTransaction = computed(
-  () => (form.value.credit_share_capital ?? false) || (form.value.credit_regular_savings ?? false)
+  () =>
+    (form.value.credit_share_capital ?? false) ||
+    (form.value.credit_regular_savings ?? false) ||
+    (form.value.credit_mortuary ?? false)
 );
 const { validation } = useValidation({
   rules,
@@ -289,19 +305,20 @@ watch(
     data.form.credit_revenue = false;
     data.form.credit_regular_savings = false;
     data.form.credit_share_capital = false;
+    data.form.credit_mortuary = false;
 
     switch (value) {
       case 'share-capital':
         data.form.credit_share_capital = true;
-
         break;
       case 'revenue':
         data.form.credit_revenue = true;
         break;
-
       case 'regular-savings':
         data.form.credit_regular_savings = true;
-
+        break;
+      case 'mortuary':
+        data.form.credit_mortuary = true;
         break;
     }
     handleDisableTransaction();
@@ -333,6 +350,7 @@ const setCreditType = () => {
   if (data.form?.credit_regular_savings) creditType.value = 'regular-savings';
   else if (data.form?.credit_share_capital) creditType.value = 'share-capital';
   else if (data.form?.credit_revenue) creditType.value = 'revenue';
+  else if (data.form?.credit_mortuary) creditType.value = 'mortuary';
 };
 
 const loadIncomeSubTypes = () => {

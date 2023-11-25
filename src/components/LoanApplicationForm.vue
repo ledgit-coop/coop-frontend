@@ -625,7 +625,11 @@ import { required } from '@vuelidate/validators';
 import LoanFeeForm from './LoanFeeForm.vue';
 import { AccountType } from '@/constants/ui/accounts';
 import { CivilStatusDropdown } from '@/constants';
-import { mapLoanFeeTemplate, loanFeeToFormTemplate } from '@/constants/mapping/loan-fee-templates';
+import {
+  mapLoanFeeTemplate,
+  loanFeeToFormTemplate,
+  loanProductFeeToTemplate,
+} from '@/constants/mapping/loan-fee-templates';
 import type { LoanFeeJSON, LoanFeeTemplate } from '@/types/ui/loan-fee-templates';
 
 interface Props {
@@ -793,10 +797,13 @@ const getLoanProduct = async (id: number) => {
       data.form.loan_term = mapLoanProductToTerms(product);
 
       if (product.loan_product_fees) {
-        loanFeeTemplates.value = mapLoanFeeTemplate(
-          product.loan_product_fees.map((e) => e.loan_fee_template as LoanFeeTemplate) ?? [],
-          props.hasSavings,
-          props.hasShareCap
+        loanFeeTemplates.value = loanProductFeeToTemplate(
+          product.loan_product_fees,
+          mapLoanFeeTemplate(
+            product.loan_product_fees.map((e) => e.loan_fee_template as LoanFeeTemplate) ?? [],
+            props.hasSavings,
+            props.hasShareCap
+          )
         );
       }
     })

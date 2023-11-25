@@ -60,6 +60,11 @@ export interface Member extends MemberForm {
     balance: number;
     latest_transaction: AccountTransaction;
   };
+  mortuary: {
+    id: number;
+    balance: number;
+    latest_transaction: AccountTransaction;
+  };
   share_capital_account?: MemberAccount;
   savings_accounts: MemberAccount[];
   paid_membership?: boolean;

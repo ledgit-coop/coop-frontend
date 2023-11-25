@@ -35,6 +35,30 @@
       </Panel>
 
       <Panel
+        v-if="member?.mortuary"
+        class="col-12"
+        header="Mortuary Contribution"
+      >
+        <template v-if="loadings.fetch || !member">
+          <Skeleton class="mb-2 w-full"></Skeleton>
+          <Skeleton class="mb-2 w-full"></Skeleton>
+        </template>
+        <template v-else>
+          <h4 class="text-green-500">{{ formatCurrency(member?.mortuary.balance ?? 0, 'Php') }}</h4>
+          <small class="text-500">Updated mortuary contribution</small>
+
+          <div class="mt-2">
+            <Button
+              link
+              label="View Mortuary"
+              class="white-space-nowrap p-0"
+              @click="emit('onClickViewMortuary')"
+            />
+          </div>
+        </template>
+      </Panel>
+
+      <Panel
         class="col-12"
         header="Recent Activities"
       >
@@ -115,7 +139,7 @@
 
       <Panel
         class="col-12"
-        header="Pending Loans"
+        header="Pending Loan Application"
       >
         <template v-if="loadings.fetch || !member">
           <Skeleton class="mb-2 w-full"></Skeleton>
@@ -271,7 +295,7 @@ const loadings = ref({
 });
 const props = defineProps<Props>();
 const { showApiError } = useAlert();
-const emit = defineEmits(['onClickViewLoans', 'onClickViewShareCap', 'onClickViewAccounts']);
+const emit = defineEmits(['onClickViewLoans', 'onClickViewShareCap', 'onClickViewAccounts', 'onClickViewMortuary']);
 
 const recentEvents = ref<any>([]);
 const overview = ref<GetMemberOverview | undefined>();

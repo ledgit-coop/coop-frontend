@@ -10,6 +10,8 @@ export interface LoanFeeForm {
   credit_revenue?: boolean;
   credit_share_capital?: boolean;
   credit_regular_savings?: boolean;
+  credit_mortuary?: boolean;
+
   show_to_report?: boolean;
 
   transaction_sub_type_id?: string;

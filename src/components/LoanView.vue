@@ -143,6 +143,7 @@
           v-model:editingRows="editingRows"
           editMode="row"
           dataKey="id"
+          v-model:expandedRows="expandedRows"
           @row-edit-save="onRowEditSave"
         >
           <template #header>
@@ -158,6 +159,10 @@
             </div>
           </template>
 
+          <Column
+            expander
+            style="width: 5rem"
+          />
           <Column
             field="id"
             header="#"
@@ -282,6 +287,26 @@
             bodyStyle="text-align:center"
           ></Column>
 
+          <template #expansion="slotProps">
+            <div class="p-3">
+              <PageContentHeader
+                size="h6"
+                title="Additional Details"
+              />
+              <div class="flex flex-column pl-5 gap-2">
+                <div class="flex gap-2">
+                  <label class="font-medium">Payment Channel: </label> {{ slotProps.data.payment_channel ?? '---' }}
+                </div>
+                <div class="flex gap-2">
+                  <label class="font-medium">Payment Reference: </label> {{ slotProps.data.payment_reference ?? '---' }}
+                </div>
+                <div class="flex gap-2">
+                  <label class="font-medium">Payment Remarks: </label> {{ slotProps.data.payment_remarks ?? '---' }}
+                </div>
+              </div>
+            </div>
+          </template>
+
           <ColumnGroup type="footer">
             <Row>
               <Column
@@ -402,6 +427,7 @@ import Skeleton from 'primevue/skeleton';
 import html2pdf from 'html2pdf.js';
 import moment from 'moment';
 import { useConfirm } from 'primevue/useconfirm';
+import Label from './Label.vue';
 
 interface Props {
   visible: boolean;
@@ -409,6 +435,8 @@ interface Props {
   disableMember?: boolean;
   tabView?: 'info' | 'amortization' | 'agreement' | 'logs';
 }
+
+const expandedRows = ref<any>([]);
 const confirm = useConfirm();
 const agreementFrame = ref();
 const props = defineProps<Props>();
