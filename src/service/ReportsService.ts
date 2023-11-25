@@ -5,8 +5,11 @@ import type {
   ChartRevenueResponse,
   ExpensesReportResponse,
   LoanReleasedReportResponse,
+  MembersAllTimeReportResponse,
+  MortuariesReportResponse,
   RepaymentsReportResponse,
   ReportCounterResponse,
+  SavingsAccountReportResponse,
   SavingsTransactionsReportResponse,
   ShareCapitalsReportResponse,
 } from '@/types/api/reports';
@@ -19,6 +22,10 @@ class ReportsService {
 
   shareCapitals(params?: Record<string, any>): AxiosPromise<ShareCapitalsReportResponse> {
     return apiClient.get(`${PATH}/share-capitals`, { params });
+  }
+
+  mortuaryContributions(params?: Record<string, any>): AxiosPromise<MortuariesReportResponse> {
+    return apiClient.get(`${PATH}/mortuaries`, { params });
   }
 
   expenses(params?: Record<string, any>): AxiosPromise<ExpensesReportResponse> {
@@ -47,6 +54,13 @@ class ReportsService {
 
   chartsRevenue(params?: Record<string, any>): AxiosPromise<ChartRevenueResponse[]> {
     return apiClient.get(`${PATH}/charts/revenue`, { params });
+  }
+
+  members(params?: Record<string, any>): AxiosPromise<MembersAllTimeReportResponse> {
+    return apiClient.get(`${PATH}/members`, { params });
+  }
+  savingsAccount(params?: Record<string, any>): AxiosPromise<SavingsAccountReportResponse> {
+    return apiClient.get(`${PATH}/accounts/savings`, { params });
   }
 }
 

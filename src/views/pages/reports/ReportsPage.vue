@@ -142,6 +142,29 @@
           </div>
         </div>
       </div>
+
+      <div class="col-12 lg:col-6 xl:col-3">
+        <div class="card mb-0 p-4">
+          <div class="flex justify-content-between">
+            <div
+              class="grid gap-2 w-full p-2"
+              v-if="loadings.reload"
+            >
+              <Skeleton />
+              <Skeleton />
+              <Skeleton />
+              <Skeleton />
+            </div>
+            <div v-else>
+              <span class="block mb-3">Total mortuary contribution</span>
+              <div class="text-900 font-medium text-xl">
+                {{ formatCurrency(Number(counter.mortuary_total_amount)) }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="col-12 lg:col-6 xl:col-3">
         <div class="card mb-0 p-4">
           <div class="flex justify-content-between">
@@ -287,10 +310,10 @@
       </div>
     </div>
   </div>
-
-  <TabView>
+  <TabView v-model:active-index="byDateTabIndex">
     <TabPanel header="Share Capitals">
       <ShareCapitalReportTable
+        v-if="byDateTabIndex == 0"
         :date-from="dates.from_date"
         :date-to="dates.to_date"
         :reload="reload"
@@ -298,6 +321,7 @@
     </TabPanel>
     <TabPanel header="Expenses">
       <ExpensesReportTable
+        v-if="byDateTabIndex == 1"
         :date-from="dates.from_date"
         :date-to="dates.to_date"
         :reload="reload"
@@ -305,6 +329,7 @@
     </TabPanel>
     <TabPanel header="Revenues">
       <RevenuesReportsTable
+        v-if="byDateTabIndex == 2"
         :date-from="dates.from_date"
         :date-to="dates.to_date"
         :reload="reload"
@@ -312,6 +337,7 @@
     </TabPanel>
     <TabPanel header="Loans">
       <LoansReleasedTable
+        v-if="byDateTabIndex == 3"
         :date-from="dates.from_date"
         :date-to="dates.to_date"
         :reload="reload"
@@ -319,6 +345,7 @@
     </TabPanel>
     <TabPanel header="Repayments">
       <LoanRepaymentReportTable
+        v-if="byDateTabIndex == 4"
         :date-from="dates.from_date"
         :date-to="dates.to_date"
         :reload="reload"
@@ -326,6 +353,15 @@
     </TabPanel>
     <TabPanel header="Savings Account Transactions">
       <SavingsAccountTransactionReportTable
+        :date-from="dates.from_date"
+        v-if="byDateTabIndex == 5"
+        :date-to="dates.to_date"
+        :reload="reload"
+      />
+    </TabPanel>
+    <TabPanel header="Mortuary Contributions">
+      <MortuaryContributionsTable
+        v-if="byDateTabIndex == 6"
         :date-from="dates.from_date"
         :date-to="dates.to_date"
         :reload="reload"
@@ -474,6 +510,53 @@
         </div>
       </div>
     </div>
+    <div class="col-12 lg:col-6 xl:col-3">
+      <div class="card mb-0 p-4">
+        <div class="flex justify-content-between">
+          <div
+            class="grid gap-2 w-full p-2"
+            v-if="loadings.reload"
+          >
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+          </div>
+          <div v-else>
+            <Label class="pb-3">Total mortuary contribution</Label>
+            <div class="text-900 font-medium text-xl">
+              {{ formatCurrency(Number(counter.all_time_mortuary_total_amount ?? 0)) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid col-12 flex-column gap-5 mt-3">
+    <Panel
+      header="Member Report"
+      toggleable
+    >
+      <MembersTable
+        :date-from="dates.from_date"
+        :date-to="dates.to_date"
+        :reload="reload"
+      />
+      <small class="text-500"
+        >Member report contains current active information, e.g share capital balance, mortuary contribution.</small
+      >
+    </Panel>
+    <Panel
+      header="Savings Accounts Report"
+      toggleable
+    >
+      <SavingsAccountTable
+        :date-from="dates.from_date"
+        :date-to="dates.to_date"
+        :reload="reload"
+      />
+    </Panel>
   </div>
 </template>
 <script lang="ts" setup>
@@ -489,10 +572,13 @@ import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import { computed, onMounted, ref } from 'vue';
 import ShareCapitalReportTable from './components/ShareCapitalReportTable.vue';
+import MortuaryContributionsTable from './components/MortuaryContributionsTable.vue';
 import ExpensesReportTable from './components/ExpensesReportTable.vue';
 import RevenuesReportsTable from './components/RevenueReportTable.vue';
 import LoansReleasedTable from './components/LoansReleasedTable.vue';
 import LoanRepaymentReportTable from './components/LoanRepaymentReportTable.vue';
+import MembersTable from './components/MembersTable.vue';
+import SavingsAccountTable from './components/SavingsAccountTable.vue';
 import SavingsAccountTransactionReportTable from './components/SavingsAccountTransactionReportTable.vue';
 import OverlayPanel from 'primevue/overlaypanel';
 import RevenueReportChart from './components/charts/RevenueReportChart.vue';
@@ -519,7 +605,7 @@ const loadings = ref({
   share_capital: false,
   cash_flow: false,
 });
-
+const byDateTabIndex = ref(0);
 const counter = ref<ReportCounterResponse>({
   total_share_capital_amount: 0,
   total_savings_account_amount: 0,

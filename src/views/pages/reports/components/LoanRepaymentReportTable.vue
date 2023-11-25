@@ -93,7 +93,7 @@ import ReportsService from '@/service/ReportsService';
 import type { AccountTransaction } from '@/types/ui/accounts';
 import type { AxiosError } from 'axios';
 import Button from 'primevue/button';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 interface Props {
   dateFrom?: Date;
@@ -124,6 +124,10 @@ watch(
     if (value && props.dateFrom && props.dateTo) loadTable();
   }
 );
+
+onMounted(() => {
+  if (props.dateFrom && props.dateTo) loadTable();
+});
 
 const { showApiError } = useAlert();
 

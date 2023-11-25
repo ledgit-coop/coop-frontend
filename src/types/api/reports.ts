@@ -1,6 +1,7 @@
 import type { Pagination } from '../ui';
 import type { AccountTransaction } from '../ui/accounts';
 import type { Loan } from '../ui/loans';
+import type { MemberAccount } from '../ui/members';
 import type { Transaction } from '../ui/transactions';
 
 export interface ReportCounterResponse {
@@ -8,6 +9,7 @@ export interface ReportCounterResponse {
   total_savings_account_amount?: number;
   total_expenses_amount?: number;
   total_loan_released_amount?: number;
+  mortuary_total_amount?: number;
 
   total_collected_interest_amount?: number;
   total_collected_penalty_amount?: number;
@@ -29,6 +31,7 @@ export interface ReportCounterResponse {
   all_time_interest_loan_interest?: number;
   all_time_total_loans_collected?: number;
   all_time_total_expenses_amount?: number;
+  all_time_mortuary_total_amount?: number;
 }
 
 export interface CashFlowReport {
@@ -42,6 +45,10 @@ export interface CashFlowReport {
 }
 
 export interface ShareCapitalsReportResponse extends Pagination {
+  data: AccountTransaction[];
+}
+
+export interface MortuariesReportResponse extends Pagination {
   data: AccountTransaction[];
 }
 
@@ -69,4 +76,22 @@ export interface ChartReleasedLoanResponse {
 export interface ChartRevenueResponse {
   name: string;
   amount: number;
+}
+
+export interface MembersAllTimeReportResponse extends Pagination {
+  data: {
+    id?: string;
+    full_name?: string;
+    share_capital_amount?: number;
+    member_number?: string;
+    mortuary_contributions?: number;
+    guarantored_count?: number;
+    active_loan_count?: number;
+    closed_loan_count?: number;
+    pending_loan_count?: number;
+  }[];
+}
+
+export interface SavingsAccountReportResponse extends Pagination {
+  data: MemberAccount[];
 }

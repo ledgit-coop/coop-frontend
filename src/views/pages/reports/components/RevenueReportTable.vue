@@ -144,6 +144,7 @@ watch(
 
 onMounted(() => {
   loadIncomeSubTypes();
+  if (props.dateFrom && props.dateTo) loadTable();
 });
 
 const { showApiError } = useAlert();

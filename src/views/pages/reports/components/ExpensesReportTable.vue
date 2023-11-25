@@ -147,6 +147,7 @@ watch(
 
 onMounted(() => {
   loadExpenseSubTypes();
+  if (props.dateFrom && props.dateTo) loadTable();
 });
 
 const { showApiError } = useAlert();

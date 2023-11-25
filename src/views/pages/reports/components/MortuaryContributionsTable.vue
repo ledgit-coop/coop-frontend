@@ -1,10 +1,10 @@
 <template>
   <DataTable
     table-style="min-width: 50rem"
-    ref="table"
-    :value="loans"
+    ref="mortuaryTb"
+    :value="mortuary"
     :loading="loadings.table"
-    export-filename="loans"
+    export-filename="mortuaries"
     :lazy="true"
     :rows="rows"
     :paginator="true"
@@ -24,51 +24,45 @@
           label="Export"
           class="p-button-outlined mb-2"
           size="small"
-          @click="($refs as any)?.table?.exportCSV()"
+          @click="($refs as any)?.mortuaryTb?.exportCSV()"
         />
       </div>
     </template>
 
     <Column
-      field="member.full_name"
+      field="transaction_number"
+      header="#"
+    ></Column>
+
+    <Column
+      field="particular"
       header="Member"
-    ></Column>
-
-    <Column
-      field="loan_number"
-      header="Loan No."
-    ></Column>
-
-    <Column
-      field="loan_product.name"
-      header="Loan"
-    ></Column>
-
-    <Column
-      field="loan_interest"
-      header="Interest"
-      class="white-space-nowrap"
     >
       <template #body="slotProps">
-        {{ `${slotProps.data.loan_interest ?? '---'} % / ${slotProps.data.loan_interest_period ?? '---'}` }}
+        {{ slotProps.data.member_account.member.full_name }}
       </template>
     </Column>
 
     <Column
-      field="released_date"
-      header="Released Date"
+      field="particular"
+      header="Particular"
+    ></Column>
+
+    <Column
+      field="transaction_date"
+      header="Date"
     >
       <template #body="slotProps">
-        {{ dateFormat(slotProps.data.released_date, DATE_FORMAT_DATE) }}
+        {{ dateFormat(slotProps.data.transaction_date, DATE_FORMAT_DATE) }}
       </template>
     </Column>
 
     <Column
-      field="principal_amount"
-      header="Approved Amount"
+      field="amount"
+      header="Amount"
     >
       <template #body="slotProps">
-        {{ formatCurrency(slotProps.data.principal_amount) }}
+        {{ formatCurrency(slotProps.data.amount) }}
       </template>
     </Column>
 
@@ -78,12 +72,12 @@
       <Row>
         <Column
           footer="Total:"
-          :colspan="5"
+          :colspan="4"
           footer-style="text-align:right"
         />
         <Column
           class="white-space-nowrap"
-          :footer="formatCurrency(loans?.reduce((n, p) => n + Number(p?.principal_amount ?? 0), 0) ?? 0)"
+          :footer="formatCurrency(mortuary?.reduce((n, p) => n + Number(p?.amount ?? 0), 0) ?? 0)"
         />
       </Row>
     </ColumnGroup>
@@ -96,7 +90,7 @@ import useTableParameters from '@/composables/useTableParameters';
 import { DATE_FORMAT_DATE, DATE_FORMAT_DB } from '@/constants';
 import { dateFormat, formatCurrency } from '@/helpers';
 import ReportsService from '@/service/ReportsService';
-import type { Loan } from '@/types/ui/loans';
+import type { AccountTransaction } from '@/types/ui/accounts';
 import type { AxiosError } from 'axios';
 import Button from 'primevue/button';
 import { computed, onMounted, ref, watch } from 'vue';
@@ -137,14 +131,13 @@ onMounted(() => {
 
 const { showApiError } = useAlert();
 
-const loans = ref<Loan[]>([]);
+const mortuary = ref<AccountTransaction[]>([]);
 
 const loadTable = async () => {
   loadings.value.table = true;
-
-  ReportsService.loansReleased(params.value)
+  ReportsService.mortuaryContributions(params.value)
     .then(({ data }) => {
-      loans.value = data.data;
+      mortuary.value = data.data;
       paginate(data);
     })
     .catch((error) => {
