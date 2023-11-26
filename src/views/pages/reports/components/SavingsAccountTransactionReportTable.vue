@@ -4,7 +4,7 @@
     ref="table"
     :value="transactions"
     :loading="loadings.table"
-    export-filename="share-capitals"
+    export-filename="savings-account-transactions"
     :lazy="true"
     :rows="rows"
     :paginator="true"

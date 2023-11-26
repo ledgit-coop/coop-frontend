@@ -631,6 +631,7 @@ import {
   loanProductFeeToTemplate,
 } from '@/constants/mapping/loan-fee-templates';
 import type { LoanFeeJSON, LoanFeeTemplate } from '@/types/ui/loan-fee-templates';
+import { debounce } from 'lodash';
 
 interface Props {
   modelValue?: LoanForm;
@@ -730,6 +731,15 @@ watch(
 );
 
 watch(
+  () => props.hasShareCap,
+  () => setLoanTemplate(selectedLoanProduct.value)
+);
+watch(
+  () => props.hasSavings,
+  () => setLoanTemplate(selectedLoanProduct.value)
+);
+
+watch(
   () => props.modelValue,
   (value) => {
     // Set
@@ -795,23 +805,27 @@ const getLoanProduct = async (id: number) => {
     .then(({ data: product }) => {
       selectedLoanProduct.value = product;
       data.form.loan_term = mapLoanProductToTerms(product);
-
-      if (product.loan_product_fees) {
-        loanFeeTemplates.value = loanProductFeeToTemplate(
-          product.loan_product_fees,
-          mapLoanFeeTemplate(
-            product.loan_product_fees.map((e) => e.loan_fee_template as LoanFeeTemplate) ?? [],
-            props.hasSavings,
-            props.hasShareCap
-          )
-        );
-      }
+      setLoanTemplate(selectedLoanProduct.value);
     })
     .catch((error) => showApiError(error))
     .finally(() => {
       loadings.value.loan_products = false;
     });
 };
+
+const setLoanTemplate = debounce((product?: LoanProduct) => {
+  console.log(product);
+  if (product?.loan_product_fees) {
+    loanFeeTemplates.value = loanProductFeeToTemplate(
+      product.loan_product_fees,
+      mapLoanFeeTemplate(
+        product.loan_product_fees.map((e) => e.loan_fee_template as LoanFeeTemplate) ?? [],
+        props.hasSavings,
+        props.hasShareCap
+      )
+    );
+  }
+});
 
 const handleTypeLoanClick = (id: any) => {
   getLoanProduct(id);

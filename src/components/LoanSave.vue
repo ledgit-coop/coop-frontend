@@ -125,16 +125,6 @@ watch(
   }
 );
 
-// watch(
-//   () => props.member,
-//   (value) => {
-//     if (value) setMember(value);
-//   },
-//   {
-//     deep: true,
-//   }
-// );
-
 watch(showModal, (value) => {
   if (value && isEditing.value) loadLoan();
 });
@@ -152,7 +142,6 @@ const setMember = (member?: Member) => {
 };
 
 const setFeeDisables = (member?: Member) => {
-  console.log(member);
   hasSavings.value = !!member?.savings_accounts.find((r) => r.is_holder_member);
   hasShareCap.value = !!member?.share_capital_account;
 };
@@ -203,6 +192,8 @@ const handleHide = () => {
   model.form = {};
   validation.value?.$reset();
   isReleased.value = false;
+  hasSavings.value = false;
+  hasShareCap.value = false;
 };
 
 const handleMemberChange = async (value: DropdownOption) => {

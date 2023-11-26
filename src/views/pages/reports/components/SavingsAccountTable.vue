@@ -1,10 +1,10 @@
 <template>
   <DataTable
     table-style="min-width: 50rem"
-    ref="shareCaptTb"
+    ref="savingsTbl"
     :value="accounts"
     :loading="loadings.table"
-    export-filename="share-capitals"
+    export-filename="savings-accounts"
     :lazy="true"
     :rows="rows"
     :paginator="true"
@@ -25,7 +25,7 @@
             label="Export"
             class="p-button-outlined mb-2"
             size="small"
-            @click="($refs as any)?.shareCaptTb?.exportCSV()"
+            @click="($refs as any)?.savingsTbl?.exportCSV()"
           />
         </div>
 

@@ -11,7 +11,7 @@
     />
 
     <div
-      v-else
+      v-else-if="data.form && data.form.length"
       class="grid p-fluid formgrid"
     >
       <template
@@ -40,6 +40,7 @@
         </div>
       </template>
     </div>
+    <p v-else>No available loan fees.</p>
   </Panel>
 </template>
 
