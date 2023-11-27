@@ -103,21 +103,21 @@ onMounted(() => {
 });
 
 const loadTemplate = () => {
-  LoanFeeTemplateService.list({filters:{limit: 200}}).then(({data})=>{
+  LoanFeeTemplateService.list({ filters: { limit: 200 } }).then(({ data }) => {
     originalFeeTemplates.value = mapLoanFeeTemplate(data.data, true, true);
     setTemplate();
-  })
-}
+  });
+};
 
 const setTemplate = debounce(() => {
-      // Clone the actual database record
-    const cp = deepClone<LoanProductFee[]>(data.form.loan_product_fees ?? []);
-    // Load template from saved loan data
-    if (cp && cp.length) {
-      loanFeeTemplates.value = loanProductFeeToTemplate(cp, originalFeeTemplates.value);
-    } else {
-      loanFeeTemplates.value = deepClone<LoanFeeJSON[]>(originalFeeTemplates.value);
-    }
+  // Clone the actual database record
+  const cp = deepClone<LoanProductFee[]>(data.form.loan_product_fees ?? []);
+  // Load template from saved loan data
+  if (cp && cp.length) {
+    loanFeeTemplates.value = loanProductFeeToTemplate(cp, originalFeeTemplates.value);
+  } else {
+    loanFeeTemplates.value = deepClone<LoanFeeJSON[]>(originalFeeTemplates.value);
+  }
 });
 
 watch(
@@ -134,8 +134,9 @@ watch(
   () => props.modelValue,
   (value) => {
     data.form = value ?? {};
-  }, {
-    deep: true
+  },
+  {
+    deep: true,
   }
 );
 </script>

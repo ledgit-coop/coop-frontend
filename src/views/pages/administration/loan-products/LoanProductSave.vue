@@ -90,7 +90,7 @@ watch(
   (value) => {
     showModal.value = value ?? false;
 
-    if(value && props.id) loadProduct();
+    if (value && props.id) loadProduct();
   }
 );
 
@@ -124,8 +124,8 @@ const loadProduct = async () => {
 const handleHide = () => {
   emit('hide');
   clear();
-}
+};
 const clear = () => {
   model.value.form = {};
-}
+};
 </script>
