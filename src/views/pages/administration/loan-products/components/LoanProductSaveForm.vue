@@ -63,6 +63,7 @@
       v-model="data.form.loan_product_fees"
       :has-savings="true"
       :has-share-cap="true"
+      :fee-templates="loanFeeTemplates"
     />
     <div class="p-2"></div>
     <LoanAccountingForm v-model="data.form.loan_accounting" />
@@ -75,14 +76,21 @@ import PageContentHeader from '@/components/PageContentHeader.vue';
 import LoanTerm from '@/components/LoanTerm.vue';
 import Label from '@/components/Label.vue';
 import LoanFeeForm from '@/components/LoanFeeForm.vue';
-import { onMounted, reactive, watch } from 'vue';
-import type { LoanProductForm } from '@/types/ui/loan-products';
+import { onMounted, reactive, ref, watch } from 'vue';
+import type { LoanProductFee, LoanProductForm } from '@/types/ui/loan-products';
 import LoanAccountingForm from './LoanAccountingForm.vue';
+import type { LoanFeeJSON } from '@/types/ui/loan-fee-templates';
+import { deepClone } from '@/helpers';
+import { loanProductFeeToTemplate, mapLoanFeeTemplate } from '@/constants/mapping/loan-fee-templates';
+import LoanFeeTemplateService from '@/service/LoanFeeTemplateService';
+import { debounce } from 'lodash';
 
 interface Props {
   modelValue?: LoanProductForm;
 }
 
+const loanFeeTemplates = ref<LoanFeeJSON[]>([]);
+const originalFeeTemplates = ref<LoanFeeJSON[]>([]);
 const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue']);
 const data = reactive<{ form: LoanProductForm }>({
@@ -91,6 +99,25 @@ const data = reactive<{ form: LoanProductForm }>({
 
 onMounted(() => {
   data.form = props.modelValue ?? {};
+  loadTemplate();
+});
+
+const loadTemplate = () => {
+  LoanFeeTemplateService.list({filters:{limit: 200}}).then(({data})=>{
+    originalFeeTemplates.value = mapLoanFeeTemplate(data.data, true, true);
+    setTemplate();
+  })
+}
+
+const setTemplate = debounce(() => {
+      // Clone the actual database record
+    const cp = deepClone<LoanProductFee[]>(data.form.loan_product_fees ?? []);
+    // Load template from saved loan data
+    if (cp && cp.length) {
+      loanFeeTemplates.value = loanProductFeeToTemplate(cp, originalFeeTemplates.value);
+    } else {
+      loanFeeTemplates.value = deepClone<LoanFeeJSON[]>(originalFeeTemplates.value);
+    }
 });
 
 watch(
@@ -107,6 +134,8 @@ watch(
   () => props.modelValue,
   (value) => {
     data.form = value ?? {};
+  }, {
+    deep: true
   }
 );
 </script>

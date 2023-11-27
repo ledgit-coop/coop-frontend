@@ -152,6 +152,7 @@
         </DataTable>
         <LoanProductSave
           @updated="loadTable(params)"
+          @hide="selectedProduct = undefined"
           :id="selectedProduct?.id"
           v-model:visible="modalsVisibility.save_product"
         />
@@ -218,8 +219,8 @@ const clearFilters = () => {
 };
 
 const handleAddClick = () => {
-  modalsVisibility.value.save_product = true;
   selectedProduct.value = undefined;
+  modalsVisibility.value.save_product = true;
 };
 
 const loadTable = (params?: LoanProductListPayload) => {

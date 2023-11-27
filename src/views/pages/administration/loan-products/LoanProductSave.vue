@@ -4,6 +4,7 @@
     modal
     :header="isEditing ? 'Edit Loan Product' : 'Add Loan Product'"
     :style="{ width: '50vw' }"
+    @hide="handleHide"
   >
     <template v-if="loadings.fetch">
       <Skeleton class="mb-2 full-width"></Skeleton>
@@ -66,7 +67,7 @@ interface Props {
 
 const { showApiError, showSuccess } = useAlert();
 const props = defineProps<Props>();
-const emit = defineEmits(['update:visible', 'updated']);
+const emit = defineEmits(['update:visible', 'updated', 'hide']);
 const model = ref<{ form: LoanProductForm }>({ form: {} });
 const showModal = ref(false);
 const loadings = ref({
@@ -77,6 +78,7 @@ const isEditing = computed(() => !!props.id);
 
 onMounted(() => {
   showModal.value = props.visible ?? false;
+  clear();
 });
 
 watch(showModal, (value) => {
@@ -88,7 +90,7 @@ watch(
   (value) => {
     showModal.value = value ?? false;
 
-    if (props.id) loadProduct();
+    if(value && props.id) loadProduct();
   }
 );
 
@@ -109,6 +111,7 @@ const handleSaveClick = async () => {
 
 const loadProduct = async () => {
   loadings.value.fetch = true;
+  clear();
   try {
     const { data } = await LoanProductService.show(props.id ?? 0);
     model.value.form = mapProductSavePayloadToLoanProduct(data);
@@ -117,4 +120,12 @@ const loadProduct = async () => {
   }
   loadings.value.fetch = false;
 };
+
+const handleHide = () => {
+  emit('hide');
+  clear();
+}
+const clear = () => {
+  model.value.form = {};
+}
 </script>

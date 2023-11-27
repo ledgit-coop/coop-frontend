@@ -96,7 +96,7 @@ watch(
       model.value.form = {};
       validation.value?.$reset();
     }
-    if (props.id) loadExpense();
+    if (value && props.id) loadExpense();
   }
 );
 
