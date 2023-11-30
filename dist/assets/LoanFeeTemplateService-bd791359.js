@@ -1,0 +1,1 @@
+import{D as t}from"./index-2240cd92.js";const r="/api/loan-fees";class n{list(e){return t.get(`${r}`,{params:e})}store(e){return t.post(`${r}`,e)}show(e){return t.get(`${r}/${e}`)}update(e,o){return t.patch(`${r}/${e}`,o)}destroy(e){return t.delete(`${r}/${e}`)}toggle(e){return t.post(`${r}/${e}/toggle`)}}const $=new n;export{$ as L};
