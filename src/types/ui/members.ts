@@ -166,7 +166,7 @@ export interface MemberLoanTable {
 export interface MemberLoanSchedule {
   id: number;
   loan_id: number;
-  due_date: string;
+  due_date: string | Date;
   principal_amount: number;
   interest_amount: number;
   fee_amount: number;

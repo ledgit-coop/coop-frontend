@@ -288,7 +288,7 @@ import type { MemberForm } from '@/types/ui/members';
 import useValidation from '@/composables/useValidation';
 import useAlert from '@/composables/useAlert';
 import MembersService from '@/service/MembersService';
-import { mapMemberFormToPostMemberPayload } from '@/constants/mapping/members';
+import { mapMemberFormToPostMemberPayload, mapMemberToMemberForm } from '@/constants/mapping/members';
 import type { AxiosError } from 'axios';
 import { useRoute } from 'vue-router';
 import type { Member } from '@/types/ui/members';
@@ -394,10 +394,7 @@ const loadInformation = async () => {
   try {
     const { data } = await MembersService.show(member_id.value);
     member.value = data;
-    model.form = {
-      ...model.form,
-      ...data,
-    };
+    model.form = mapMemberToMemberForm(data);
   } catch (error) {
     showApiError(error as AxiosError);
   }

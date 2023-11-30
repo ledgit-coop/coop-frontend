@@ -492,8 +492,10 @@ const basic_information_2 = computed<InformationItem[]>(() => [
 const loanSummary = computed<LoanSummaryTable[]>(() => [
   {
     released_date: loan.value?.released_date ?? '',
-    first_amortization_date: schedules.value ? schedules.value[0]?.due_date : '',
-    maturity_date: schedules.value ? schedules.value[schedules.value.length - 1]?.due_date : '',
+    first_amortization_date: schedules.value ? moment(schedules.value[0]?.due_date).format(DATE_FORMAT_DATE) : '',
+    maturity_date: schedules.value
+      ? moment(schedules.value[schedules.value.length - 1]?.due_date).format(DATE_FORMAT_DATE)
+      : '',
     principal: loan.value?.principal_amount ?? 0,
     interest: loan.value?.interest_amount ?? 0,
     payment: loan.value?.due_amount ?? 0,
@@ -602,7 +604,10 @@ const loadSchedules = async () => {
   loadings.value.fetch_schedule = true;
   try {
     const { data } = await LoanService.schedule(Number(props.loanId ?? 0));
-    schedules.value = data;
+    schedules.value = data.map((r) => ({
+      ...r,
+      due_date: r.due_date ? moment(r.due_date).toDate() : '',
+    }));
   } catch (error) {
     showApiError(error as AxiosError);
   }
