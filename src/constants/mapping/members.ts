@@ -105,6 +105,7 @@ export function mapMemberToMemberForm(member: Member): MemberForm {
   // Copy the common properties
   const memberForm: MemberForm = {
     surname: member.surname,
+    member_number: member.member_number,
     first_name: member.first_name,
     middle_name: member.middle_name,
     name_extension: member.name_extension,
