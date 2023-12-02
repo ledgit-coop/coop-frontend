@@ -315,7 +315,7 @@
                 <Row>
                   <Column
                     footer="Total Amount:"
-                    :colspan="2"
+                    :colspan="3"
                     footer-style="text-align:right"
                   />
                   <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.principal_amount ?? 0), 0) ?? 0)" />
@@ -323,10 +323,11 @@
 
                   <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.penalty_amount ?? 0), 0) ?? 0)" />
 
-                  <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.fee_amount ?? 0), 0) ?? 0)" />
+                  <Column :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.due_amount ?? 0), 0) ?? 0)" />
+                  <Column />
                   <Column
-                    :colspan="4"
-                    :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.due_amount ?? 0), 0) ?? 0)"
+                    :colspan="3"
+                    :footer="formatNumber(schedules?.reduce((n, p) => n + (p?.amount_paid ?? 0), 0) ?? 0)"
                   />
                 </Row>
               </ColumnGroup>
