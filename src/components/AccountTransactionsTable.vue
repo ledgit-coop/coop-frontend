@@ -30,7 +30,7 @@
             v-if="slotProps.data.posted"
             severity="success"
             rounded
-            value="Posted"
+            v-tooltip="'Posted'"
             class="white-space-nowrap"
           ></Tag>
 
@@ -38,7 +38,7 @@
             v-else
             severity="warning"
             rounded
-            value="Unposted"
+            v-tooltip="'Unposted'"
             class="white-space-nowrap"
           ></Tag>
           <span>{{ slotProps.data.transaction_number }}</span>
@@ -69,39 +69,58 @@
       </template>
     </Column>
 
-    <Column
-      v-if="!hideColumns?.includes('withdrawals')"
-      field="withdrawals"
-      header="Withdrawals"
-      style="text-wrap: nowrap"
-    >
-      <template #body="slotProps">
-        {{
-          slotProps.data.transaction_type === AccountTransactionType.WITHDRAWAL
-            ? formatCurrency(Math.abs(slotProps.data.amount))
-            : ''
-        }}
-      </template>
-    </Column>
-    <Column
-      v-if="!hideColumns?.includes('deposits')"
-      field="deposits"
-      header="Deposits"
-      style="text-wrap: nowrap"
-    >
-      <template #body="slotProps">
-        {{
-          slotProps.data.transaction_type === AccountTransactionType.DEPOSIT
-            ? formatCurrency(Math.abs(slotProps.data.amount))
-            : ''
-        }}
-      </template>
-    </Column>
+    <template v-if="!display || (display && display === 'transactional')">
+      <Column
+        v-if="!hideColumns?.includes('withdrawals')"
+        field="withdrawals"
+        header="Withdrawal"
+        style="text-wrap: nowrap"
+      >
+        <template #body="slotProps">
+          {{
+            slotProps.data.transaction_type === AccountTransactionType.WITHDRAWAL
+              ? formatCurrency(Math.abs(slotProps.data.amount))
+              : ''
+          }}
+        </template>
+      </Column>
+      <Column
+        v-if="!hideColumns?.includes('deposits')"
+        field="deposits"
+        header="Deposit"
+        style="text-wrap: nowrap"
+      >
+        <template #body="slotProps">
+          {{
+            slotProps.data.transaction_type === AccountTransactionType.DEPOSIT
+              ? formatCurrency(Math.abs(slotProps.data.amount))
+              : ''
+          }}
+        </template>
+      </Column>
+    </template>
+    <template v-else-if="display && display === 'summary'">
+      <Column
+        v-if="!hideColumns?.includes('amount')"
+        field="amount"
+        header="Amount"
+        style="text-wrap: nowrap"
+      >
+        <template #body="slotProps">
+          <template v-if="slotProps.data.transaction_type === AccountTransactionType.DEPOSIT">
+            {{ formatCurrency(Math.abs(slotProps.data.amount)) }}
+          </template>
+          <template v-if="slotProps.data.transaction_type === AccountTransactionType.WITHDRAWAL">
+            ({{ formatCurrency(Math.abs(slotProps.data.amount)) }})
+          </template>
+        </template>
+      </Column>
+    </template>
 
     <Column
-      v-if="!hideColumns?.includes('running_balance')"
+      v-if="!hideColumns?.includes('running_balance') && !(display && display === 'summary')"
       field="running_balance"
-      header="Balance"
+      header="Running Balance"
       style="text-wrap: nowrap"
     >
       <template #body="slotProps">
@@ -139,7 +158,7 @@
       <Row>
         <Column
           footer="Total:"
-          :colspan="6 - (hideColumns?.length ?? 0)"
+          :colspan="6 - (hideColumns?.length ?? 0) - (display && display === 'summary' ? 2 : 0)"
           footer-style="text-align:right"
         />
         <Column
@@ -168,6 +187,7 @@ interface Props {
   transactions?: AccountTransaction[];
   loading?: boolean;
   showAction?: boolean;
+  display?: 'transactional' | 'summary';
 }
 
 defineProps<Props>();

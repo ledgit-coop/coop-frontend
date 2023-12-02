@@ -178,6 +178,7 @@
       :loading="loadings.transaction_table"
       :transactions="selected_account_transactions"
       show-action
+      :display="accountTransactionDisplay"
       @on-delete-click="handleTransactionDeleteClick"
     />
   </Dialog>
@@ -215,12 +216,13 @@ const accountStatuses = computed<DropdownOption[]>(() => [
   { label: 'Active', value: AccountStatus.ACTIVE },
   { label: 'Dormant', value: AccountStatus.DORMANT },
 ]);
-
+const accountTransactionDisplay = computed(() =>
+  selected_account && selected_account.value?.account?.type === 'regular' ? 'summary' : 'transactional'
+);
 const showModal = ref(false);
 const accounts = ref<MemberAccount[]>();
 const selected_account = ref<undefined | MemberAccount>();
 const selected_account_transactions = ref<AccountTransaction[]>();
-
 const props = defineProps<Props>();
 const loadings = ref({
   transaction_table: false,
@@ -268,6 +270,7 @@ const handleGetTransactions = async () => {
 const handleViewTransactionClick = (value: MemberAccount) => {
   selected_account.value = value;
   showModal.value = true;
+
   handleGetTransactions();
 };
 

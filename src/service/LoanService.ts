@@ -9,6 +9,7 @@ import apiClient from '@/http-common';
 import type { Loan } from '@/types/ui/loans';
 import type { MemberLoanStatus } from '@/constants/ui/members';
 import type { MemberLoanSchedule } from '@/types/ui/members';
+import type { AccountTransaction } from '@/types/ui/accounts';
 
 const PATH = '/api/loans';
 class LoanService {
@@ -50,6 +51,10 @@ class LoanService {
 
   updateSchedule(schedule_id: number, payload: UpdateLoanSchedulePayload): AxiosPromise<MemberLoanSchedule> {
     return apiClient.post(`${PATH}/schedule/${schedule_id}`, payload);
+  }
+
+  repaymentAccountTransactions(loan_id: number, params?: Record<string, any>): AxiosPromise<AccountTransaction[]> {
+    return apiClient.post(`${PATH}/repayments/${loan_id}`, { params });
   }
 }
 
