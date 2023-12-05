@@ -13,7 +13,7 @@ export function mapMemberFormToPostMemberPayload(memberForm: MemberForm): PostMe
     date_of_birth: moment(memberForm.date_of_birth).format(DATE_FORMAT_DB),
     place_of_birth: memberForm.place_of_birth ?? '',
     gender: memberForm.gender ?? '',
-    date_hired: moment(memberForm.date_hired).format(DATE_FORMAT_DB),
+    date_hired: memberForm.date_hired ? moment(memberForm.date_hired).format(DATE_FORMAT_DB) : undefined,
     department: memberForm.department ?? '',
     position: memberForm.position ?? '',
     employee_no: memberForm.employee_no ?? '',

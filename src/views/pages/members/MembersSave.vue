@@ -349,13 +349,14 @@ onMounted(() => {
 });
 
 const handleSubmit = async (showSaveDialog: boolean = false) => {
-  if (showSaveDialog) {
-    modal.value.show_save_dialog = true;
-    return;
-  }
   await validation.value?.$validate();
   if (validation.value?.$invalid) {
     showError('Please complete required fields.');
+    return;
+  }
+
+  if (showSaveDialog) {
+    modal.value.show_save_dialog = true;
     return;
   }
 

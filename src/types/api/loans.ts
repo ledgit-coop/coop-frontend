@@ -80,4 +80,7 @@ export interface UpdateLoanSchedulePayload {
   interest_amount?: number;
   penalty_amount?: number;
   amount_paid?: number;
+  payment_channel?: string;
+  payment_reference?: string;
+  payment_remarks?: string;
 }

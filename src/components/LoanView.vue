@@ -178,25 +178,63 @@
               <Column
                 field="due_date"
                 header="Due Date"
+                class="vertical-align-baseline"
               >
                 <template #body="slotProps">
                   {{ dateFormat(slotProps.data.due_date, DATE_FORMAT_DATE) }}
                 </template>
 
                 <template #editor="{ data, field }">
-                  <Calendar
-                    date-format="yy-mm-dd"
-                    mask="true"
-                    id="due-date"
-                    v-model="data[field]"
-                    showButtonBar
-                    show-icon
-                  />
+                  <div class="flex flex-column gap-2">
+                    <Calendar
+                      date-format="yy-mm-dd"
+                      mask="true"
+                      id="due-date"
+                      v-model="data[field]"
+                      showButtonBar
+                      show-icon
+                      :style="{ width: '15rem' }"
+                    />
+
+                    <div class="field mb-0">
+                      <Label for="payment_channel">Payment Channel</Label>
+
+                      <Dropdown
+                        showClear
+                        :options="paymentChannels"
+                        filter
+                        option-value="value"
+                        option-label="label"
+                        placeholder="Select Payment Channel"
+                        v-model="data.payment_channel"
+                        class="w-full"
+                      >
+                      </Dropdown>
+                    </div>
+                    <div class="field mb-0">
+                      <Label for="payment_reference">Payment Ref. #</Label>
+                      <InputText
+                        class="w-full"
+                        placeholder="Reference Number"
+                        v-model="data.payment_reference"
+                      />
+                    </div>
+
+                    <div class="field mb-0">
+                      <Label for="payment_remarks">Payment Remarks</Label>
+                      <InputText
+                        v-model="data.payment_remarks"
+                        placeholder="Remarks"
+                        class="w-full"
+                      />
+                    </div>
+                  </div>
                 </template>
               </Column>
               <Column
                 field="principal_amount"
                 header="Principal Amount"
+                class="vertical-align-baseline"
               >
                 <template #body="slotProps">
                   {{ formatNumber(slotProps.data.principal_amount) }}
@@ -215,6 +253,7 @@
               <Column
                 field="interest_amount"
                 header="Interest Amount"
+                class="vertical-align-baseline"
               >
                 <template #body="slotProps">
                   {{ formatNumber(slotProps.data.interest_amount) }}
@@ -233,6 +272,7 @@
               <Column
                 field="penalty_amount"
                 header="Penaly"
+                class="vertical-align-baseline"
               >
                 <template #body="slotProps">
                   {{ formatNumber(slotProps.data.penalty_amount) }}
@@ -251,6 +291,7 @@
               <Column
                 field="due_amount"
                 header="Due Payment"
+                class="vertical-align-baseline"
               >
                 <template #body="slotProps">
                   {{ formatNumber(slotProps.data.due_amount) }}
@@ -260,6 +301,7 @@
               <Column
                 field="principal_balance"
                 header="Loan Balance"
+                class="vertical-align-baseline"
               >
                 <template #body="slotProps">
                   {{ formatNumber(slotProps.data.principal_balance) }}
@@ -269,6 +311,7 @@
               <Column
                 field="amount_paid"
                 header="Amount Paid"
+                class="vertical-align-baseline"
               >
                 <template #body="slotProps">
                   {{ formatNumber(slotProps.data.amount_paid) }}
@@ -288,6 +331,9 @@
                 :rowEditor="true"
                 style="width: 10%; min-width: 8rem"
                 bodyStyle="text-align:center"
+                align-frozen="right"
+                class="froze-right vertical-align-baseline"
+                frozen
               ></Column>
 
               <template #expansion="slotProps">
@@ -479,7 +525,7 @@ import Dialog from 'primevue/dialog';
 import { computed, onMounted, ref, watch } from 'vue';
 import Button from 'primevue/button';
 import PageContentHeader from '@components/PageContentHeader.vue';
-import type { InformationItem } from '@/types/ui';
+import type { DropdownOption, InformationItem } from '@/types/ui';
 import Information from '@components/Information.vue';
 import type { MemberLoanSchedule } from '@/types/ui/members';
 import LoanStatus from './LoanStatus.vue';
@@ -496,6 +542,7 @@ import { type LoanSummaryTable } from '@/types/ui/loans';
 import { LogModules } from '@/constants/ui/logs';
 import { DATE_FORMAT_DATE, DATE_FORMAT_DB } from '@/constants';
 import Skeleton from 'primevue/skeleton';
+import { PaymentMethods } from '@/constants/ui/repayments';
 
 // @ts-ignore
 import html2pdf from 'html2pdf.js';
@@ -522,6 +569,13 @@ const activeIndex = ref(0);
 const editingRows = ref<any>([]);
 const schedules = ref<MemberLoanSchedule[]>([]);
 const repaymentTransactions = ref<AccountTransaction[]>([]);
+const paymentChannels = ref<DropdownOption[]>([
+  { label: 'Cash', value: PaymentMethods.CASH },
+  { label: 'Cheque', value: PaymentMethods.CHEQUE },
+  { label: 'E-Wallet', value: PaymentMethods.E_WALLET },
+  { label: 'Online Transfer', value: PaymentMethods.ONLINE_TRANSFER },
+]);
+
 const basic_information_1 = computed<InformationItem[]>(() => [
   { label: 'Member', value: loan.value?.member?.full_name ?? '' },
   { label: 'Contact Number', value: loan.value?.contact_number ?? '' },
@@ -654,6 +708,9 @@ const onRowEditSave = (event: any) => {
           interest_amount: data.interest_amount,
           penalty_amount: data.penalty_amount,
           amount_paid: data.amount_paid,
+          payment_channel: data.payment_channel,
+          payment_reference: data.payment_reference,
+          payment_remarks: data.payment_remarks,
         })
           .then(({ data }) => {
             schedules.value[event.index] = data;
