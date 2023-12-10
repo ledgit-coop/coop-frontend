@@ -17,6 +17,7 @@ import {
   ROUTE_NAME_SETTINGS,
   ROUTE_NAME_TRANSACTION_TYPES,
   ROUTE_NAME_USERS,
+  ROUTE_URL_HELP,
 } from '@/constants';
 
 const model = ref<any>([
@@ -79,6 +80,11 @@ const model = ref<any>([
         label: 'Settings',
         icon: 'pi pi-fw pi-cog',
         to: { name: ROUTE_NAME_SETTINGS },
+      },
+      {
+        label: 'Help',
+        icon: 'pi pi-question-circle',
+        to: { url: ROUTE_URL_HELP },
       },
     ],
   },

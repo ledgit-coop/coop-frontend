@@ -97,23 +97,44 @@ const checkActiveRoute = (item: any) => {
         class="pi pi-fw pi-angle-down layout-submenu-toggler"
       ></i>
     </a>
-    <router-link
-      v-if="item.to && !item.items && item.visible !== false"
-      :class="[item.class, { 'active-route': checkActiveRoute(item) }]"
-      tabindex="0"
-      :to="item.to"
-      @click="itemClick($event, item)"
-    >
-      <i
-        :class="item.icon"
-        class="layout-menuitem-icon"
-      ></i>
-      <span class="layout-menuitem-text">{{ item.label }}</span>
-      <i
-        v-if="item.items"
-        class="pi pi-fw pi-angle-down layout-submenu-toggler"
-      ></i>
-    </router-link>
+    <template v-if="item.to && !item.items && item.visible !== false">
+      <template v-if="item.to.url">
+        <a
+          :class="[item.class, { 'active-route': checkActiveRoute(item) }]"
+          tabindex="0"
+          :href="item.to.url"
+        >
+          <i
+            :class="item.icon"
+            class="layout-menuitem-icon"
+          ></i>
+          <span class="layout-menuitem-text">{{ item.label }}</span>
+          <i
+            v-if="item.items"
+            class="pi pi-fw pi-angle-down layout-submenu-toggler"
+          ></i>
+        </a>
+      </template>
+      <template v-else>
+        <router-link
+          :class="[item.class, { 'active-route': checkActiveRoute(item) }]"
+          tabindex="0"
+          :to="item.to"
+          @click="itemClick($event, item)"
+        >
+          <i
+            :class="item.icon"
+            class="layout-menuitem-icon"
+          ></i>
+          <span class="layout-menuitem-text">{{ item.label }}</span>
+          <i
+            v-if="item.items"
+            class="pi pi-fw pi-angle-down layout-submenu-toggler"
+          ></i>
+        </router-link>
+      </template>
+    </template>
+
     <Transition
       v-if="item.items && item.visible !== false"
       name="layout-submenu"

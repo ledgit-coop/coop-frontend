@@ -46,3 +46,5 @@ export const PUBLIC_ROUTES: Array<string> = [
   ROUTE_NAME_EMAIL_VERIFICATION,
   ROUTE_NAME_OTP_VERIFICATION,
 ];
+
+export const ROUTE_URL_HELP = 'https://docs.dspacc.com';
