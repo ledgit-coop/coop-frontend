@@ -180,6 +180,14 @@
       show-action
       :display="accountTransactionDisplay"
       @on-delete-click="handleTransactionDeleteClick"
+      @on-edit-click="handleTransactionEditClick"
+    />
+
+    <TransactionSave
+      @updated="handleGetTransactions"
+      @hide="selectedTransactionEdit = undefined"
+      :id="selectedTransactionEdit?.id"
+      v-model:visible="modalsVisibility.save_transaction"
     />
   </Dialog>
 </template>
@@ -201,6 +209,7 @@ import { dateFormat, formatCurrency, generateYearListDropdown } from '@/helpers'
 import moment from 'moment';
 import type { DropdownOption } from '@/types/ui';
 import { useConfirm } from 'primevue/useconfirm';
+import TransactionSave from './TransactionSave.vue';
 
 interface Props {
   member?: Member;
@@ -209,6 +218,9 @@ interface Props {
 const filters = ref({
   year: moment().get('year').toString(),
   status: undefined,
+});
+const modalsVisibility = ref({
+  save_transaction: false,
 });
 const confirm = useConfirm();
 const years = computed(() => generateYearListDropdown());
@@ -219,6 +231,7 @@ const accountStatuses = computed<DropdownOption[]>(() => [
 const accountTransactionDisplay = computed(() =>
   selected_account && selected_account.value?.account?.type === 'regular' ? 'summary' : 'transactional'
 );
+const selectedTransactionEdit = ref<AccountTransaction>();
 const showModal = ref(false);
 const accounts = ref<MemberAccount[]>();
 const selected_account = ref<undefined | MemberAccount>();
@@ -292,6 +305,10 @@ const handleDeleteClick = (value: MemberAccount) => {
   });
 };
 
+const handleTransactionEditClick = (value: AccountTransaction) => {
+  selectedTransactionEdit.value = value;
+  modalsVisibility.value.save_transaction = true;
+};
 const handleTransactionDeleteClick = (value: AccountTransaction) => {
   let message = 'Are you sure you want to delete the transaction?';
   if (value.posted && value.type !== MemberAccountTransactionType.LOAN_PAYMENT) {

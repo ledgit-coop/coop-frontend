@@ -69,7 +69,15 @@ class MembersService {
     member_id: string,
     params?: GetAccountTransactionsParams
   ): AxiosPromise<AccountTransaction[]> {
-    return apiClient.get(`${PATH}/accounts/transaction/${member_id}`, { params });
+    return apiClient.get(`${PATH}/accounts/transaction/members/${member_id}`, { params });
+  }
+
+  getMemberAccountTrasaction(transaction_id: number): AxiosPromise<AccountTransaction> {
+    return apiClient.get(`${PATH}/accounts/transaction/${transaction_id}`);
+  }
+
+  patchMemberAccountTransaction(transaction_id: string, params?: Record<any, any>): AxiosPromise<AccountTransaction> {
+    return apiClient.patch(`${PATH}/accounts/transaction/${transaction_id}`, params);
   }
 
   getOverview(member_id: string): AxiosPromise<GetMemberOverview> {

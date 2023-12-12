@@ -1,7 +1,7 @@
 export enum TransactionSubTypeTypes {
-  EXPENSES = 'expenses',
-  REVENUE = 'revenues',
-  RECEIVABLES = 'receivables',
-  PAYABLES = 'payables',
-  LIABILITIES = 'liabilities',
+  EXPENSES = 'expense',
+  REVENUE = 'revenue',
+  RECEIVABLES = 'receivable',
+  PAYABLES = 'payable',
+  LIABILITIES = 'liability',
 }

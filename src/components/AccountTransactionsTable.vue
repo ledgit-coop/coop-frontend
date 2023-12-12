@@ -134,12 +134,25 @@
       header="Action"
       align-frozen="right"
       frozen
+      class="froze-right"
+      style="min-width: 12rem"
     >
       <template #body="slotProps">
         <div class="flex flex-wrap gap-2">
           <Button
+            icon="pi pi-pencil"
+            v-tooltip="'Edit transaction'"
+            text
+            raised
+            rounded
+            class="mr-2 mb-2"
+            size="small"
+            severity="warning"
+            @click="$emit('onEditClick', slotProps.data)"
+          />
+          <Button
             icon="pi pi-trash"
-            v-tooltip="'Delete unposted transaction'"
+            v-tooltip="'Delete transaction'"
             text
             raised
             rounded
@@ -192,5 +205,5 @@ interface Props {
 
 defineProps<Props>();
 
-defineEmits(['onDeleteClick']);
+defineEmits(['onDeleteClick', 'onEditClick']);
 </script>
