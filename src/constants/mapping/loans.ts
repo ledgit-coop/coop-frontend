@@ -3,7 +3,7 @@ import type { Loan, LoanForm, LoanTermForm } from '@/types/ui/loans';
 import moment from 'moment';
 import { DATE_FORMAT_DB } from '..';
 
-export function mapLoanFormToPayload(loanForm: LoanForm): LoanApplicationPayload {
+export function mapLoanFormToPayload(loanForm: LoanForm, re_calculate?: boolean): LoanApplicationPayload {
   const {
     member_id,
     contact_number,
@@ -51,6 +51,7 @@ export function mapLoanFormToPayload(loanForm: LoanForm): LoanApplicationPayload
   };
 
   return {
+    re_calculate,
     member_account_id: loanForm.member_account_id || 0,
     member_id: Number(member_id || 0),
     loan_product_id: loanForm.loan_product_id || 0,

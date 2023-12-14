@@ -41,6 +41,16 @@
     />
 
     <template #footer>
+      <div
+        v-if="isEditing"
+        class="w-full p-3"
+      >
+        <div class="flex">
+          <div class="flex ml-auto gap-2 align-items-center">
+            <InputSwitch v-model="recalculateSchedule" /> Re-Calculate the loan schedule
+          </div>
+        </div>
+      </div>
       <Button
         label="Cancel"
         icon="pi pi-times"
@@ -81,6 +91,8 @@ import useValidation from '@/composables/useValidation';
 import Message from 'primevue/message';
 import type { DropdownOption } from '@/types/ui';
 import MembersService from '@/service/MembersService';
+import InputSwitch from 'primevue/inputswitch';
+import { useConfirm } from 'primevue/useconfirm';
 
 interface Props {
   visible: boolean;
@@ -99,6 +111,7 @@ const model = reactive<{ form?: LoanForm }>({
 });
 
 const isReleased = ref(false);
+const confirm = useConfirm();
 
 const isEditing = computed(() => !!props.loanIdForEdit);
 const showModal = ref(false);
@@ -108,6 +121,7 @@ const loadings = ref({
 });
 const hasSavings = ref(false);
 const hasShareCap = ref(false);
+const recalculateSchedule = ref(false);
 
 onMounted(() => {
   showModal.value = props.visible ?? false;
@@ -115,6 +129,7 @@ onMounted(() => {
 
 watch(showModal, (value) => {
   emit('update:visible', value);
+  if (isEditing.value) recalculateSchedule.value = true;
 });
 
 watch(
@@ -153,26 +168,38 @@ const handleSaveClick = async (draft: boolean) => {
     return;
   }
 
-  try {
-    loadings.value.save = true;
-    if (isEditing.value)
-      await LoanService.update(props.loanIdForEdit ?? 0, {
-        ...mapLoanFormToPayload(model.form!),
-        is_draft: draft,
-      });
-    else
-      await LoanService.postLoan({
-        ...mapLoanFormToPayload(model.form!),
-        is_draft: draft,
-      });
+  const save = async () => {
+    try {
+      loadings.value.save = true;
+      if (isEditing.value)
+        await LoanService.update(props.loanIdForEdit ?? 0, {
+          ...mapLoanFormToPayload(model.form!, recalculateSchedule.value),
+          is_draft: draft,
+        });
+      else
+        await LoanService.postLoan({
+          ...mapLoanFormToPayload(model.form!),
+          is_draft: draft,
+        });
 
-    showSuccess('Loan application saved successfully.');
-    showModal.value = false;
-    emit('saved');
-  } catch (error) {
-    showApiError(error as AxiosError);
-  }
-  loadings.value.save = false;
+      showSuccess('Loan application saved successfully.');
+      showModal.value = false;
+      emit('saved');
+    } catch (error) {
+      showApiError(error as AxiosError);
+    }
+    loadings.value.save = false;
+  };
+
+  if (recalculateSchedule.value) {
+    confirm.require({
+      message: 'Re-calculate loan schedule has been activated. Are you sure you want to proceed?',
+      header: 'Update Loan',
+      icon: 'pi pi-exclamation-triangle',
+      acceptClass: 'p-button-danger',
+      accept: () => save(),
+    });
+  } else save();
 };
 
 const loadLoan = async () => {
