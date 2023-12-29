@@ -39,10 +39,10 @@
                 <Button
                   type="button"
                   icon="pi pi-download"
-                  label="Export"
+                  label="Export Collections"
                   class="p-button-outlined mb-2"
                   size="small"
-                  @click="handleExport"
+                  @click="modalsVisibility.collections = true"
                 />
               </div>
 
@@ -388,6 +388,8 @@
           :outstanding-amount="selected_loan?.outstanding"
         />
 
+        <RepaymentCollectionExport v-model:visible="modalsVisibility.collections" />
+
         <LoanView
           :tab-view="(tabView as any)"
           v-model:visible="modalsVisibility.view_loan"
@@ -416,15 +418,18 @@ import { dateFormat, formatNumber } from '@/helpers';
 import type { Loan } from '@/types/ui/loans';
 import type { MemberLoanSchedule } from '@/types/ui/members';
 import moment from 'moment';
+import RepaymentCollectionExport from './RepaymentCollectionExport.vue';
 
 interface ModalsVisibility {
   repay: boolean;
   view_loan: boolean;
+  collections: boolean;
 }
 
 const modalsVisibility = ref<ModalsVisibility>({
   repay: false,
   view_loan: false,
+  collections: false,
 });
 
 const statuses = ref<DropdownOption[]>([
@@ -511,9 +516,6 @@ const handleStatusChanged = () => {
 const handleDueDateChange = () => {
   filters.value.status = undefined;
   loadTable();
-};
-const handleExport = () => {
-  dt.value.exportCSV();
 };
 
 const handleClearFilter = () => {

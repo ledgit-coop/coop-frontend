@@ -29,6 +29,7 @@
                   label="Clear"
                   class="p-button-outlined mb-2"
                   size="small"
+                  @click="clearFilters()"
                 />
 
                 <Button
@@ -177,5 +178,13 @@ const loadTable = async (params?: Record<string, any>) => {
     showApiError(error as AxiosError);
   }
   loadings.value.table = false;
+};
+
+const clearFilters = () => {
+  filters.value = {
+    loan_product_id: undefined,
+    keyword: undefined,
+    status: undefined,
+  };
 };
 </script>

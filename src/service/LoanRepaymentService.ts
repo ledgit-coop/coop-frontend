@@ -12,6 +12,10 @@ class LoanRepaymentService {
   store(schedule_id?: string, params?: LoanRepaymentPayload): AxiosPromise<ListLoanRepaymentResponse> {
     return apiClient.post(`${PATH}/${schedule_id}`, params);
   }
+
+  collectionsExport(params?: LoanListPayload): AxiosPromise {
+    return apiClient.get(`${PATH}/export/collections`, { params });
+  }
 }
 
 export default new LoanRepaymentService();

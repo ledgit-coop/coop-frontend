@@ -398,6 +398,13 @@
                 <div class="flex justify-content-between flex-column sm:flex-row">
                   <Button
                     type="button"
+                    icon="pi pi-sync"
+                    label="Reconcile Payments"
+                    class="p-button-outlined mb-2"
+                    size="small"
+                  />
+                  <Button
+                    type="button"
                     icon="pi pi-download"
                     label="Export"
                     class="p-button-outlined mb-2"
