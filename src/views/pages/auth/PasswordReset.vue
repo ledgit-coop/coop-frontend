@@ -19,7 +19,7 @@
           <div class="mb-5 grid">
             <img
               :src="logoUrl"
-              alt="DSPACC Logo"
+              alt="Ledget Coop Logo"
               class="w-6rem flex-shrink-0"
             />
             <h4 class="ml-2">Dalan Sa-Pag Asenso<br /><small>Credit Cooperative Portal</small></h4>

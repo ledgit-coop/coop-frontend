@@ -279,7 +279,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  document.title = 'DSPACC - ' + (to.meta?.title ?? 'Credit Portal');
+  document.title = 'Ledget Coop - ' + (to.meta?.title ?? 'Credit Portal');
 });
 
 router.beforeResolve(async (to) => {

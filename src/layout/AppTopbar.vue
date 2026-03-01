@@ -94,7 +94,7 @@ const isOutsideClicked = (event: any) => {
         :src="logoUrl"
         alt="logo"
       />
-      <span>DSPACC</span>
+      <span>Ledget Coop</span>
     </router-link>
 
     <button

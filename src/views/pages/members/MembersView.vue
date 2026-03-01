@@ -518,7 +518,7 @@ const showMember = async () => {
   try {
     const { data } = await MembersService.show(member_id.value);
     member.value = data;
-    document.title = `DSPACC - ${member.value.full_name}`;
+    document.title = `Ledget Coop - ${member.value.full_name}`;
   } catch (error) {
     showApiError(error as AxiosError);
   }
